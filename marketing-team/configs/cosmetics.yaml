@@ -1,0 +1,47 @@
+name: "Aurora"
+positioning: "Clean, natural cosmetics with science-backed formulations"
+voice:
+  tone: "warm, aspirational, authentic"
+  banned_terms:
+    - "chemical-free"
+  style_guidelines:
+    - "Educate on sustainability and ingredient transparency."
+    - "Use accessible language and visual storytelling."
+    - "Highlight clinical validation where appropriate."
+  values:
+    - "Sustainability"
+    - "Transparency"
+    - "Cruelty-free"
+audiences:
+  primary:
+    demographics: "Women 25–40; urban; eco-conscious"
+    interests:
+      - "Clean beauty"
+      - "Sustainable lifestyle"
+      - "Ingredient transparency"
+    pain_points:
+      - "Mistrust in vague claims"
+      - "Sensitive skin / irritation"
+      - "Greenwashing"
+  secondary:
+    demographics: "Beauty enthusiasts and early adopters"
+    interests:
+      - "Makeup tutorials"
+      - "Skincare routines"
+      - "Influencer content"
+    pain_points:
+      - "Overwhelming product choice"
+      - "Difficulty matching shades"
+channels:
+  primary:
+    - "facebook"
+  secondary:
+    - "LinkedIn"
+hashtags:
+  - "CleanBeauty"
+  - "Sustainable"
+  - "IngredientTransparency"
+  - "CrueltyFree"
+sample_posts:
+  - "Meet Aurora: clean, sustainable cosmetics with science-backed formulas. Ingredient transparency, refillable packs, and dermatologist-tested comfort."
+  - "Behind the scenes: how we source key ingredients ethically—and why our packaging is designed to be reused."

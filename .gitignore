@@ -1,0 +1,67 @@
+# Local .terraform directories (provider cache)
+.terraform/
+
+# .tfstate files (Terraform state - sensitive, use remote backend)
+*.tfstate
+*.tfstate.*
+tfstate/
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Ignore override files (local customizations)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include .tfvars files by default, but ignore if they contain secrets
+# (Uncomment if you have sensitive .tfvars; commit non-sensitive ones)
+# *.tfvars
+# *.tfvars.json
+
+# Ignore CLI configuration and data files
+.terraformrc
+terraform.rc
+
+# Dependency lock file (commit if pinning versions, ignore if not)
+# Uncomment to ignore:
+.terraform.lock.hcl
+
+# Backup files
+*.backup
+*.bak
+
+# Editor/IDE files (e.g., VS Code, IntelliJ)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Misc local files
+*.log
+*.tfplan
+*.tfout
+*.docx
+
+Ignore local secrets or temp files
+# (Customize as needed)
+secrets/
+*.key
+*.pem
+*.crt
+.env
+.venv
+local.tfvars
+creds.md
+
+# Environment-specific files
+.venv/
+runs/
+.ipynb_checkpoints/

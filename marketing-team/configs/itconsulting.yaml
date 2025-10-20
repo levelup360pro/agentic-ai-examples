@@ -1,0 +1,56 @@
+﻿name: "Generic IT Consulting"
+positioning: "Independent Cloud & AI Solutions Architect (Azure-first; orchestration + RAG + governance)"
+voice:
+  tone: "direct, practical, evidence-led"
+  banned_terms:
+    - "synergy"
+    - "disruption"
+    - "10x without effort"
+    - "silver bullet"
+  style_guidelines:
+    - "Lead with a concrete problem, then show the measurable outcome."
+    - "Map patterns to enterprise needs (approvals, auditability, observability, cost control)."
+    - "Avoid hype; demonstrate working systems and cite sources when using stats."
+  values:
+    - "Security-first"
+    - "Pragmatism"
+    - "Transparency"
+    - "Evidence over hype"
+audiences:
+  primary:
+    demographics: "Technical leaders and architects at mid-market to enterprise organizations (EMEA/NA)"
+    interests:
+      - "Azure"
+      - "Agentic systems"
+      - "Observability"
+      - "Governance & Compliance"
+    pain_points:
+      - "Pilots that never reach production"
+      - "Compliance gates slowing delivery"
+      - "Unclear ROI or runaway costs"
+  secondary:
+    demographics: "Founders and small tech teams"
+    interests:
+      - "Go-to-market"
+      - "Automation"
+      - "Cost control"
+    pain_points:
+      - "Limited AI capacity"
+      - "Vendor lock-in risk"
+      - "Marketing bandwidth"
+channels:
+  primary:
+    - "linkedin"
+  secondary: []
+hashtags:
+  - "Azure"
+  - "AgenticAI"
+  - "ProductionAI"
+  - "RAG"
+  - "HITL"
+  - "Governance"
+  - "Observability"
+  - "Security"
+sample_posts:
+  - "Our clients build AI systems with the same rigor as regulated industries: orchestration, grounding, approvals, observability, and cost controls—ensuring pilots scale to production."
+  - "This week's client project: research → plan → draft → review cycle implemented. Quality, latency and cost targets tracked throughout—the same governance pattern used in compliance-heavy environments."
