@@ -352,7 +352,7 @@ Based on Chip Huyen’s AI Engineering principles.
 
 | Week | Status | Key Deliverables | Report |
 |----------|-------------|------------------|--------|
-| **Week 1** | ✅ Complete | Evaluation framework, three-environment strategy, decision criteria | [Week 1 Report](/reports/WEEK1.md) |
+| **Week 1** | ✅ Complete | Evaluation framework, three-environment strategy, decision criteria | [Week 1 Report](/marketing-team/reports/WEEK1.md) |
 | **Week 2** | 🔄 In Progress | Baseline testing: 5 prompt templates, RAG impact, search A/B, early AI-judge calibration (24 pieces) | TBD |
 | **Week 3** | 📅 Planned | Pattern testing (45 pieces) + Model selection (60 pieces) | TBD |
 | **Week 4** | 📅 Planned | Framework testing with winning pattern and model (45 pieces) | TBD |
