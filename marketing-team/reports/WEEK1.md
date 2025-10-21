@@ -90,32 +90,93 @@ Week 1 established the methodological foundation for building a production-grade
 
 ---
 
-### **4. Vector Store: PostgreSQL + pgvector + text-embedding-3-small**
+### **4. Vector Store: PostgreSQL + pgvector (Semantic Search Baseline, Hybrid Search Optional)**
 
-**Decision**: Use PostgreSQL with pgvector extension for embeddings in production; text-embedding-3-small (1536D) for all embeddings.
+**Decision**: Use PostgreSQL Flexible Server (Burstable B1ms, €11/month) with pgvector extension for semantic search; text-embedding-3-small (1536D) for all embeddings. PostgreSQL full-text search (tsvector) available for hybrid search if Week 4 testing proves value.
 
 **Alternatives Considered**: 
-- Vector stores: FAISS (in-memory, Azure Files, Blob), Azure AI Search, Pinecone
-- Embedding models: text-embedding-ada-002 (1536D, older), text-embedding-3-small (1536D, better quality/cost), text-embedding-3-large (3072D, higher quality but more expensive)
+- **Vector stores**: FAISS (ephemeral), Azure AI Search (€70/month), Pinecone (managed, expensive), ChromaDB (local-only, not production-ready for Container Apps)
+- **Embedding models**: text-embedding-ada-002 (1536D, deprecated), text-embedding-3-small (1536D, best cost/quality), text-embedding-3-large (3072D, overkill for marketing content)
+- **Retrieval patterns**: Semantic-only (baseline), hybrid search (semantic + BM25 keyword), Azure AI Search semantic ranking (managed, expensive)
 
-**Decision Rationale**:
-1. **PostgreSQL + pgvector**:
-   - **Cost**: Zero additional cost (already using PostgreSQL for logs/state)
-   - **Persistence**: Database guarantees, survives container restarts
-   - **No cold start**: Containers ready immediately
-   - **Simplicity**: One database for all data (logs, content, state, embeddings)
-   - **Performance**: 10-50ms query time sufficient (LLM inference dominates at 2-3s)
-   
-2. **text-embedding-3-small**:
-   - **Quality**: Better than ada-002 on benchmarks (MTEB)
-   - **Cost**: Lower per token than ada-002
-   - **Dimension**: 1536D matches ada-002; no migration needed if we switch models later
-   - **Adoption timing**: Immediate adoption (Week 2) avoids migration later; Chroma and pgvector both support 1536D
+| Criterion | PostgreSQL+pgvector | Azure AI Search Basic | ChromaDB | FAISS |
+|-----------|---------------------|----------------------|----------|-------|
+| **Cost (Q1)** | €33 (Burstable B1ms) | €210 (6.4x more) | €0 (local) | €0 (in-memory) |
+| **Persistence** | ✅ Database durability | ✅ Managed service | ⚠️ Requires persistent volume | ❌ Ephemeral (lost on restart) |
+| **Production-Ready** | ✅ Azure managed DB | ✅ Fully managed | ⚠️ Local deployment complexity | ❌ Not production-suitable |
+| **Hybrid Search** | ✅ PostgreSQL full-text (tsvector) available | ✅ Native (BM25 + vector) | ⚠️ Manual BM25 integration | ❌ Not supported |
+| **Query Performance** | 10-50ms (sufficient) | <10ms (overkill) | 5-20ms (local) | <5ms (in-memory) |
+| **Setup Complexity** | 1 day | 0.5 days | 2 days (production config) | 1 day (rebuild on restart) |
+| **Multi-Purpose** | ✅ Vector store + operational DB (logs, state, analytics) | ❌ Vector store only | ❌ Vector store only | ❌ Vector store only |
 
-**Implementation**:
-- **Local (W1-4)**: Chroma with text-embedding-3-small via OpenRouter/Azure AI Foundry API
-- **Production (W5+)**: PostgreSQL + pgvector (VECTOR(1536)) with text-embedding-3-small via Azure AI Foundry
-- **Migration**: Week 5 migrates Chroma embeddings to PostgreSQL; same model ensures compatibility
+**Why PostgreSQL+pgvector wins for Q1:**
+1. **Cost efficiency**: €33 for Q1 vs €210 for Azure AI Search (saves 27% of total Q1 budget)
+2. **Cost-per-post constraint**: Infrastructure cost allocated across ~60-80 posts (2 brands × 30-40 posts each) = **€0.41-€0.55/post** (well under €2 target). Adding Azure AI Search would raise this to **€2.63-€3.50/post** (exceeds budget).
+3. **Zero additional cost**: Already using PostgreSQL for operational data (campaign logs, user preferences, performance tracking)—pgvector is a free extension
+4. **Persistence guarantee**: Database survives container restarts (Azure Container Apps may recycle)
+5. **Simplicity**: One database for all data types (vectors, relational, JSON, logs)
+6. **Hybrid search option**: PostgreSQL full-text search (tsvector/tsquery) provides BM25-style keyword matching at zero incremental cost—can implement in Week 4 if testing proves value
+
+---
+
+#### **Hybrid Search: Test-Driven Decision in Week 4**
+
+**Baseline (Weeks 2-3)**: Semantic-only retrieval
+- pgvector cosine similarity on text-embedding-3-small embeddings
+- LangChain `PGVector` retriever with MMR (Maximal Marginal Relevance) for diversity
+- Evaluate 15-piece content generation with 5-dimension rubric
+
+**Week 4 Learning Spike (2-3 days)**: Implement hybrid search, measure delta
+1. **Implement PostgreSQL hybrid retrieval**:
+   - Add `tsvector` column to documents table for full-text search
+   - Create GIN index on tsvector column
+   - Implement reciprocal rank fusion (RRF) to merge BM25 + vector scores
+2. **Re-run 15-piece evaluation**: Same test set, same rubric
+3. **Measure quality improvement**: Compare scores (Clarity, Brand Voice, CTA, Technical Accuracy, Engagement)
+4. **Decision rule**:
+   - **<10% improvement**: Defer hybrid to Q2; focus on model tuning/prompts (higher ROI)
+   - **10-20% improvement**: Document as "Q2 optimization"; prioritize other Week 4-5 features
+   - **>20% improvement**: Keep hybrid search; refactor into main branch
+
+**Cost impact of hybrid search**: 
+- PostgreSQL full-text search: **€0 incremental** (built-in feature)
+- Development time: 2-3 days (covered by 150-hour buffer from skipping AI-102)
+- Per-post cost: **No change** (€0.41-€0.55/post remains under €2 target)
+
+**Why NOT Azure AI Search Basic (Q1)**:
+- ❌ **6.4x cost increase**: €210 vs €33 for Q1 (consumes 32% of €450 budget for ONE component)
+- ❌ **Per-post cost impact**: €2.63-€3.50/post (exceeds €2 target by 30-75%)
+- ❌ **Premature optimization**: Hybrid search quality improvement may not justify cost for content generation use case (vs legal/medical Q&A)
+- ✅ **Migration path preserved**: Vector data portable (export from PostgreSQL, bulk upload to AI Search if client-funded later)
+
+**When to upgrade to Azure AI Search**:
+- Client engagement with >10K documents/brand requiring sub-50ms retrieval
+- Enterprise SLA requirements (99.9% uptime, Microsoft support)
+- Budget allows €70+/month for managed vector store (e.g., client passes cost through)
+
+---
+
+#### **Embedding Model: text-embedding-3-small**
+
+**Decision**: text-embedding-3-small (1536 dimensions, $0.02 per 1M tokens)
+
+**Why text-embedding-3-small over alternatives**:
+| Model | Dimensions | Cost (per 1M tokens) | MTEB Score | Q1 Cost Estimate |
+|-------|-----------|----------------------|------------|------------------|
+| text-embedding-ada-002 | 1536 | $0.10 | 61.0% | €45 (5x more) |
+| **text-embedding-3-small** | **1536** | **$0.02** | **62.3%** | **€9** |
+| text-embedding-3-large | 3072 | $0.13 | 64.6% | €59 (6.5x more) |
+
+**Rationale**:
+- **Best cost/quality ratio**: 62.3% MTEB score at 1/5 the cost of ada-002
+- **Sufficient for marketing content**: Retrieval quality delta between 3-small and 3-large (<2% MTEB) unlikely to impact LinkedIn post quality
+- **Q1 budget fit**: ~200 documents/brand × 500 tokens/doc × 2 brands = 200K tokens = **€9 for Q1** (2% of budget)
+
+**Q1 Embedding Cost Breakdown**:
+- Initial corpus: 200 documents/brand × 2 brands × 500 tokens/doc = 200K tokens = **€0.18**
+- Weekly updates: 10 new docs/week × 12 weeks × 500 tokens = 60K tokens = **€0.05**
+- Re-indexing (if needed): 1x full re-embed = **€0.18**
+- **Total Q1 embeddings**: **€0.41** (<1% of budget)
 
 ---
 
@@ -249,7 +310,7 @@ Week 1 established the methodological foundation for building a production-grade
 | Component | Enterprise Value | Q1 Decision | Rationale |
 |-----------|------------------|-------------|-----------|
 | **Azure API Management (APIM)** | ✅ High (API gateway, rate limiting, multi-model routing) | ❌ Exclude | Cost: $150-2,800/month = 400% over Q1 budget. Complexity: 2-3 weeks setup. **Q1 Mitigation**: Direct API calls with retry logic + basic rate limiting in code. **When Needed**: Multi-client deployments (10+ brands), SLA requirements. |
-| **Hybrid Search (Azure AI Search)** | ⚠️ Medium (10-15% retrieval quality boost) | ❌ Exclude | Cost: $75-10,000+/month. Complexity: 1 week setup. **Q1 Mitigation**: Optimized pgvector search with re-ranking. **When Needed**: Complex queries at scale (>10K documents/brand). |
+| **Azure AI Search** | ⚠️ Medium (native hybrid search + semantic ranking, sub-10ms retrieval) | ❌ Exclude | Cost: $75/month = €210 for Q1 (32% of budget). Per-post cost: €2.63-€3.50 (exceeds €2 target by 30-75%). **Q1 Mitigation**: PostgreSQL+pgvector for semantic search. Hybrid search (PostgreSQL full-text + pgvector) deferred to Week 4 testing—only implement if data proves >20% quality improvement. **When Needed**: Enterprise clients with >10K documents/brand, <50ms retrieval SLA. **Migration Path**: Export vectors from PostgreSQL, bulk upload to AI Search. |
 | **Auto-Publishing (Post-Approval)** | ⚠️ Low (saves 4 hours over 12 weeks) | ❌ Exclude | Complexity: 5-7 days OAuth + error handling. Risk: Wrong timing, format errors. **Q1 Mitigation**: Manual publishing after HITL approval. **When Needed**: High-volume clients (>20 posts/day). |
 
 ---

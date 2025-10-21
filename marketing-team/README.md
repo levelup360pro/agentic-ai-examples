@@ -97,7 +97,7 @@ The system implements enterprise patterns (security, HITL governance, RAG ground
 - **Purpose**: Rapid experimentation, pattern/framework/model testing
 - **LLM**: OpenRouter API (GPT-4o-mini, GPT-4o, Claude 3.5 Haiku) for flexible model testing
 - **Vector Store**: Chroma (local file) with text-embedding-3-small (1536D)
-- **Search**: SERPER web search integration for evidence-based content
+- **Search**: Tavily web search integration for evidence-based content
 - **Testing**: Jupyter notebooks with systematic evaluation (10-20 pieces per condition)
 - **Cost**: ~€40-60 for entire testing phase (includes model selection testing)
 
@@ -183,8 +183,8 @@ The system implements enterprise patterns (security, HITL governance, RAG ground
 ### **Month 1: Foundation + Testing (Weeks 1-4)**
 - **Week 1**: Evaluation framework, infrastructure setup ✅ **COMPLETE**
 - **Week 2**: Baseline testing (prompts + RAG + search)
-- **Week 3**: Orchestration pattern testing (single-pass vs reflection vs evaluator-optimizer) + Model selection testing (4 configurations: GPT-4o-mini baseline, hybrid reasoning, best-in-class, GPT-4o ceiling)
-- **Week 4**: Framework testing (LangGraph vs CrewAI vs Hybrid) using winning pattern and model config from Week 3
+- **Week 3**: Orchestration pattern testing (single-pass vs reflection vs evaluator-optimizer) + Model selection testing (4 configurations)
+- **Week 4**: Framework testing (LangGraph vs CrewAI vs Hybrid) using winning pattern and model config from Week 3, and finalize retrieval architecture (semantic-only vs hybrid search).
 
 **Key Principle**: No architectural commitments until data validates choices. Week 3 extended by 2 days for model selection testing to ensure optimal model choice before framework implementation.
 
