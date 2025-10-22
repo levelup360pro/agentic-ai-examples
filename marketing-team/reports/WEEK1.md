@@ -26,7 +26,7 @@ Week 1 established the methodological foundation for building a production-grade
 **Decision**: Build system using data-driven methodology, not assumption-driven architecture.
 
 **Rationale**:
-- AI Engineering Bible core principle: "Define what 'good' looks like BEFORE building"
+- AI Engineering core principle: "Define what 'good' looks like BEFORE building"
 - Addresses root cause of 95% GenAI pilot failures (MIT 2025)
 - 73% of failures trace to poor problem definition and insufficient validation
 

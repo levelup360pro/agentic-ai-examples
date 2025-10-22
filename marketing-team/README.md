@@ -129,7 +129,7 @@ The system implements enterprise patterns (security, HITL governance, RAG ground
 **Rationale**: Zero additional cost (already paying for PostgreSQL), persistent by design, no cold start, one database for everything (logs, content, state, embeddings), sufficient performance (10-50ms query time is <1% of total pipeline time).
 
 **Decision**: Defer orchestration pattern and framework choice to testing  
-**Rationale**: AI Engineering Bible principle: test alternatives with YOUR data before committing. Week 3 tests patterns (single-pass vs reflection vs evaluator-optimizer); Week 4 tests frameworks (LangGraph vs CrewAI vs Hybrid). Decisions based on quality, cost, latency, and developer experience—not assumptions.
+**Rationale**: AI Engineering principle: test alternatives with YOUR data before committing. Week 3 tests patterns (single-pass vs reflection vs evaluator-optimizer); Week 4 tests frameworks (LangGraph vs CrewAI vs Hybrid). Decisions based on quality, cost, latency, and developer experience—not assumptions.
 
 ---
 
