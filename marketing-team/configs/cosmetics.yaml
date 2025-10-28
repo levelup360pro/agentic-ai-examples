@@ -1,5 +1,6 @@
 name: "Aurora"
 positioning: "Clean, natural cosmetics with science-backed formulations"
+
 voice:
   tone: "warm, aspirational, authentic"
   banned_terms:
@@ -12,6 +13,45 @@ voice:
     - "Sustainability"
     - "Transparency"
     - "Cruelty-free"
+context_specific_points:
+  - "Ingredient transparency: list actives, concentrations, and clinical evidence where available."
+  - "Sustainability touchpoints: refillable packaging, biodegradable components, and ethical sourcing."
+  - "Sensitive-skin friendly formulations: hypoallergenic testing and dermatologist validation."
+
+content_generation_rules:
+  - "Lead with benefits and evidence (clinical/dermatologist results) for product claims."
+  - "Avoid absolute/unverifiable claims; use measured language and link to data where possible."
+  - "Prefer short educational threads explaining ingredient function for technical posts."
+
+factual_accuracy:
+  - "Do not claim 'chemical-free' or other absolute terms; explain ingredient roles instead."
+  - "Cite clinical tests, lab results, or supplier documentation when referencing efficacy."
+  - "Flag any regulatory or allergen statements for legal review before publishing."
+
+formatting_rules:
+  structure:
+    - "Hook: 1-2 lines describing the consumer problem or sensory benefit"
+    - "Ingredient or process explanation: 2-4 lines (how it helps, evidence)"
+    - "Usage guidance and safety notes: 1-2 lines"
+    - "Closing: benefit, micro-CTA (link or product)"
+
+cta_guidelines:
+  principle: "CTAs should be low-friction and product- or education-focused."
+  options:
+    - type: "Shop"
+      when: "Product announcement or limited edition launches"
+      format: "Direct product link"
+      example: "Shop the new hydrating serum (limited edition)."
+    - type: "Learn"
+      when: "Educational content about ingredients or sustainability"
+      format: "Link to blog, data sheet, or short explainer"
+      example: "Learn how our refill program reduces plastic waste."
+    - type: "Subscribe"
+      when: "Ongoing educational series or promotions"
+      format: "Newsletter signup"
+      example: "Subscribe for early access to new shades and restocks."
+  instruction: "Use one clear CTA per post; make the action specific and simple."
+
 audiences:
   primary:
     demographics: "Women 25–40; urban; eco-conscious"
@@ -23,25 +63,15 @@ audiences:
       - "Mistrust in vague claims"
       - "Sensitive skin / irritation"
       - "Greenwashing"
-  secondary:
-    demographics: "Beauty enthusiasts and early adopters"
-    interests:
-      - "Makeup tutorials"
-      - "Skincare routines"
-      - "Influencer content"
-    pain_points:
-      - "Overwhelming product choice"
-      - "Difficulty matching shades"
+
 channels:
-  primary:
-    - "facebook"
-  secondary:
-    - "LinkedIn"
+  primary: ["instagram", "facebook"]
+
 hashtags:
   - "CleanBeauty"
   - "Sustainable"
   - "IngredientTransparency"
-  - "CrueltyFree"
+
 sample_posts:
   - "Meet Aurora: clean, sustainable cosmetics with science-backed formulas. Ingredient transparency, refillable packs, and dermatologist-tested comfort."
   - "Behind the scenes: how we source key ingredients ethically—and why our packaging is designed to be reused."

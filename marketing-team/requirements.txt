@@ -1,1 +1,14 @@
-# placeholder
+# Third-party dependencies used by marketing-team
+# Install with: pip install -r requirements.txt
+
+openai
+python-dotenv
+pydantic
+langsmith
+pandas
+chromadb
+tavily-python
+tiktoken
+pyyaml
+rich
+ipykernel

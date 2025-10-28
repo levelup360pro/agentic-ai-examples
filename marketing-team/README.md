@@ -1,3 +1,34 @@
+# Marketing Team — Data Directory Notes
+
+This folder contains the marketing-team example code, notebooks, and sample data used for the RAG pipeline demos.
+
+## Ignored persistent vector DB
+
+The persistent Chroma vector database directory `data/chroma_db/` is intentionally ignored in git (see the repository `.gitignore`). This directory can contain large binary and index files that are generated at runtime and are not suitable for version control.
+
+If you clone this repo and need to recreate the vector DB locally, follow one of these options:
+
+1. Rebuild from the notebook (interactive)
+
+   - Open `notebooks/week02_baseline_testing.ipynb` in Jupyter or VS Code and run the cells in order. The notebook will:
+     - Load the brand documents from `data/past_posts/` and `configs/`.
+     - Chunk content and create embeddings using your configured embedding provider.
+     - Populate `data/chroma_db/` with the resulting collection (collection name: `marketing_content`).
+
+2. Rebuild headlessly (script)
+
+   - If you prefer a non-interactive approach, you can run the relevant initialization script or a small Python runner that imports the same `DocumentLoader`, `RAGHelper`, and `VectorStore` classes used in the notebook. Example pattern:
+
+   ```powershell
+   # Activate your virtual env first
+   python -m venv .venv; .\.venv\Scripts\Activate.ps1
+   python -c "from src.rag.document_loader import DocumentLoader; from src.rag.rag_helper import RAGHelper; from src.rag.vector_store import VectorStore; ..."
+   ```
+
+## Notes
+
+- Make sure to populate a `.env` file with your API keys before running the notebook or scripts.
+- The notebook assumes embedding models are available via your selected LLM provider (see `notebooks/week02_baseline_testing.ipynb` environment notes).
 # LevelUp360 Agentic Marketing System
 
 **Production-grade agentic AI system for dual-brand content generation, built through Evaluation-Driven Development.**
@@ -352,8 +383,8 @@ Based on Chip Huyen’s AI Engineering principles.
 
 | Week | Status | Key Deliverables | Report |
 |----------|-------------|------------------|--------|
-| **Week 1** | ✅ Complete | Evaluation framework, three-environment strategy, decision criteria | [Week 1 Report](/marketing-team/reports/WEEK1.md) |
-| **Week 2** | 🔄 In Progress | Baseline testing: 5 prompt templates, RAG impact, search A/B, early AI-judge calibration (24 pieces) | TBD |
+| **Week 1** | ✅ Complete | Evaluation framework, three-environment strategy, decision criteria [Week 1 Report](/marketing-team/reports/WEEK1.md) |
+| **Week 2** | ✅ Complete | RAG system implementation (Chroma, 40-post corpus), brand guidelines refinement (system message enforcement), search integration (Tavily + LLM query optimization), corpus composition testing (25% → 100% retrieval success), first production post published | [Week 2 Report](/marketing-team/reports/WEEK2.md) |
 | **Week 3** | 📅 Planned | Pattern testing (45 pieces) + Model selection (60 pieces) | TBD |
 | **Week 4** | 📅 Planned | Framework testing with winning pattern and model (45 pieces) | TBD |
 

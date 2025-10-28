@@ -1,5 +1,6 @@
 ﻿name: "Generic IT Consulting"
-positioning: "Independent Cloud & AI Solutions Architect (Azure-first; orchestration + RAG + governance)"
+positioning: "Pragmatic IT consulting for building scalable systems"
+
 voice:
   tone: "direct, practical, evidence-led"
   banned_terms:
@@ -8,26 +9,66 @@ voice:
     - "10x without effort"
     - "silver bullet"
   style_guidelines:
-    - "Lead with a concrete problem, then show the measurable outcome."
-    - "Map patterns to enterprise needs (approvals, auditability, observability, cost control)."
-    - "Avoid hype; demonstrate working systems and cite sources when using stats."
+    - "Lead with the problem, then the solution, then the measurable result."
+    - "Map recommendations to governance, auditability, and operational cost impact."
+    - "Avoid jargon unless defining it for a mixed audience."
   values:
     - "Security-first"
     - "Pragmatism"
     - "Transparency"
     - "Evidence over hype"
+    
+context_specific_points:
+  - "Design and deliver Azure-native agentic systems with secure orchestration patterns."
+  - "Operationalize RAG with audit trails, human-in-the-loop approvals and observability."
+  - "Cost governance: guardrails, budgets, and measurable SLOs for AI workloads."
+
+content_generation_rules:
+  - "Always include measurable outcomes (latency, cost, error rates) when referencing projects."
+  - "Cite or flag external statistics and calls-to-action that require verification."
+  - "Prefer pragmatic, reproducible steps over abstract recommendations."
+
+factual_accuracy:
+  - "Verify claims about vendor features, pricing, and compliance standards before publishing."
+  - "When using benchmarks or numbers, include the source and date."
+  - "If unsure about a technical detail, label it as an example or ask for review from an engineer."
+
+formatting_rules:
+  structure:
+    - "1-2 line contextual hook"
+    - "Problem statement (1-2 lines)"
+    - "Proposed approach (3-5 lines)"
+    - "Outcome / Metrics / Next steps (1-3 lines)"
+
+cta_guidelines:
+  principle: "Keep CTAs specific, low-friction, and aligned to next measurable step."
+  options:
+    - type: "Book a call"
+      when: "Complex, consultative topics where assessment is needed"
+      format: "Link to calendar or short form"
+      example: "Book a 30-min discovery call to review your pilot plan."
+    - type: "Download"
+      when: "When additional technical details or templates are helpful"
+      format: "Link to gated PDF or GitHub repo"
+      example: "Download our RAG governance checklist."
+    - type: "Subscribe"
+      when: "Light-touch educational content"
+      format: "Newsletter signup"
+      example: "Subscribe for weekly engineering tips on productionizing AI."
+  instruction: "Prefer one specific CTA per post; keep language action-oriented and measurable."
+
 audiences:
   primary:
     demographics: "Technical leaders and architects at mid-market to enterprise organizations (EMEA/NA)"
     interests:
-      - "Azure"
-      - "Agentic systems"
-      - "Observability"
-      - "Governance & Compliance"
+      - "Cloud architecture and platform strategy"
+      - "Enterprise automation and integration"
+      - "Resilience, monitoring and SRE practices"
+      - "Risk, governance and compliance frameworks"
     pain_points:
-      - "Pilots that never reach production"
-      - "Compliance gates slowing delivery"
-      - "Unclear ROI or runaway costs"
+      - "Difficulty scaling pilots to production"
+      - "Balancing speed with compliance and security"
+      - "Lack of clear cost and ROI visibility for new tech"
   secondary:
     demographics: "Founders and small tech teams"
     interests:
@@ -35,22 +76,18 @@ audiences:
       - "Automation"
       - "Cost control"
     pain_points:
-      - "Limited AI capacity"
       - "Vendor lock-in risk"
       - "Marketing bandwidth"
+      
 channels:
-  primary:
-    - "linkedin"
-  secondary: []
+  primary: ["linkedin"]
+
 hashtags:
-  - "Azure"
-  - "AgenticAI"
-  - "ProductionAI"
-  - "RAG"
-  - "HITL"
+  - "ITStrategy"
+  - "Cloud"
   - "Governance"
-  - "Observability"
-  - "Security"
+  - "SRE"
+
 sample_posts:
-  - "Our clients build AI systems with the same rigor as regulated industries: orchestration, grounding, approvals, observability, and cost controls—ensuring pilots scale to production."
-  - "This week's client project: research → plan → draft → review cycle implemented. Quality, latency and cost targets tracked throughout—the same governance pattern used in compliance-heavy environments."
+  - "We help teams move agentic AI pilots to production by implementing RAG pipelines with governance, observability, and cost controls."
+  - "Operationalizing AI requires engineering patterns: approvals, auditing, and measurable SLOs—we've distilled them into a checklist."
