@@ -3,7 +3,19 @@ Prompt templates for LinkedIn and Facebook content generation.
 Simple template system with variable substitution.
 """
 
-from typing import List
+from typing import List, Dict
+
+# module-level registry
+TEMPLATES: Dict[str, "PromptTemplate"] = {}
+
+def register_module_templates(module_globals: dict) -> None:
+    """Set .name on PromptTemplate instances declared in the module and populate TEMPLATES."""
+    for var_name, value in list(module_globals.items()):
+        if isinstance(value, PromptTemplate):
+            # only set if not explicitly provided
+            if not getattr(value, "name", None):
+                value.name = var_name
+            TEMPLATES[value.name] = value
 
 
 class PromptTemplate:
@@ -41,8 +53,11 @@ class PromptTemplate:
 
 # LinkedIn Templates
 
-LINKEDIN_POST_ZERO_SHOT = PromptTemplate(
-    template_string="""Generate a LinkedIn post about the following topic for {brand_name}.
+LINKEDIN_LONG_POST_ZERO_SHOT = PromptTemplate(
+    template_string=
+    """Generate a long-form LinkedIn post about the following topic for {brand_name}.
+       - Don't make the post a list of bullet points, add brand personality to it and make it flow.
+       - Ensure you follow ALL brand guidelines and style below. 
 
 ======================================================================
 TOPIC:
@@ -63,22 +78,89 @@ CONTEXT:
 ======================================================================
 REQUIREMENTS:
 ======================================================================
-- Length: 120-180 words
-- Structure: Hook (1-2 lines) → Insight/Evidence → Pattern/Takeaway → Closing
-- Include specific data or examples where relevant
-- Closing: Choose what fits naturally - engagement question, clear offer, or key takeaway
-- No emojis (will be added separately if needed)
-- Follow brand guidelines for voice, banned terms, and content generation rules
-- CRITICAL: Do not use any phrases from the banned_terms list
+{requirements}
 
 ======================================================================
 
-Generate a post following ALL brand guidelines above.
-Pay special attention to: structure examples, style_guidelines, banned_terms.
+Post:""",
+    required_variables=["topic", "brand_name", "brand_guidelines", "requirements"],
+    optional_variables=["rag_context", "search_context", "examples"]
+)
+
+LINKEDIN_LONG_POST_FEW_SHOT = PromptTemplate(
+    template_string=
+    """Generate a long-form LinkedIn post about the following topic for {brand_name}.
+       - Don't make the post a list of bullet points, add brand personality to it and make it flow.
+       - Ensure you follow ALL brand guidelines and style below. 
+
+======================================================================
+TOPIC:
+======================================================================
+{topic}
+
+======================================================================
+REFERENCE POSTS:
+======================================================================
+{examples}
+
+
+======================================================================
+BRAND GUIDELINES:
+======================================================================
+{brand_guidelines}
+
+======================================================================
+CONTEXT:
+======================================================================
+{rag_context}
+{search_context}
+
+======================================================================
+REQUIREMENTS:
+======================================================================
+{requirements}
+
+======================================================================
+- Don't make the post a list of bullet points, add brand personality to it and make it flow.
+- Ensure you follow ALL brand guidelines and style below. 
 
 Post:""",
-    required_variables=["topic", "brand_name", "brand_guidelines"],
-    optional_variables=["rag_context", "search_context"])
+    required_variables=["topic", "brand_name", "brand_guidelines", "examples", "requirements"],
+    optional_variables=["rag_context", "search_context"]
+)
+
+LINKEDIN_POST_ZERO_SHOT = PromptTemplate(
+    template_string=
+    """Generate a LinkedIn post about the following topic for {brand_name}.
+        - Don't make the post a list of bullet points, add brand personality to it and make it flow.
+        - Ensure you follow ALL brand guidelines and style below. 
+
+======================================================================
+TOPIC:
+======================================================================
+{topic}
+
+======================================================================
+BRAND GUIDELINES:
+======================================================================
+{brand_guidelines}
+
+======================================================================
+CONTEXT:
+======================================================================
+{rag_context}
+{search_context}
+
+======================================================================
+REQUIREMENTS:
+======================================================================
+{requirements}
+
+======================================================================
+
+Post:""",
+    required_variables=["topic", "brand_name", "brand_guidelines", "requirements"],
+    optional_variables=["rag_context", "search_context", "examples"])
 
 LINKEDIN_POST_FEW_SHOT = PromptTemplate(
     template_string=
@@ -90,6 +172,11 @@ TOPIC:
 {topic}
 
 ======================================================================
+REFERENCE POSTS:
+======================================================================
+{examples}
+
+======================================================================
 BRAND GUIDELINES:
 ======================================================================
 {brand_guidelines}
@@ -101,33 +188,62 @@ CONTEXT:
 {search_context}
 
 ======================================================================
-EXAMPLES OF GOOD POSTS:
+REQUIREMENTS:
+======================================================================
+{requirements}
+
+======================================================================
+
+Post:""",
+    required_variables=["topic", "brand_name", "brand_guidelines", "examples", "requirements"],
+    optional_variables=["rag_context", "search_context"])
+
+
+# Post & Newsletter Templates
+
+BLOG_POST = PromptTemplate(
+    template_string=
+    """Generate a blog post about the following topic for {brand_name}.
+       - Follow ALL brand guidelines below.
+       - Output in Markdown format with proper heading hierarchy.
+
+======================================================================
+TOPIC:
+======================================================================
+{topic}
+
+======================================================================
+REFERENCE POSTS:
 ======================================================================
 {examples}
 
 ======================================================================
+BRAND GUIDELINES:
+======================================================================
+{brand_guidelines}
+
+======================================================================
+CONTEXT:
+======================================================================
+{rag_context}
+{search_context}
+
+======================================================================
 REQUIREMENTS:
 ======================================================================
-- Length: 120-180 words
-- Structure: Hook → Insight/Evidence → Pattern/Takeaway → Closing
-- Match the tone and style of the examples
-- Include specific data or examples where relevant
-- Closing: Engagement question, clear offer, or key takeaway (match to post purpose)
-- Follow brand guidelines for voice, banned terms, and content generation rules
-- CRITICAL: Do not use any phrases from the banned_terms list
+{requirements}
 
 ======================================================================
 
-Generate a post following ALL brand guidelines above.
-Pay special attention to: structure examples, style_guidelines, banned_terms.
+Article:""",
+    required_variables=["topic", "brand_name", "brand_guidelines", "requirements"],
+    optional_variables=["rag_context", "search_context", "examples"])
 
-Post:""",
-    required_variables=["topic", "brand_name", "brand_guidelines", "examples"],
-    optional_variables=["rag_context", "search_context"])
-
-LINKEDIN_ARTICLE = PromptTemplate(
+NEWSLETTER = PromptTemplate(
     template_string=
-    """Generate a LinkedIn article about the following topic for {brand_name}.
+    """Generate a Newsletter issue about the following topic for {brand_name}.
+
+This will be sent to subscribers and published on LinkedIn profile.
 
 ======================================================================
 TOPIC:
@@ -148,27 +264,16 @@ CONTEXT:
 ======================================================================
 REQUIREMENTS:
 ======================================================================
-- Length: 1500-2000 words
-- Structure:
-  1. Hook/Problem (2-3 paragraphs)
-  2. Context/Background (2-3 paragraphs)
-  3. Main Content (5-7 paragraphs with subheadings)
-  4. Key Takeaways (bullet list)
-  5. Conclusion + Closing
-- Include specific examples, data, or case studies
-- Use subheadings for readability
-- Closing: End with key takeaways summary, engagement question, or clear next step (match to article purpose)
-- Follow brand guidelines for voice, banned terms, and content generation rules
-- CRITICAL: Do not use any phrases from the banned_terms list
+{requirements}
 
 ======================================================================
 
-Generate an article following ALL brand guidelines above.
-Pay special attention to: structure examples, style_guidelines, banned_terms.
+Generate a newsletter issue following ALL brand guidelines above.
 
-Article:""",
-    required_variables=["topic", "brand_name", "brand_guidelines"],
-    optional_variables=["rag_context", "search_context"])
+Newsletter:""",
+    required_variables=["topic", "brand_name", "brand_guidelines", "requirements"],
+    optional_variables=["rag_context", "search_context", "examples"]
+)
 
 
 # Facebook Templates
@@ -196,22 +301,13 @@ CONTEXT:
 ======================================================================
 REQUIREMENTS:
 ======================================================================
-- Length: 100-150 words
-- Structure: Hook (1 line) → Value/Story → Closing
-- Conversational and engaging tone
-- Closing: Question, offer, or key point (match to post purpose)
-- No emojis (will be added separately if needed)
-- Follow brand guidelines for voice and content generation rules
-- CRITICAL: Do not use any phrases from the banned_terms list
+{requirements}
 
 ======================================================================
 
-Generate a post following ALL brand guidelines above.
-Pay special attention to: structure examples, style_guidelines, banned_terms.
-
 Post:""",
-    required_variables=["topic", "brand_name", "brand_guidelines"],
-    optional_variables=["rag_context", "search_context"])
+    required_variables=["topic", "brand_name", "brand_guidelines", "requirements"],
+    optional_variables=["rag_context", "search_context", "examples"])
 
 FACEBOOK_POST_FEW_SHOT = PromptTemplate(
     template_string="""Generate a Facebook post about the following topic for {brand_name}.
@@ -220,6 +316,11 @@ FACEBOOK_POST_FEW_SHOT = PromptTemplate(
 TOPIC:
 ======================================================================
 {topic}
+
+======================================================================
+REFERENCE POSTS:
+======================================================================
+{examples}
 
 ======================================================================
 BRAND GUIDELINES:
@@ -233,28 +334,15 @@ CONTEXT:
 {search_context}
 
 ======================================================================
-EXAMPLES OF GOOD POSTS:
-======================================================================
-{examples}
-
-======================================================================
 REQUIREMENTS:
 ======================================================================
-- Length: 100-150 words
-- Structure: Hook → Value/Story → Closing
-- Match the tone and style of the examples
-- Conversational and engaging
-- Closing: Question, offer, or key point (match to post purpose)
-- Follow brand guidelines for voice and content generation rules
-- CRITICAL: Do not use any phrases from the banned_terms list
+{requirements}
 
 ======================================================================
 
-Generate a post following ALL brand guidelines above.
-Pay special attention to: structure examples, style_guidelines, banned_terms.
-
 Post:""",
-    required_variables=["topic", "brand_name", "brand_guidelines", "examples"],
+    required_variables=["topic", "brand_name", "brand_guidelines", "examples", "requirements"],
     optional_variables=["rag_context", "search_context"]
 )
 
+register_module_templates(globals())

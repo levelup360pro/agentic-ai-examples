@@ -3,20 +3,25 @@ positioning: "Clean, natural cosmetics with science-backed formulations"
 
 voice:
   tone: "warm, aspirational, authentic"
-  banned_terms:
-    - "chemical-free"
   style_guidelines:
     - "Educate on sustainability and ingredient transparency."
     - "Use accessible language and visual storytelling."
     - "Highlight clinical validation where appropriate."
+    - ...
+  banned_terms:
+    - "chemical-free"
+    - ...
   values:
     - "Sustainability"
     - "Transparency"
     - "Cruelty-free"
+    - ...
+
 context_specific_points:
   - "Ingredient transparency: list actives, concentrations, and clinical evidence where available."
   - "Sustainability touchpoints: refillable packaging, biodegradable components, and ethical sourcing."
   - "Sensitive-skin friendly formulations: hypoallergenic testing and dermatologist validation."
+  - ...
 
 content_generation_rules:
   - "Lead with benefits and evidence (clinical/dermatologist results) for product claims."
@@ -27,13 +32,39 @@ factual_accuracy:
   - "Do not claim 'chemical-free' or other absolute terms; explain ingredient roles instead."
   - "Cite clinical tests, lab results, or supplier documentation when referencing efficacy."
   - "Flag any regulatory or allergen statements for legal review before publishing."
+  - ...
 
 formatting_rules:
-  structure:
-    - "Hook: 1-2 lines describing the consumer problem or sensory benefit"
-    - "Ingredient or process explanation: 2-4 lines (how it helps, evidence)"
-    - "Usage guidance and safety notes: 1-2 lines"
-    - "Closing: benefit, micro-CTA (link or product)"
+  post_requirements: >
+    - Hook: 1-2 lines describing the consumer problem or sensory benefit
+    - Ingredient or process explanation: 2-4 lines (how it helps, evidence)
+    - Usage guidance and safety notes: 1-2 lines
+    - Closing: benefit, micro-CTA (link or product)
+    - ...
+
+  long_post_requirements: >
+    - Character limit: 2900 characters maximum
+    - ...
+
+  blog_post_requirements: >
+    - Length: 1,500-2,500 words (optimized for 7-10 minute read)
+    - ...
+
+  newsletter_requirements: >
+    - Length: 1,200-1,800 words (8-12 minute read)
+    - ...
+
+generation_system_message: |
+  You are a professional content generator.
+  ...
+
+evaluation_system_message: |
+  You are an expert content evaluator for marketing posts.
+  ...
+
+optimization_system_message: |
+  You are a content optimizer. Improve content based on evaluation feedback.
+  ...
 
 cta_guidelines:
   principle: "CTAs should be low-friction and product- or education-focused."
@@ -63,6 +94,12 @@ audiences:
       - "Mistrust in vague claims"
       - "Sensitive skin / irritation"
       - "Greenwashing"
+  secondary:
+    demographics: ...
+    interests:
+      - ...
+    pain_points:
+      - ...
 
 channels:
   primary: ["instagram", "facebook"]

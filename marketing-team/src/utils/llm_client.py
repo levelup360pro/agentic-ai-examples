@@ -2,6 +2,7 @@ from openai import OpenAI, AzureOpenAI
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime, timezone
+from typing import Optional, Any
 import os
 import time
 import csv
@@ -13,7 +14,7 @@ from langsmith import traceable
 
 class CompletionResult(BaseModel):
     """Result from LLM completion call with metadata"""
-    model_config = ConfigDict(frozen=True)
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
     
     content: str = Field(..., description="Generated text from LLM")
     input_tokens: int = Field(ge=0, description="Number of input tokens")
@@ -22,6 +23,7 @@ class CompletionResult(BaseModel):
     latency: float = Field(gt=0.0, description="Latency in seconds")
     model: str = Field(..., description="Model used (e.g., 'gpt-4o-mini')")
     timestamp: datetime = Field(..., description="When the API call was initiated (UTC)")
+    structured_output: Optional[BaseModel] = Field(default=None, description="Structured output (Pydantic model) when response_format is used")
 
 
 class EmbeddingResult(BaseModel):
@@ -53,9 +55,7 @@ class LLMClient:
         self.max_delay = max_delay
         self.client = None
         
-        # Load and cache pricing information
-        self._load_pricing_config()
-        
+       
         # Setup logging
         self.logger = logging.getLogger(__name__)
         if not self.logger.handlers:
@@ -64,6 +64,9 @@ class LLMClient:
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
             self.logger.setLevel(logging.INFO)
+
+        # Load and cache pricing information
+        self._load_pricing_config()
     
     def _load_pricing_config(self):
         """Load pricing configuration from environment variables with defaults"""
@@ -72,11 +75,15 @@ class LLMClient:
         # Default pricing in EUR per 1K tokens (as of October 2025)
         # These are fallback values - always set environment variables for production
         default_pricing = {
-            "GPT4O_MINI_INPUT_PRICE_PER_1K": "0.000150",    # $0.15 per 1M tokens
-            "GPT4O_MINI_OUTPUT_PRICE_PER_1K": "0.000600",   # $0.60 per 1M tokens
-            "GPT4O_INPUT_PRICE_PER_1K": "0.005000",         # $5.00 per 1M tokens
-            "GPT4O_OUTPUT_PRICE_PER_1K": "0.015000",        # $15.00 per 1M tokens
-            "EMBEDDING_PRICE_PER_1K": "0.000020",           # $0.02 per 1M tokens
+            "GPT4O_MINI_INPUT_PRICE_PER_1K": "0.000150",     # $0.15 per 1M tokens
+            "GPT4O_MINI_OUTPUT_PRICE_PER_1K": "0.000600",    # $0.60 per 1M tokens
+            "GPT4O_INPUT_PRICE_PER_1K": "0.005000",          # $5.00 per 1M tokens
+            "GPT4O_OUTPUT_PRICE_PER_1K": "0.015000",         # $15.00 per 1M tokens
+            "EMBEDDING_PRICE_PER_1K": "0.000020",            # $0.02 per 1M tokens
+            "CLAUDE_SONET_4_INPUT_PRICE_PER_1K": "0.003000", # $3.00 per 1M tokens
+            "CLAUDE_SONET_4_OUTPUT_PRICE_PER_1K": "0.015000", # $15.00 per 1M tokens
+            "GPT5_INPUT_PRICE_PER_1K": "0.001500", # $1.50 per 1M tokens
+            "GPT5_OUTPUT_PRICE_PER_1K": "0.01000" # $10.00 per 1M tokens
         }
         
         self.pricing = {}
@@ -109,10 +116,16 @@ class LLMClient:
         elif "gpt-4o" in model.lower():
             input_price_per_1k = self.pricing["GPT4O_INPUT_PRICE_PER_1K"]
             output_price_per_1k = self.pricing["GPT4O_OUTPUT_PRICE_PER_1K"]
+        elif "gpt-5" in model.lower():
+            input_price_per_1k = self.pricing["GPT5_INPUT_PRICE_PER_1K"]
+            output_price_per_1k = self.pricing["GPT5_OUTPUT_PRICE_PER_1K"]
         elif "embedding" in model.lower() or "ada" in model.lower():
             # Embedding models (output_tokens should be 0)
             input_price_per_1k = self.pricing["EMBEDDING_PRICE_PER_1K"]
             output_price_per_1k = 0.0
+        elif "sonnet-4" in model.lower():
+            input_price_per_1k = self.pricing["CLAUDE_SONET_4_INPUT_PRICE_PER_1K"]
+            output_price_per_1k = self.pricing["CLAUDE_SONET_4_OUTPUT_PRICE_PER_1K"]
         else:
             raise ValueError(f"Pricing not configured for model: {model}")
         
@@ -203,7 +216,7 @@ class LLMClient:
         return self.client
     
     @traceable(name="llm_completion", run_type="llm")
-    def get_completion(self, model: str, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 1000) -> CompletionResult:
+    def get_completion(self, model: str, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 1000, response_format: type[BaseModel] | None = None) -> CompletionResult:
         """Get completion with automatic retry logic"""
         return self._execute_with_retry(
             operation=self._get_completion_internal,
@@ -211,45 +224,134 @@ class LLMClient:
             model=model,
             messages=messages,
             temperature=temperature,
-            max_tokens=max_tokens
+            max_tokens=max_tokens,
+            response_format=response_format
         )
     
-    def _get_completion_internal(self, model: str, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 1000) -> CompletionResult:
-        # Capture timestamp when API call starts
+    def _get_completion_internal(self, model: str, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 1000, response_format: type[BaseModel] | None = None) -> CompletionResult:
+        """Internal completion logic with cost tracking"""
         call_timestamp = datetime.now(timezone.utc)
         start_time = time.perf_counter()
         
-        response = self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-
-        end_time = time.perf_counter()
-
-        latency = end_time - start_time
-        usage = response.usage
-        input_tokens = usage.prompt_tokens
-        output_tokens = usage.completion_tokens
+        # Check if model supports native structured outputs (OpenAI models only)
+        supports_native_parse = not model.startswith(("anthropic/", "meta-llama/", "google/"))
         
-        # Use helper method for cost calculation
-        cost = self._calculate_cost(response.model, input_tokens, output_tokens)
-
-        result = CompletionResult(
-            content=response.choices[0].message.content,
+        if response_format and supports_native_parse:
+            # Use OpenAI's native structured output API
+            response = self.client.beta.chat.completions.parse(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format=response_format
+            )
+            structured_output = response.choices[0].message.parsed
+            content = response.choices[0].message.content
+            
+        elif response_format:
+            # Manual JSON parsing for non-OpenAI models (OpenRouter, etc.)
+            json_instruction = f"\n\nYou must respond with ONLY valid JSON matching this exact structure. No markdown, no explanations, just raw JSON:\n{response_format.model_json_schema()}"
+            
+            # Modify messages to request JSON
+            modified_messages = messages.copy()
+            if modified_messages and modified_messages[-1]["role"] == "user":
+                modified_messages[-1] = {
+                    "role": "user",
+                    "content": modified_messages[-1]["content"] + json_instruction
+                }
+            
+            response = self.client.chat.completions.create(
+                model=model,
+                messages=modified_messages,
+                temperature=temperature,
+                max_tokens=max_tokens
+            )
+            content = response.choices[0].message.content
+            
+            # Parse JSON with robust extraction
+            try:
+                import json
+                import re
+                
+                # Try direct parsing first (clean JSON)
+                try:
+                    parsed_data = json.loads(content)
+                except json.JSONDecodeError:
+                    # Fallback: Extract JSON from response
+                    # Remove markdown code fences if present
+                    cleaned = re.sub(r'^```(?:json)?\s*', '', content, flags=re.MULTILINE)
+                    cleaned = re.sub(r'\s*```\s*$', '', cleaned, flags=re.MULTILINE)
+                    
+                    # Find first complete JSON object (first { to matching })
+                    json_match = re.search(r'\{.*?\}\s*(?:\n|$)', cleaned, re.DOTALL)
+                    
+                    if not json_match:
+                        # Try finding JSON anywhere in response
+                        json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', cleaned, re.DOTALL)
+                    
+                    if not json_match:
+                        raise ValueError(
+                            f"No valid JSON found in response.\n"
+                            f"Full content:\n{content}"
+                        )
+                    
+                    json_str = json_match.group(0).strip()
+                    parsed_data = json.loads(json_str)
+                
+                # Validate with Pydantic
+                structured_output = response_format(**parsed_data)
+                
+            except json.JSONDecodeError as e:
+                raise ValueError(
+                    f"Failed to parse JSON from model response.\n"
+                    f"Error: {e}\n"
+                    f"Content:\n{content}"
+                )
+            except Exception as e:
+                raise ValueError(
+                    f"Failed to validate structured output with Pydantic.\n"
+                    f"Error: {e}\n"
+                    f"Parsed data: {parsed_data if 'parsed_data' in locals() else 'N/A'}\n"
+                    f"Content:\n{content[:1000]}"
+                )
+        else:
+            # Regular completion without structured output
+            response = self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens
+            )
+            content = response.choices[0].message.content
+            structured_output = None
+        
+        end_time = time.perf_counter()
+        
+        latency = end_time - start_time
+        input_tokens = response.usage.prompt_tokens
+        output_tokens = response.usage.completion_tokens
+        
+        cost = self._calculate_cost(model, input_tokens, output_tokens)
+        
+        self.log_api_call(
+            model=model,
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             cost=cost,
             latency=latency,
-            model=response.model,
             timestamp=call_timestamp
         )
-
-        # Log the API call
-        self.log_api_call(response.model, input_tokens, output_tokens, cost, latency, call_timestamp)
-
-        return result
+        
+        return CompletionResult(
+            content=content,
+            model=model,
+            cost=cost,
+            latency=latency,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            timestamp=call_timestamp,
+            structured_output=structured_output
+        )
     
     @traceable(name="embedding_generation", run_type="embedding")
     def get_embedding(self, model: str, text: str) -> EmbeddingResult:

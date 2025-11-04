@@ -32,7 +32,7 @@ class PromptBuilder:
         """LLM-powered query optimization."""
         #if len(topic) <= max_length:
         #    return topic
-        
+
         messages = [{"role": "user", "content": f"""Convert this detailed topic into a focused search query (max {max_length} chars). Remove personal narrative, keep key facts/claims to verify. Topic: {topic} Search query:"""}]
 
         result = llm_client.get_completion(model="gpt-4o-mini",
@@ -55,7 +55,8 @@ class PromptBuilder:
                      search_depth: str = 'basic',
                      search_type: str = 'general',
                      llm_client: LLMClient = None,
-                     num_examples: int = 0) -> str:
+                     examples: Optional[list[str]] = None,
+                     use_cot: bool = False) -> str:
         """Construct prompt with optional RAG and search context"""
 
         brand_guidelines = self._format_brand_guidelines(brand_config)
@@ -89,18 +90,41 @@ class PromptBuilder:
                                                        search_type=search_type)
             search_context = self.search_client.format_search_context(
                 search_results)
+            
+        if use_cot:
+            topic = topic + """
+                \nBefore generating the final content, think through:
+                1. What specific problem, failure, or surprising result will hook readers immediately?
+                2. How can I create tension or curiosity in the opening (show what didn't work, build contrast)?
+                3. What concrete numbers, metrics, or evidence prove the main point?
+                4. How does this insight apply beyond the immediate topic (what's the transferable pattern)?
 
-        examples = ""
-        if num_examples > 0:
-            examples = self._build_post_examples(collection_name, brand, topic,
-                                                 num_examples, max_distance)
+                After thinking, generate the final content. Do not include this reasoning in your output.
+                """
 
+        # get template name
+        template_name = getattr(template, "name", None)
+        
+        formatting_rules = brand_config['formatting_rules']
+        requirements = ""
+        
+        if "LONG_POST" in template_name:
+            requirements = formatting_rules.get('long_post_requirements', [])
+        elif "BLOG_POST" in template_name:
+            requirements = formatting_rules.get('blog_post_requirements', [])
+        elif "POST" in template_name:
+            requirements = formatting_rules.get('post_requirements', [])
+        elif "NEWSLETTER" in template_name:
+            requirements = formatting_rules.get('newsletter_requirements', [])
+
+        # Generate prompt
         prompt = template.render(topic=topic,
                                  brand_name=brand,
                                  brand_guidelines=brand_guidelines,
                                  rag_context=rag_context,
                                  search_context=search_context,
-                                 examples=examples)
+                                 examples=examples,
+                                 requirements=requirements)
 
         return prompt
 
@@ -115,25 +139,25 @@ class PromptBuilder:
         guidelines.append(f"  POSITIONING: {brand_config['positioning']}")
         guidelines.append("|" + "-" * 70)
 
-        # 1. Context specific points
+        # 2. Context specific points
         guidelines.append("\n" + "|" + "-" * 70)
         guidelines.append("  CONTEXT SPECIFIC POINTS")
         guidelines.append("|" + "-" * 70)
         guidelines.append(
-            "ONLY mention if they are the PRIMARY subject of the post.")
+            "ONLY mention if they are the PRIMARY subject of the post—never as mandatory mentions or checklists.")
         guidelines.append(
             "Do not force into posts where they are tangential.\n")
         for context_point in brand_config["context_specific_points"]:
             guidelines.append(f"  • {context_point}")
 
-        # 2. Content generation rules
+        # 3. Content generation rules
         guidelines.append("\n" + "|" + "-" * 70)
         guidelines.append("  CONTENT GENERATION RULES")
         guidelines.append("|" + "-" * 70)
         for content_rule in brand_config["content_generation_rules"]:
             guidelines.append(f"  • {content_rule}")
 
-        # 3. Factual accuracy
+        # 4. Factual accuracy
         guidelines.append("\n" + "|" + "-" * 70)
         guidelines.append(
             "  FACTUAL ACCURACY - CRITICAL - OVERRIDE ALL OTHER INSTRUCTIONS")
@@ -141,7 +165,7 @@ class PromptBuilder:
         for accuracy in brand_config["factual_accuracy"]:
             guidelines.append(f"  • {accuracy}")
 
-        # 4. Voice
+        # 5. Voice
         voice = brand_config["voice"]
         guidelines.append("\n" + "|" + "-" * 70)
         guidelines.append("  VOICE & STYLE")
@@ -153,14 +177,6 @@ class PromptBuilder:
 
         guidelines.append(
             f"\nAVOID These Terms: {', '.join(voice['banned_terms'])}")
-
-        # 5. Structure
-        structure = brand_config['formatting_rules']['structure']
-        guidelines.append("\n" + "|" + "-" * 70)
-        guidelines.append("  POST STRUCTURE")
-        guidelines.append("|" + "-" * 70)
-        for rule in structure:
-            guidelines.append(f"  • {rule}")
 
         # 6. CTA Guidelines
         guidelines.append("\n" + "|" + "-" * 70)
@@ -200,31 +216,3 @@ class PromptBuilder:
             context.append(f"- {snippet} (Source: {source})")
 
         return "\n".join(context)
-
-    def _build_post_examples(self,
-                             collection_name: str,
-                             brand: str,
-                             topic: str,
-                             num_examples: int,
-                             max_distance: Optional[float] = None) -> str:
-        """Retrieve and format example posts for few-shot prompting"""
-
-        # Generate embedding for the topic
-        query_embedding = self.rag_helper.embed_batch([topic])[0]
-
-        # Query vector store for similar past posts
-        results = self.vector_store.query(collection_name=collection_name,
-                                          query_embeddings=query_embedding,
-                                          n_results=num_examples,
-                                          where={"brand": brand},
-                                          max_distance=max_distance)
-
-        if not results or not getattr(results, 'texts', None):
-            return ""
-
-        # Format as numbered examples
-        examples = []
-        for i, text in enumerate(results.texts, 1):
-            examples.append(f"Example {i}:\n{text}\n")
-
-        return "\n".join(examples)

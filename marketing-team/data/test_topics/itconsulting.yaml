@@ -1,0 +1,37 @@
+linkedin_posts:
+  - topic: >
+      Create a linkedin post about Cloud platform strategy and architecture — building a secure, scalable platform that
+      balances developer velocity with operational control.
+
+      TOPIC:
+      Describe platform boundaries, when to standardize on a single cloud vs a multi-cloud
+      approach, and how to choose between managed services and owning platform components.
+      Cover practical steps for standardizing infrastructure as code, introducing self-service
+      developer workflows and platform guardrails, and decisions to evaluate during migrations
+      (lift-and-shift, replatform, or cloud-native). Target audience: cloud architects and
+      platform engineering leads.
+
+linkedin_long_posts:
+  - topic: >
+      Create a long linkedin article about enterprise automation and integration strategy — designing resilient orchestrations and
+      API-driven platforms for complex organizations.
+
+      TOPIC:
+      Explain how to design end-to-end automation: event-driven orchestration, API gateways,
+      and integration patterns (point-to-point, choreography). Cover API-first design, versioning
+      and contract testing to maintain integration stability, plus observability and backoff/retry
+      strategies to make automations reliable. Briefly compare RPA/low-code approaches vs
+      cloud-native workflows and when each is appropriate for maintenance cost, ownership and
+      observability.
+
+blog_posts:
+  - topic: >
+      Create a blog post on reliability, governance and operational excellence — practical SRE practices for cloud platforms.
+
+      TOPIC:
+      Present a pragmatic guide for building observable, reliable systems that combines SLO-driven
+      reliability, governance controls, and operational validation. Cover setting SLOs and error budgets,
+      pragmatic observability (logs/metrics/traces), incident response runbooks and post-incident reviews,
+      and how to embed governance checks (identity, least-privilege, data classification and audit trails)
+      into CI/CD and platform policies. Include short notes on chaos engineering, capacity planning and
+      recovery testing to validate resilience.
