@@ -26,7 +26,7 @@ Week 4 transformed the Week 3 eval-optimizer pattern from deterministic orchestr
 ---
 ## Design Decisions
 
-### Decision 14: Architecture Correction - Deterministic to Agentic
+### Decision 17: Architecture Correction - Deterministic to Agentic
 
 **Challenge**: Initial Week 4 approach built deterministic wrappers disguised as agentic—caller controlled workflow via parameters (include_rag, include_search, include_evaluation). Violated fundamental principle: **agent decides strategy, not caller**.
 
@@ -83,7 +83,7 @@ Graph controls flow, agent makes decisions
 
 ---
 
-### Decision 15: State Schema Design - LangGraph Best Practices
+### Decision 18: State Schema Design - LangGraph Best Practices
 
 **Challenge**: Design state schema that supports agentic workflow, graph-level loop control, and Week 3 evaluation integration—while following LangGraph "keep state boring and typed" principle.
 
@@ -140,7 +140,7 @@ class ContentGenerationState(TypedDict):
 
 ---
 
-### Decision 16: Config-Driven Architecture - ROI-Justified Refactoring
+### Decision 19: Config-Driven Architecture - ROI-Justified Refactoring
 
 **Challenge**: Day 2 supervisor implementation revealed hardcoded model configs scattered across codebase (ContentGenerator, ContentEvaluator, PromptBuilder). Changing models requires code deployment, blocks A/B testing, duplicates configuration logic.
 
@@ -247,7 +247,7 @@ temperature = temperature or brand_config.get('models.generation.temperature', 0
 
 ---
 
-### Decision 17: Production Package Structure - Import Chaos Prevention
+### Decision 20: Production Package Structure - Import Chaos Prevention
 
 **Challenge**: Week 3 used sys.path.insert() for imports, breaks in different contexts (notebooks, Docker, CI/CD). Production systems need reliable imports from any working directory.
 
@@ -317,7 +317,7 @@ from src.generation import ContentGenerator
 
 ---
 
-### Decision 18: Framework-Agnostic Core Architecture
+### Decision 21: Framework-Agnostic Core Architecture
 
 **Challenge**: Week 5 will compare LangGraph (Week 4) vs CrewAI implementations. Need objective comparison without rewriting business logic for each framework.
 
@@ -417,7 +417,7 @@ draft_ossie = generator.generate(..., brand="ossie_naturals", brand_config=ossie
 
 ---
 
-### Decision 19: Tool Calling Architecture - No Duplicate Calls
+### Decision 22: Tool Calling Architecture - No Duplicate Calls
 
 **Challenge**: In agentic workflow, supervisor selects tools and fetches results. Generation node needs tool context but must not re-call tools (duplicates cost, latency, inconsistent results).
 
