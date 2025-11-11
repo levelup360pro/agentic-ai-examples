@@ -1,0 +1,2 @@
+timestamp,brand,accuracy,consistency,passes,failures,inconsistent_cases,total_test_cases,single_tool_cases,multi_tool_cases
+2025-11-11T08:52:34.421032,itconsulting,0.5,1.0,False,2,0,4,2,1

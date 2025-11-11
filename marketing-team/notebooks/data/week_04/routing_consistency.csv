@@ -1,0 +1,5 @@
+query,expected_tools,actual_decisions,consistent,unique_decisions,mode_decision
+Explain our content generation workflow,['rag_search'],"[('rag_search',)]",True,1,"('rag_search',)"
+Write about the importance of AI governance in general,[],"[('rag_search',)]",True,1,"('rag_search',)"
+What are the latest trends in AI implementation for 2025?,['web_search'],"[('rag_search',)]",True,1,"('rag_search',)"
+Compare our Azure governance approach to current industry standards,"['rag_search', 'web_search']","[('rag_search',)]",True,1,"('rag_search',)"

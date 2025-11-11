@@ -1,3 +1,20 @@
+"""ChromaDB-based vector store abstractions for the marketing example.
+
+Provides lightweight Pydantic models for collections, documents, and query
+results plus a ``VectorStore`` wrapper that handles persistence, creation,
+querying, and maintenance operations. This concentrates all direct ChromaDB
+interaction behind a narrow API, making higher-level RAG code provider-
+agnostic and easier to test.
+
+Public API
+        CollectionMetadata, Document, QueryResult, VectorStore
+
+Notes
+        - Sanitizes metadata before insertion to ensure Chroma-friendly scalar
+            types and recursively cleans nested structures.
+        - Query responses are normalized to flat lists for convenience.
+        - Methods raise ``ChromaError`` with contextual messages on failure.
+"""
 import chromadb
 from chromadb import Settings
 from chromadb.errors import ChromaError
@@ -8,7 +25,7 @@ import datetime
 
 
 class CollectionMetadata(BaseModel):
-    """Collection metadata"""
+    """Metadata describing a collection's configuration and provenance."""
     model_config = ConfigDict(frozen=True)
     
     description: str = Field(default=None, description="Collection description")
@@ -17,7 +34,7 @@ class CollectionMetadata(BaseModel):
 
 
 class Document(BaseModel):
-    """Document batch for adding to vector store"""
+    """Single document with its embedding and optional metadata."""
     model_config = ConfigDict(frozen=True)
     
     id: str = Field(..., description="Unique document ID")
@@ -27,7 +44,7 @@ class Document(BaseModel):
 
 
 class QueryResult(BaseModel):
-    """Result from vector similarity search"""
+    """Normalized result from a similarity search (parallel lists)."""
     model_config = ConfigDict(frozen=True)
     
     ids: List[str] = Field(..., description="List of matched document IDs")
@@ -37,9 +54,11 @@ class QueryResult(BaseModel):
 
 
 class VectorStore:
-    """
-    Production-ready vector store wrapper for ChromaDB.
-    Provides persistent storage for document embeddings with similarity search capabilities.
+    """Persistent vector store wrapper around ChromaDB.
+
+    Encapsulates collection lifecycle (create, list, delete, clear) and
+    document operations (add/query) while applying normalization and
+    defensive validation. Intended for use in example agentic flows.
     """
     
     def __init__(
@@ -47,16 +66,15 @@ class VectorStore:
         persist_directory: str, 
         settings: Optional[Settings] = None
     ):
-        """
-        Initialize vector store with persistent storage.
-        
+        """Initialize vector store with persistent on-disk storage.
+
         Args:
-            persist_directory: Directory path for persisting the vector store
-            settings: Optional ChromaDB settings (defaults to anonymized_telemetry=False)
-        
+            persist_directory: Directory path for ChromaDB persistence.
+            settings: Optional ChromaDB Settings override.
+
         Raises:
-            ValueError: If persist_directory is empty or invalid
-            ChromaError: If ChromaDB client initialization fails
+            ValueError: If ``persist_directory`` is empty or invalid.
+            ChromaError: If the Chroma client cannot be initialized.
         """
         if not persist_directory or not isinstance(persist_directory, str):
             raise ValueError("persist_directory must be a non-empty string")
@@ -84,18 +102,17 @@ class VectorStore:
             raise ChromaError(f"ChromaDB initialization failed: {e}") from e
 
     def get_collection(self, collection_name: str):
-        """
-        Get an existing collection.
-        
+        """Return an existing collection by name.
+
         Args:
-            collection_name: Name of the collection
-        
+            collection_name: Name of an existing collection.
+
         Returns:
-            ChromaDB collection object
-        
+            Underlying Chroma collection object.
+
         Raises:
-            ValueError: If collection_name is empty or invalid
-            ChromaError: If collection doesn't exist
+            ValueError: If name is empty/invalid.
+            ChromaError: If collection does not exist.
         """
         if not collection_name or not isinstance(collection_name, str):
             raise ValueError("collection_name must be a non-empty string")
@@ -109,23 +126,22 @@ class VectorStore:
             raise ChromaError(f"Collection '{collection_name}' does not exist") from e
 
     def create_collection(
-        self, 
-        collection_name: str, 
-        metadata: Optional[Dict[str, Any]] = None
+        self,
+        collection_name: str,
+        metadata: Optional[Dict[str, Any]] = None,
     ):
-        """
-        Create a new collection with optional metadata.
-        
+        """Create a new collection if it does not yet exist.
+
         Args:
-            collection_name: Name of the collection
-            metadata: Optional collection metadata dict (e.g., {"hnsw:space": "cosine"})
-        
+            collection_name: Unique collection name.
+            metadata: Optional Chroma metadata (e.g. {"hnsw:space": "cosine"}).
+
         Returns:
-            ChromaDB collection object
-        
+            Underlying Chroma collection object.
+
         Raises:
-            ValueError: If collection_name is empty or metadata is invalid
-            ChromaError: If collection already exists or creation fails
+            ValueError: If name or distance metric invalid.
+            ChromaError: On creation failure.
         """
         if not collection_name or not isinstance(collection_name, str):
             raise ValueError("collection_name must be a non-empty string")
@@ -148,24 +164,13 @@ class VectorStore:
             raise ChromaError(f"Failed to create collection (may already exist): {e}") from e
 
     def get_or_create_collection(
-        self, 
-        collection_name: str, 
-        metadata: Optional[Dict[str, Any]] = None
+        self,
+        collection_name: str,
+        metadata: Optional[Dict[str, Any]] = None,
     ):
-        """
-        Get existing collection or create new one if it doesn't exist.
-        Convenience method that combines get_collection() and create_collection().
-        
-        Args:
-            collection_name: Name of the collection
-            metadata: Optional metadata for new collection (e.g., {"hnsw:space": "cosine"})
-        
-        Returns:
-            ChromaDB collection object
-        
-        Raises:
-            ValueError: If collection_name is empty or invalid
-            ChromaError: If collection operations fail
+        """Return existing collection or create a new one if missing.
+
+        Convenience wrapper around ``get_collection`` + ``create_collection``.
         """
         try:
             # Try to get existing collection first
@@ -176,23 +181,18 @@ class VectorStore:
             return self.create_collection(collection_name, metadata)   
 
     def add_documents(
-        self, 
-        collection_name: str, 
-        documents: List[Document]
+        self,
+        collection_name: str,
+        documents: List[Document],
     ) -> int:
-        """
-        Add documents with embeddings to the specified collection.
-        
+        """Add a batch of pre-embedded documents to a collection.
+
         Args:
-            collection_name: Name of the target collection
-            documents: List of Document objects, each containing id, text, embedding, and metadata
-        
+            collection_name: Target collection name.
+            documents: List of ``Document`` instances with embeddings.
+
         Returns:
-            Number of documents successfully added
-        
-        Raises:
-            ValueError: If documents list is invalid or empty
-            ChromaError: If adding documents fails
+            Count of documents successfully added.
         """
         if not documents or len(documents) == 0:
             raise ValueError("Documents must contain at least one document")
@@ -275,44 +275,23 @@ class VectorStore:
             raise ChromaError(f"Failed to add documents: {e}") from e
 
     def query(
-        self, 
-        collection_name: str, 
-        query_embeddings: List[float], 
+        self,
+        collection_name: str,
+        query_embeddings: List[float],
         n_results: int = 5,
         where: Optional[Dict[str, Any]] = None,
         where_document: Optional[Dict[str, Any]] = None,
-        max_distance: Optional[float] = None
+        max_distance: Optional[float] = None,
     ) -> QueryResult:
-        """
-        Query the vector store for similar documents using embedding similarity.
-        
+        """Similarity query returning top matching documents.
+
         Args:
-            collection_name: Name of the collection to query
-            query_embeddings: Pre-computed embedding vector for the query
-            n_results: Maximum number of results to return (default: 5)
-            where: Optional metadata filter (e.g., {"brand": "levelup360"})
-            where_document: Optional document text filter (e.g., {"$contains": "marketing"})
-        
-        Filter Examples:
-            Metadata filters (where):
-                {"brand": "levelup360"}  # Exact match
-                {"brand": {"$eq": "levelup360"}}  # Explicit equality
-                {"brand": {"$ne": "competitor"}}  # Not equal
-                {"brand": {"$in": ["levelup360", "ossienaturals"]}}  # In list
-                
-            Document text filters (where_document):
-                {"$contains": "marketing"}  # Contains text
-                {"$not_contains": "competitor"}  # Doesn't contain
-                
-            Combined filters:
-                Both where and where_document can be used together for complex queries
-        
-        Returns:
-            QueryResult containing matched documents, distances, and metadata
-        
-        Raises:
-            ValueError: If query_embeddings is empty or n_results is invalid
-            ChromaError: If collection doesn't exist or query operation fails
+            collection_name: Collection to search.
+            query_embeddings: Single embedding vector (as list of floats).
+            n_results: Max number of matches to return.
+            where: Optional metadata filter dict.
+            where_document: Optional document text filter dict.
+            max_distance: Optional distance threshold for post-filtering.
         """
         if not query_embeddings or not isinstance(query_embeddings, list):
             raise ValueError("query_embeddings must be a non-empty list of floats")
@@ -398,18 +377,7 @@ class VectorStore:
             raise ChromaError(f"Query operation failed: {e}") from e
 
     def get_document_count(self, collection_name: str) -> int:
-        """
-        Get the total number of documents in the collection.
-        
-        Args:
-            collection_name: Name of the collection
-        
-        Returns:
-            Total number of documents in the collection
-        
-        Raises:
-            ChromaError: If collection doesn't exist or count operation fails
-        """
+        """Return the total number of documents in a collection."""
         try:
             collection = self.get_collection(collection_name)
             count = collection.count()
@@ -424,20 +392,10 @@ class VectorStore:
             raise ChromaError(f"Failed to get document count: {e}") from e
 
     def clear_collection(
-        self, 
-        collection_name: str
+        self,
+        collection_name: str,
     ) -> None:
-        """
-        Delete and recreate a collection, preserving its metadata.
-        This effectively clears all documents while keeping the collection configuration.
-        
-        Args:
-            collection_name: Name of the collection to clear
-        
-        Raises:
-            ValueError: If collection_name is empty
-            ChromaError: If collection doesn't exist or clear operation fails
-        """
+        """Delete and recreate a collection, preserving metadata."""
         if not collection_name or not isinstance(collection_name, str):
             raise ValueError("collection_name must be a non-empty string")
 
@@ -468,16 +426,7 @@ class VectorStore:
             raise ChromaError(f"Failed to clear collection: {e}") from e
     
     def delete_collection(self, collection_name: str) -> None:
-        """
-        Permanently delete a collection and all its documents.
-        
-        Args:
-            collection_name: Name of the collection to delete
-        
-        Raises:
-            ValueError: If collection_name is empty
-            ChromaError: If delete operation fails
-        """
+        """Permanently delete a collection and its documents."""
         if not collection_name or not isinstance(collection_name, str):
             raise ValueError("collection_name must be a non-empty string")
         
@@ -490,15 +439,7 @@ class VectorStore:
             raise ChromaError(f"Failed to delete collection: {e}") from e
     
     def list_collections(self) -> List[str]:
-        """
-        List all collection names in the vector store.
-        
-        Returns:
-            List of collection names
-        
-        Raises:
-            ChromaError: If list operation fails
-        """
+        """Return all collection names in the store."""
         try:
             collections = self.client.list_collections()
             collection_names = [col.name for col in collections]

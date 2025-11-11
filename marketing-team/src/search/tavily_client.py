@@ -1,6 +1,9 @@
-"""
-Tavily AI-first search API wrapper.
-Simple, clean implementation with no unnecessary complexity.
+"""Thin wrapper around the Tavily AI-first search API.
+
+Provides a small, dependency-light client used by agent tools to retrieve
+web results and render them as LLM-ready context. Keeps behavior minimal and
+explicit: callers control query, depth, and type; outputs are simple lists of
+dicts with just the fields needed downstream.
 """
 
 import os
@@ -9,7 +12,12 @@ from typing import List, Dict, Optional
 
 
 class TavilySearchClient:
-    """Tavily AI-first search API wrapper"""
+    """Convenience client for Tavily search with opinionated defaults.
+
+    The client exposes two operations:
+    - ``search``: run a query and return simplified result dicts
+    - ``format_search_context``: render results into prompt-friendly text
+    """
 
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv("TAVILY_API_KEY")
@@ -20,17 +28,17 @@ class TavilySearchClient:
                max_results: int = 5,
                search_depth: str = "basic",
                search_type: str = 'general') -> List[Dict]:
-        """
-        Execute Tavily search
-        
+        """Execute a Tavily search and return simplified result dicts.
+
         Args:
-            query: Search query
-            max_results: Number of results (default 5)
-            search_depth: 'basic' or 'advanced'
-            search_type: 'technical', 'industry', 'news', 'documentation'
+            query: Free-text search query.
+            max_results: Number of results to return (default 5).
+            search_depth: One of {"basic", "advanced"}.
+            search_type: One of {"technical", "industry", "news",
+                "documentation", "general"}; controls domain allowlist.
 
         Returns:
-            List of dicts with keys: url, content, score
+            List of dicts with keys: ``url``, ``content``, ``score``.
         """
 
         # Define allowed domains per search type
@@ -79,14 +87,13 @@ class TavilySearchClient:
             return []
 
     def format_search_context(self, results: List[Dict]) -> str:
-        """
-        Format Tavily results as context string for LLM injection
-        
+        """Render results as a compact, readable prompt context block.
+
         Args:
-            results: List of search results from self.search()
-        
+            results: List of search results from ``self.search()``.
+
         Returns:
-            Formatted string for prompt injection
+            A formatted string suitable for injection into an LLM prompt.
         """
         if not results:
             return ""

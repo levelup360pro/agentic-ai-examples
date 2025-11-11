@@ -14,9 +14,8 @@ from typing import List, Dict, Any, Optional, TYPE_CHECKING
 import tiktoken
 import yaml
 from rich import print as rprint
-
-from rag.vector_store import Document
-from utils.llm_client import LLMClient
+from src.rag.vector_store import Document
+from src.utils.llm_client import LLMClient
 
 # Avoid circular import
 if TYPE_CHECKING:
@@ -75,9 +74,29 @@ class RAGHelper:
         """
         embeddings = []
         for text in texts:
-            result = self.embedding_client.get_embedding(self.embedding_model, text)
+            result = self.embedding_client.get_embedding(model=self.embedding_model, text=text)
             embeddings.append(result.embedding)
         return embeddings
+
+    def embed_query(self, text: str) -> List[float]:
+        """
+        Generate an embedding for a single query/text string.
+
+        This is a convenience wrapper around `embed_batch` / the underlying
+        embedding client that avoids creating a temporary list at call sites.
+
+        Args:
+            text: Single text string to embed
+
+        Returns:
+            Embedding vector for the provided text
+
+        Example:
+            >>> helper = RAGHelper(embedding_client)
+            >>> vec = helper.embed_query("skin")
+        """
+        result = self.embedding_client.get_embedding(model=self.embedding_model, text=text)
+        return result.embedding
     
     def chunk_text(self, text: str) -> List[str]:
         """
@@ -144,8 +163,8 @@ class RAGHelper:
         for i, chunk in enumerate(chunks):
             # Generate embedding
             embedding_result = self.embedding_client.get_embedding(
-                self.embedding_model, 
-                chunk
+                model=self.embedding_model,
+                text=chunk,
             )
             
             # Create unique ID for chunk
@@ -467,4 +486,4 @@ def prepare_text_for_rag(
         ... )
     """
     helper = RAGHelper(embedding_client, embedding_model)
-    return helper.prepare_document(doc_id, text, metadata)
+    return helper.prepare_document(doc_id=doc_id, content=text, metadata=metadata)

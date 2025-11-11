@@ -1,4 +1,4 @@
-﻿name: "Generic IT Consulting"
+﻿name: "itconsulting"
 positioning: "Pragmatic IT consulting for building scalable systems"
 
 voice:
@@ -55,17 +55,62 @@ formatting_rules:
     - Length: 1,200-1,800 words (8-12 minute read)
     - ...
 
-generation_system_message: |
-  You are a professional content generator.
-  ...
+models: 
+  content_planning:
+    model: "anthropic/claude-sonnet-4"
+    temperature: 0.5
+    max_tokens: 1500
+    system_message: |
+      You are a routing supervisor for content generation. Analyze queries and 
+      ...
 
-evaluation_system_message: |
-  You are an expert content evaluator for marketing posts.
-  ...
+  content_generation:
+    model: "anthropic/claude-sonnet-4"
+    temperature: 0.5
+    max_tokens: 1500
+    system_message: |
+      You are a professional content generator for LevelUp360.
+      ...
 
-optimization_system_message: |
-  You are a content optimizer. Improve content based on evaluation feedback.
-  ...
+  content_evaluation:
+    model: "gpt-4o"
+    temperature: 0.3
+    max_tokens: 1500
+    pattern: "evaluator_optimizer"
+    quality_threshold: 7.0
+    system_message: |
+      You are an expert content evaluator for marketing posts.
+      ...
+
+  content_optimization:
+    model: "anthropic/claude-sonnet-4"
+    temperature: 0.5
+    max_tokens: 1500
+    system_message: |
+      You are a content optimizer. Improve content based on evaluation feedback.
+      ...
+
+  search_optimization:  
+    model: "gpt-4o-mini"
+    temperature: 0.5
+    max_tokens: 100
+
+  vectorization:
+    model: "text-embedding-3-small"
+    chunk_size: 150
+    chunk_overlap: 30
+    chunk_threshold: 150
+
+
+retrieval:  
+  rag:
+    max_results: 5
+    max_distance: 0.50
+  
+  search:
+    max_results: 5
+    search_depth: "advanced"
+    search_type: "general"
 
 
 cta_guidelines:

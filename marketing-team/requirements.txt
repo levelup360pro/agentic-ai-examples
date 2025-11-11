@@ -12,4 +12,7 @@ tiktoken
 pyyaml
 rich
 ipykernel
-logger
+langchain_openai
+langgraph
+langchain-core
+langchain

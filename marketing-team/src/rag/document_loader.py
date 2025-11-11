@@ -1,13 +1,17 @@
-"""
-Document Loader for RAG System
+"""Lightweight document loading utilities for the RAG pipeline.
 
-General-purpose document loader that handles various file types.
-Flexible and unopinionated - doesn't assume document structure or naming patterns.
-Focuses only on loading and basic text extraction - does NOT handle chunking or embeddings.
-Use with RAGHelper for complete document preparation pipeline.
-"""
+Focus: file I/O + basic text extraction ONLY. No chunking, embedding, vector
+storage, or metadata inference. Pairs with ``RAGHelper`` and ``VectorStore``
+for the full preparation flow.
 
-import os
+Public API
+    RawDocument, DocumentLoader, create_metadata_extractor, combine_metadata_extractors
+
+Notes
+    - Keeps responsibilities narrow and explicit (Separation of Concerns)
+    - Metadata is caller-provided (Explicit over implicit)
+    - Convenience helpers compose small extractor functions
+"""
 import yaml
 import json
 from pathlib import Path
@@ -18,9 +22,10 @@ import logging
 
 @dataclass
 class RawDocument:
-    """
-    Raw document loaded from source before processing.
-    Not yet chunked or embedded.
+    """In-memory representation of a source file prior to processing.
+
+    Contains raw text plus user-supplied (and minimal auto) metadata. Not
+    chunked or embedded yet.
     """
     content: str
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -33,51 +38,21 @@ class RawDocument:
 
 
 class DocumentLoader:
-    """
-    General-purpose document loader for RAG pipeline.
-    
-    Philosophy:
-        - Flexible: Works with any file structure
-        - Unopinionated: Doesn't assume naming patterns
-        - Explicit: Metadata passed by caller, not inferred
-        - Simple: Each method does one thing well
-    
-    Responsibilities:
-        - Load files (text, markdown, yaml, json)
-        - Extract content
-        - Directory scanning with filters
-    
-    Does NOT:
-        - Assume document structure
-        - Infer metadata from filenames
-        - Chunk text (see RAGHelper)
-        - Generate embeddings (see RAGHelper)
-        - Store vectors (see VectorStore)
-    
-    Usage:
-        >>> loader = DocumentLoader()
-        >>> 
-        >>> # Load single file with custom metadata
-        >>> doc = loader.load_text_file(
-        ...     Path("guide.md"),
-        ...     metadata={"brand": "levelup360", "doc_type": "guideline"}
-        ... )
-        >>> 
-        >>> # Load directory with metadata function
-        >>> docs = loader.load_files(
-        ...     Path("data/docs/"),
-        ...     pattern="*.md",
-        ...     metadata_fn=lambda p: {"doc_type": "guideline"}
-        ... )
+    """Load raw files (text/markdown/YAML/JSON) with optional metadata.
+
+    Responsibilities
+        - File reading and basic content extraction
+        - Directory globbing (with optional recursion)
+        - Optional per-file metadata enrichment via user functions
+
+    Exclusions
+        - No structural inference or filename parsing heuristics
+        - No chunking (``RAGHelper`` handles this)
+        - No embedding or vector persistence
     """
     
     def __init__(self, base_path: Optional[Path] = None):
-        """
-        Initialize document loader.
-        
-        Args:
-            base_path: Optional base directory for relative paths
-        """
+        """Initialize loader with optional base directory."""
         self.base_path = Path(base_path) if base_path else Path.cwd()
         
         # Setup logging
@@ -90,32 +65,17 @@ class DocumentLoader:
             self.logger.setLevel(logging.INFO)
     
     def load_text_file(
-        self, 
-        file_path: Union[str, Path], 
+        self,
+        file_path: Union[str, Path],
         metadata: Optional[Dict[str, Any]] = None,
-        encoding: str = 'utf-8'
+        encoding: str = 'utf-8',
     ) -> RawDocument:
-        """
-        Load a single text file.
-        
+        """Load a plain text/markdown file.
+
         Args:
-            file_path: Path to text file
-            metadata: Optional metadata dict to attach (e.g., {"brand": "x", "doc_type": "y"})
-            encoding: File encoding (default: utf-8)
-        
-        Returns:
-            RawDocument with file content and metadata
-        
-        Raises:
-            FileNotFoundError: If file doesn't exist
-            UnicodeDecodeError: If encoding is incorrect
-        
-        Example:
-            >>> loader = DocumentLoader()
-            >>> doc = loader.load_text_file(
-            ...     "guide.md",
-            ...     metadata={"brand": "levelup360", "doc_type": "guideline"}
-            ... )
+            file_path: Target file path.
+            metadata: Optional metadata dict.
+            encoding: File encoding (default UTF-8).
         """
         file_path = Path(file_path)
         
@@ -153,54 +113,23 @@ class DocumentLoader:
     def load_markdown_file(
         self,
         file_path: Union[str, Path],
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> RawDocument:
-        """
-        Load a markdown file.
-        Convenience method that adds 'markdown' to file_extension.
-        
-        Args:
-            file_path: Path to markdown file
-            metadata: Optional metadata dict
-        
-        Returns:
-            RawDocument with markdown content
-        
-        Example:
-            >>> doc = loader.load_markdown_file(
-            ...     "brand_guide.md",
-            ...     metadata={"brand": "levelup360", "doc_type": "guideline"}
-            ... )
-        """
+        """Load a markdown file (delegates to ``load_text_file``)."""
         return self.load_text_file(file_path, metadata=metadata)
     
     def load_yaml_file(
         self,
         file_path: Union[str, Path],
         metadata: Optional[Dict[str, Any]] = None,
-        return_as_text: bool = False
+        return_as_text: bool = False,
     ) -> Union[RawDocument, Dict[str, Any]]:
-        """
-        Load a YAML file.
-        
+        """Load YAML returning parsed dict or raw text document.
+
         Args:
-            file_path: Path to YAML file
-            metadata: Optional metadata dict
-            return_as_text: If True, return YAML as text in RawDocument
-                           If False, return parsed dict directly
-        
-        Returns:
-            RawDocument (if return_as_text=True) or Dict (if return_as_text=False)
-        
-        Raises:
-            yaml.YAMLError: If YAML is invalid
-        
-        Example:
-            >>> # Get parsed YAML dict
-            >>> config = loader.load_yaml_file("config.yaml")
-            >>> 
-            >>> # Get YAML as text document
-            >>> doc = loader.load_yaml_file("config.yaml", return_as_text=True)
+            file_path: Path to YAML file.
+            metadata: Optional metadata for text mode.
+            return_as_text: True to wrap as ``RawDocument``; False for parsed dict.
         """
         file_path = Path(file_path)
         
@@ -239,29 +168,14 @@ class DocumentLoader:
         self,
         file_path: Union[str, Path],
         metadata: Optional[Dict[str, Any]] = None,
-        return_as_text: bool = False
+        return_as_text: bool = False,
     ) -> Union[RawDocument, Dict[str, Any]]:
-        """
-        Load a JSON file.
-        
+        """Load JSON returning parsed dict or raw text document.
+
         Args:
-            file_path: Path to JSON file
-            metadata: Optional metadata dict
-            return_as_text: If True, return JSON as text in RawDocument
-                           If False, return parsed dict directly
-        
-        Returns:
-            RawDocument (if return_as_text=True) or Dict (if return_as_text=False)
-        
-        Raises:
-            json.JSONDecodeError: If JSON is invalid
-        
-        Example:
-            >>> # Get parsed JSON dict
-            >>> data = loader.load_json_file("data.json")
-            >>> 
-            >>> # Get JSON as text document
-            >>> doc = loader.load_json_file("data.json", return_as_text=True)
+            file_path: Path to JSON file.
+            metadata: Optional metadata for text mode.
+            return_as_text: True to wrap as ``RawDocument``; False for parsed dict.
         """
         file_path = Path(file_path)
         
@@ -303,52 +217,17 @@ class DocumentLoader:
         metadata: Optional[Dict[str, Any]] = None,
         metadata_fn: Optional[Callable[[Path], Dict[str, Any]]] = None,
         recursive: bool = False,
-        file_loader: Optional[Callable[[Path, Optional[Dict]], RawDocument]] = None
+        file_loader: Optional[Callable[[Path, Optional[Dict]], RawDocument]] = None,
     ) -> List[RawDocument]:
-        """
-        Load multiple files from a directory - FLEXIBLE and GENERAL-PURPOSE.
-        
+        """Load many files via glob with optional per-file metadata.
+
         Args:
-            directory: Directory path containing files
-            pattern: Glob pattern for file matching (default: "*.md")
-            metadata: Base metadata dict applied to ALL files
-            metadata_fn: Optional function to generate per-file metadata
-                        Signature: (Path) -> Dict[str, Any]
-                        Result is merged with base metadata
-            recursive: Whether to search subdirectories
-            file_loader: Optional custom file loader function
-                        Signature: (Path, Optional[Dict]) -> RawDocument
-                        Default: self.load_text_file
-        
-        Returns:
-            List of RawDocument objects
-        
-        Examples:
-            >>> # Simple: Load all markdown files
-            >>> docs = loader.load_files(Path("data/docs/"), pattern="*.md")
-            >>> 
-            >>> # With base metadata for all files
-            >>> docs = loader.load_files(
-            ...     Path("data/guidelines/"),
-            ...     metadata={"doc_type": "guideline"}
-            ... )
-            >>> 
-            >>> # With per-file metadata function
-            >>> def get_metadata(path: Path) -> Dict:
-            ...     return {"brand": path.stem.split('_')[0]}
-            >>> 
-            >>> docs = loader.load_files(
-            ...     Path("data/brand_docs/"),
-            ...     metadata={"doc_type": "guideline"},
-            ...     metadata_fn=get_metadata
-            ... )
-            >>> 
-            >>> # With custom file loader
-            >>> docs = loader.load_files(
-            ...     Path("configs/"),
-            ...     pattern="*.yaml",
-            ...     file_loader=lambda p, m: loader.load_yaml_file(p, m, return_as_text=True)
-            ... )
+            directory: Directory to scan.
+            pattern: Glob pattern (default *.md).
+            metadata: Base metadata applied to every file.
+            metadata_fn: Function producing per-file metadata (merged after base).
+            recursive: Whether to search subdirectories.
+            file_loader: Alternate single-file loader (defaults to ``load_text_file``).
         """
         directory = Path(directory)
         
@@ -396,27 +275,9 @@ class DocumentLoader:
         metadata: Optional[Dict[str, Any]] = None,
         metadata_fn: Optional[Callable[[Path], Dict[str, Any]]] = None,
         pattern: str = "*.md",
-        recursive: bool = False
+        recursive: bool = False,
     ) -> List[RawDocument]:
-        """
-        Convenience method: Load markdown files from directory.
-        
-        Args:
-            directory: Directory containing markdown files
-            metadata: Base metadata for all files
-            metadata_fn: Optional function for per-file metadata
-            pattern: Glob pattern (default: "*.md")
-            recursive: Search subdirectories
-        
-        Returns:
-            List of RawDocument objects
-        
-        Example:
-            >>> docs = loader.load_markdown_files(
-            ...     "data/docs/",
-            ...     metadata={"doc_type": "guideline", "brand": "levelup360"}
-            ... )
-        """
+        """Convenience wrapper restricting ``load_files`` to markdown."""
         return self.load_files(
             directory=directory,
             pattern=pattern,
@@ -428,25 +289,7 @@ class DocumentLoader:
     
     @staticmethod
     def clean_text(text: str, preserve_newlines: bool = True) -> str:
-        """
-        Basic text cleaning for document content.
-        
-        Args:
-            text: Raw text content
-            preserve_newlines: If True, preserve single newlines
-                              If False, collapse all whitespace
-        
-        Returns:
-            Cleaned text
-        
-        Example:
-            >>> raw = "  Line 1  \\n\\n  Line 2  \\n\\n\\n  Line 3  "
-            >>> cleaned = DocumentLoader.clean_text(raw)
-            >>> print(cleaned)
-            Line 1
-            Line 2
-            Line 3
-        """
+        """Small utility to normalize whitespace in content."""
         if preserve_newlines:
             # Remove excessive whitespace but preserve single newlines
             lines = [line.strip() for line in text.split('\n')]
@@ -461,31 +304,9 @@ class DocumentLoader:
 # Convenience functions for common use cases
 def create_metadata_extractor(
     extract_fn: Callable[[Path], Any],
-    key: str
+    key: str,
 ) -> Callable[[Path], Dict[str, Any]]:
-    """
-    Create a metadata extractor function from a simple extraction function.
-    
-    Args:
-        extract_fn: Function that extracts a value from file path
-        key: Metadata key to store the extracted value
-    
-    Returns:
-        Metadata extractor function
-    
-    Example:
-        >>> # Extract brand from filename prefix
-        >>> extract_brand = create_metadata_extractor(
-        ...     lambda p: p.stem.split('_')[0],
-        ...     "brand"
-        ... )
-        >>> 
-        >>> loader = DocumentLoader()
-        >>> docs = loader.load_files(
-        ...     "data/docs/",
-        ...     metadata_fn=extract_brand
-        ... )
-    """
+    """Wrap a single-value extraction function into metadata dict producer."""
     def extractor(path: Path) -> Dict[str, Any]:
         return {key: extract_fn(path)}
     
@@ -495,30 +316,7 @@ def create_metadata_extractor(
 def combine_metadata_extractors(
     *extractors: Callable[[Path], Dict[str, Any]]
 ) -> Callable[[Path], Dict[str, Any]]:
-    """
-    Combine multiple metadata extractor functions.
-    
-    Args:
-        *extractors: Variable number of metadata extractor functions
-    
-    Returns:
-        Combined metadata extractor
-    
-    Example:
-        >>> extract_brand = create_metadata_extractor(
-        ...     lambda p: p.stem.split('_')[0],
-        ...     "brand"
-        ... )
-        >>> 
-        >>> extract_type = create_metadata_extractor(
-        ...     lambda p: "guideline" if "guide" in p.name else "post",
-        ...     "doc_type"
-        ... )
-        >>> 
-        >>> combined = combine_metadata_extractors(extract_brand, extract_type)
-        >>> 
-        >>> docs = loader.load_files("data/", metadata_fn=combined)
-    """
+    """Compose multiple metadata extractor functions into one."""
     def combined_extractor(path: Path) -> Dict[str, Any]:
         result = {}
         for extractor in extractors:
