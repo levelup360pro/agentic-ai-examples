@@ -1,12 +1,25 @@
+"""Cost tracking utilities for API usage in the example project.
+
+Reads the CSV produced by the central LLM client and surfaces
+summaries for notebooks and quick diagnostics. This module does not
+perform any network calls.
+"""
+
 import pandas as pd
-from datetime import datetime
-from typing import Optional, Dict
+from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
 from pathlib import Path
 import logging
 
 class ModelCostBreakdown(BaseModel):
-    """Cost breakdown per model"""
+    """Cost breakdown per model.
+
+    Attributes:
+        model: Model name.
+        total_cost: Total cost attributed to the model (EUR).
+        call_count: Number of invocations.
+        avg_cost_per_call: Average EUR spent per invocation.
+    """
     model_config = ConfigDict(frozen=True)
     
     model: str = Field(..., description="Model name")
@@ -15,7 +28,10 @@ class ModelCostBreakdown(BaseModel):
     avg_cost_per_call: float = Field(ge=0.0, description="Average cost per call")
 
 class CostSummary(BaseModel):
-    """Comprehensive cost analysis report"""
+    """Comprehensive cost analysis report.
+
+    Attributes reflect aggregate totals and a per-model breakdown.
+    """
     model_config = ConfigDict(frozen=True)
     
     total_cost: float = Field(ge=0.0, description="Total cost across all models")
@@ -27,14 +43,22 @@ class CostSummary(BaseModel):
     by_model: list[ModelCostBreakdown] = Field(default_factory=list, description="Cost breakdown by model")
 
 class CostTracker:
-    """API cost tracking and analysis"""
+    """API cost tracking and analysis helper.
+
+    Args:
+        log_file: Path to the CSV exported by the LLM client.
+    """
     
     def __init__(self, log_file: str = "data/api_calls.csv"):
         self.log_file = Path(log_file)
         self.logger = logging.getLogger(__name__)
     
     def _load_data(self) -> pd.DataFrame:
-        """Load and validate cost data from CSV"""
+        """Load and validate cost data from CSV.
+
+        Returns:
+            Dataframe with timestamp, model, token counts, cost, latency.
+        """
         if not self.log_file.exists():
             self.logger.warning(f"Cost log file not found: {self.log_file}")
             return pd.DataFrame(columns=['timestamp', 'model', 'input_tokens', 'output_tokens', 'cost_eur', 'latency_seconds'])
@@ -52,7 +76,15 @@ class CostTracker:
         start_date: Optional[str] = None,
         end_date: Optional[str] = None
     ) -> float:
-        """Get total cost for specified date range"""
+        """Compute total cost for an optional date range.
+
+        Args:
+            start_date: Inclusive start date (YYYY-MM-DD) or None.
+            end_date: Inclusive end date (YYYY-MM-DD) or None.
+
+        Returns:
+            Sum of cost_eur for the selected period.
+        """
         df = self._load_data()
         
         if df.empty:
@@ -67,7 +99,11 @@ class CostTracker:
         return float(df['cost_eur'].sum())
     
     def get_cost_by_model(self) -> list[ModelCostBreakdown]:
-        """Get cost breakdown by model"""
+        """Get cost breakdown by model.
+
+        Returns:
+            A list of ModelCostBreakdown sorted by total_cost descending.
+        """
         df = self._load_data()
         
         if df.empty:
@@ -96,7 +132,15 @@ class CostTracker:
         start_date: Optional[str] = None,
         end_date: Optional[str] = None
     ) -> CostSummary:
-        """Generate comprehensive cost summary report"""
+        """Generate a comprehensive cost summary report.
+
+        Args:
+            start_date: Inclusive start date (YYYY-MM-DD) or None.
+            end_date: Inclusive end date (YYYY-MM-DD) or None.
+
+        Returns:
+            A CostSummary object with totals and per-model breakdown.
+        """
         df = self._load_data()
         
         if df.empty:

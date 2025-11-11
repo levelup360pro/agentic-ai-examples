@@ -1,0 +1,5 @@
+query,expected_tools,actual_tools,reasoning,correct,reason_for_expected,category
+Explain our content generation workflow,['rag_search'],['rag_search'],,True,Our specific workflow implementation,Single: rag_search
+Write about the importance of AI governance in general,[None],['web_search'],,False,"General AI governance concepts, no company context needed",Single: None
+What are the latest trends in AI implementation for 2025?,['web_search'],"['web_search', 'rag_search']",,False,"Current industry trends, needs recent information",Single: web_search
+Compare our Azure governance approach to current industry standards,"['rag_search', 'web_search']","['rag_search', 'web_search']",,True,Needs our approach (RAG) + industry standards (web search),Multi-tool

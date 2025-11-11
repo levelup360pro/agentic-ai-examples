@@ -1,15 +1,26 @@
+"""Manual scoring utilities for qualitative content evaluation.
+
+Provides a CLI and notebook-friendly helpers to apply a structured
+rubric (loaded from YAML) to generated marketing content. All scoring
+outputs are immutable Pydantic models for consistency with the rest
+of the evaluation pipeline.
+"""
+
 import yaml
 import csv
-import os
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 
 class ScoreResult(BaseModel):
-    """Structured scoring result"""
+    """Immutable structured representation of a manual scoring result.
+
+    All dimension scores follow the rubric scale (1–10). The average
+    is precomputed for convenience and stored explicitly.
+    """
     model_config = ConfigDict(frozen=True)
-    
+
     content_id: str = Field(..., description="Unique identifier for content")
     clarity: float = Field(ge=1, le=10, description="Content clarity score")
     brand_voice: float = Field(ge=1, le=10, description="Brand voice consistency score")
@@ -21,15 +32,28 @@ class ScoreResult(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.now, description="When the evaluation was completed")
 
 class ScoringHelper:
-    """Production-grade helper for manual content scoring"""
-    
+    """Helper for interactive/manual scoring workflows.
+
+    Handles rubric loading, interactive CLI scoring, batch mode,
+    and notebook-friendly display helpers.
+
+    Args:
+        rubric_path: Path to the evaluation rubric YAML file.
+    """
+
     def __init__(self, rubric_path: str = "configs/evaluation_rubric.yaml"):
         self.rubric_path = Path(rubric_path)
         self.rubric = self._load_rubric()
         self.dimensions = ["clarity", "brand_voice", "cta", "accuracy", "engagement"]
     
     def _load_rubric(self) -> Dict:
-        """Load scoring rubric from YAML file"""
+        """Load scoring rubric from YAML file.
+
+        Returns:
+            Parsed rubric dictionary.
+        Raises:
+            FileNotFoundError: If the rubric file does not exist.
+        """
         if not self.rubric_path.exists():
             raise FileNotFoundError(f"Rubric file not found: {self.rubric_path}")
         
@@ -37,7 +61,18 @@ class ScoringHelper:
             return yaml.safe_load(f)
     
     def score_content(self, content: str, content_id: str) -> ScoreResult:
-        """Interactive CLI for scoring content with validation"""
+        """Interactively score a single piece of content via CLI.
+
+        Prompts for each dimension defined in the rubric. Use in
+        terminal sessions; for notebooks prefer display_scoring_guide.
+
+        Args:
+            content: Raw content text to evaluate.
+            content_id: Unique identifier used in persistence.
+
+        Returns:
+            Immutable ScoreResult with individual dimensions and average.
+        """
         
         print("\n" + "=" * 80)
         print(f"SCORING CONTENT: {content_id}")
@@ -70,7 +105,14 @@ class ScoringHelper:
         )
     
     def _score_dimension(self, dimension: str) -> float:
-        """Score a single dimension with validation"""
+        """Prompt user for a single dimension score with validation.
+
+        Args:
+            dimension: Dimension name (e.g. "clarity").
+
+        Returns:
+            A validated float between 1 and 10.
+        """
         dimension_config = self.rubric.get('dimensions', {}).get(dimension, {})
         examples = dimension_config.get('examples', {})
         
@@ -101,7 +143,14 @@ class ScoringHelper:
         score_result: ScoreResult,
         output_path: str = "data/week_02_scores.csv"
     ) -> None:
-        """Save scores to CSV with proper error handling"""
+        """Persist a ScoreResult to a CSV file.
+
+        Creates the file (with headers) on first write.
+
+        Args:
+            score_result: Immutable score data to persist.
+            output_path: Target CSV path.
+        """
         output_file = Path(output_path)
         
         # Create directory if it doesn't exist
@@ -115,7 +164,7 @@ class ScoringHelper:
         self._append_score_to_csv(output_file, score_result)
     
     def _create_csv_with_headers(self, output_file: Path) -> None:
-        """Create CSV file with proper headers"""
+        """Create a new CSV file with header row if missing."""
         with open(output_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow([
@@ -124,7 +173,7 @@ class ScoringHelper:
             ])
     
     def _append_score_to_csv(self, output_file: Path, score_result: ScoreResult) -> None:
-        """Append score result to CSV file"""
+        """Append a single ScoreResult row to an existing CSV file."""
         with open(output_file, 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow([
@@ -144,7 +193,15 @@ class ScoringHelper:
         contents: Dict[str, str],
         output_path: str = "data/week_02_scores.csv"
     ) -> list[ScoreResult]:
-        """Score multiple contents in batch"""
+        """Score multiple contents sequentially.
+
+        Args:
+            contents: Mapping of content_id -> content text.
+            output_path: CSV location for persisted results.
+
+        Returns:
+            List of ScoreResult objects (may be partial if interrupted).
+        """
         results = []
         
         for content_id, content in contents.items():
@@ -162,17 +219,15 @@ class ScoringHelper:
         return results
     
     def display_scoring_guide(self, content: str, content_id: str) -> None:
-        """
-        Display content and rubric for manual scoring in notebooks.
-        Use this when input() doesn't work (Jupyter notebooks).
-        
-        Usage:
-            scorer.display_scoring_guide(content, "post_001")
-            # Then in next cell, manually create scores dict and use create_score_result()
-        
+        """Render content and rubric context for notebook-based scoring.
+
+        Use when interactive input() is unavailable. After calling,
+        manually construct scores and instantiate ScoreResult in a
+        subsequent cell.
+
         Args:
-            content: The content to be scored
-            content_id: Unique identifier for the content
+            content: Raw content text.
+            content_id: Identifier to use in persistence.
         """
         print("\n" + "=" * 80)
         print(f"CONTENT TO SCORE: {content_id}")
