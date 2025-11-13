@@ -97,10 +97,10 @@ Detailed week reports are published in this repository documenting:
 
 | Week | Report | Key Outcomes |
 |------|--------|--------------|
-| **Week 1** | [WEEK1.md](WEEK1.md) | Evaluation framework, three-environment strategy, decision criteria |
-| **Week 2** | [WEEK2.md](WEEK2.md) | RAG system (Chroma, 40-post corpus), Tavily search, corpus testing (25% → 100% retrieval success) |
-| **Week 3** | [WEEK3.md](WEEK3.md) | Orchestration pattern testing (60 pieces), eval-optimizer winner (8.56/10), model selection (Claude Sonnet 4), evaluation system calibration |
-| **Week 4** | [WEEK4.md](WEEK4.md) | LangGraph supervisor pattern, 100% routing accuracy (22/22 scenarios), framework-agnostic architecture, config-driven system (4.3x ROI) |
+| **Week 1** | [WEEK1.md](/marketing-team/reports/WEEK1.md) | Evaluation framework, three-environment strategy, decision criteria |
+| **Week 2** | [WEEK2.md](/marketing-team/reports/WEEK2.md) | RAG system (Chroma, 40-post corpus), Tavily search, corpus testing (25% → 100% retrieval success) |
+| **Week 3** | [WEEK3.md](/marketing-team/reports/WEEK3.md) | Orchestration pattern testing (60 pieces), eval-optimizer winner (8.56/10), model selection (Claude Sonnet 4), evaluation system calibration |
+| **Week 4** | [WEEK4.md](/marketing-team/reports/WEEK4.md) | LangGraph supervisor pattern, 100% routing accuracy (22/22 scenarios), framework-agnostic architecture, config-driven system (4.3x ROI) |
 | **Week 5** | WEEK5.md | *In progress* - CrewAI integration, framework comparison |
 
 ---
