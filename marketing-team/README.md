@@ -1,41 +1,65 @@
 # LevelUp360 Agentic Marketing System
 
-**Production-grade agentic AI system for dual-brand content generation, built through Evaluation-Driven Development.**
+**Systematic exploration of agentic AI orchestration (LangGraph, CrewAI) for enterprise delivery, applied to dual-brand marketing use case.**
 
-**Status**: Week 4 Complete — LangGraph Multi-Agent System  
-**Methodology**: Data-driven architecture decisions through systematic testing  
-**Deployment**: Local development (Weeks 1-4) → Azure production (Weeks 5+)
+**Context**: Expanding my enterprise AI delivery capabilities (10+ years building production systems in regulated environments) into agentic orchestration patterns. Using marketing as a low-risk sandbox to master LangGraph/CrewAI with the same production rigor I've applied in finance/compliance workloads.
+
+**Status**: Week 5 In Progress — CrewAI Integration + Framework Comparison  
+**Methodology**: Evaluation-Driven Development (data-driven architecture decisions—enterprise standard)  
+**Deployment Path**: Local testing (Weeks 1-4) → Azure production (Weeks 5+)
 
 ---
 
 ## What I'm Building
 
-A production agentic marketing system that generates LinkedIn content for two real brands (AI consulting + cosmetics), designed to **enterprise production standards**:
+An **agentic marketing system** serving two real brands (my AI consulting practice LevelUp360 + partner's cosmetics brand), built with **the same production-grade patterns I've used in enterprise delivery for 10+ years**—now applied to agentic orchestration frameworks (LangGraph, CrewAI).
 
-**Core Capabilities**:
-- **Quality-First**: >7/10 content quality (human rubric), >2% engagement target (stretch >3%)
-- **Cost-Efficient**: <€2 per post operational cost
-- **Production-Grade**: HITL approvals, observability, cost monitoring, evaluation pipelines
-- **Enterprise Security**: Azure Content Safety (Prompt Shield, Content Moderation, Groundedness Detection)
-- **Performance Tracking**: Automated Facebook + LinkedIn analytics with insights embedded as retrieval context for adaptive decision-making
-- **Data-Driven**: All architectural decisions validated through systematic testing with real content
+### Why Marketing as the Use Case?
 
-**Technical Stack** (Locked After Testing):
+**Low-risk sandbox** to master agentic tooling (LangGraph supervisor patterns, CrewAI hierarchical teams, multi-agent coordination) while applying enterprise rigor I already know from regulated delivery (evaluation pipelines, cost budgets, HITL approvals, security layers, observability, drift detection).
+
+Marketing generates real published content (not academic), but stakes are lower than finance/healthcare—safe environment to systematically test orchestration frameworks before applying to higher-stakes client work.
+
+### What's Familiar (Enterprise Patterns I've Delivered Before)
+
+These patterns are **proven in my production work** (finance, compliance, regulated ML systems). I'm applying them here to validate they work with agentic orchestration:
+
+- ✅ **Evaluation-Driven Development**: Define metrics before building, test systematically, choose based on data (not opinions)
+- ✅ **Cost Controls**: Runtime budget enforcement, per-operation tracking (achieved €0.054/post Week 4 vs <€2 target)
+- ✅ **Security Layers**: Azure Content Safety integrated from Day 1 (Prompt Shield, content moderation, groundedness detection)
+- ✅ **HITL Approval Workflows**: Human-in-the-loop governance before any output goes live
+- ✅ **Full Observability**: Application Insights monitoring, decision audit trails, lineage tracking
+- ✅ **Drift Detection**: Quality degradation monitoring over time (automated alerts on metric decay)
+- ✅ **Multi-Tenant Isolation**: Separate PostgreSQL tables per brand (zero cross-contamination—GDPR/compliance pattern)
+
+### What's New (Agentic AI Tooling I'm Systematically Testing)
+
+This is the **skill expansion** focus—mastering agentic orchestration frameworks through hands-on testing:
+
+- 🔄 **LangGraph supervisor patterns**: 100% routing accuracy achieved Week 4 (22/22 scenarios, 110/110 runs)
+- 🔄 **CrewAI hierarchical orchestration**: Week 5 testing in progress (objective comparison vs LangGraph)
+- 🔄 **Multi-agent coordination strategies**: Eval-optimizer pattern winner Week 3 (8.56/10 avg quality vs 8.20 reflection, 7.64 single-pass)
+- 🔄 **Framework-agnostic architecture**: Same business logic, swappable orchestration—enables objective comparison without refactoring
+
+### Technical Stack (Locked After Systematic Testing)
+
 - **Orchestration**: LangGraph supervisor pattern (100% routing accuracy, Week 4 winner)
 - **Pattern**: Eval-optimizer (8.56/10 avg quality, Week 3 winner)
 - **Model**: Claude Sonnet 4 with reference post (9.5/10 narrative quality, Week 3 winner)
 - **Grounding**: RAG with Chroma (local) → PostgreSQL + pgvector (production) for brand knowledge; text-embedding-3-small (1536D)
 - **Search**: Tavily AI-first search API for LLM-optimized evidence retrieval
 - **Security**: Azure Content Safety (Prompt Shield, Content Moderation, Groundedness Detection)
-- **Analytics**: Automated Facebook + LinkedIn post performance tracking with agentic learning
+- **Analytics**: Automated LinkedIn post performance tracking with insights as retrieval context
 - **Multi-Brand Isolation**: Separate PostgreSQL tables per brand (zero cross-contamination)
 - **Deployment**: Azure Container Apps (Staging + Production) with Application Insights monitoring
 
-**Why This Approach**:
-- **Evaluation-Driven Development**: Define success metrics BEFORE building, test alternatives with data
-- **Transparent Methodology**: Share testing process, decision rationale, outcomes weekly
-- **Production Patterns**: Implements evaluation pipelines, logging, cost tracking, drift detection from Day 1
-- **Transferable**: Same patterns map to enterprise use cases (finance, healthcare, compliance)
+### Core Capabilities (Validated Metrics)
+
+- **Quality-First**: >7/10 content quality via human rubric evaluation ✅ **Achieved**: 8.56/10 (Week 3)
+- **Cost-Efficient**: <€2 per post operational cost ✅ **Achieved**: €0.054/post (Week 4)
+- **Performance**: <60s generation latency ✅ **Achieved**: <40s (Week 4)
+- **Routing Accuracy**: 100% correct tool selection ✅ **Achieved**: 22/22 scenarios (Week 4)
+- **Production-Grade**: HITL approvals, observability, cost monitoring, evaluation pipelines (enterprise standard)
 
 ---
 
@@ -43,7 +67,7 @@ A production agentic marketing system that generates LinkedIn content for two re
 
 **Each week has its own Git branch** with complete code, notebooks, and setup instructions specific to that week's focus:
 
-### **Week Branches**
+### Week Branches
 
 | Branch | Focus | Status | Key Deliverables |
 |--------|-------|--------|------------------|
@@ -56,7 +80,7 @@ A production agentic marketing system that generates LinkedIn content for two re
 | `week-07` | Observability + monitoring | 📅 Planned | Application Insights, LangSmith tracing, cost monitoring, quality drift detection |
 | `week-08` | End-to-end validation | 📅 Planned | Staging testing, dual-brand workflows, performance validation |
 
-### **How to Use Week Branches**
+### How to Use Week Branches
 
 Each week branch is **self-contained** with:
 - Complete working code for that week's implementation
@@ -95,6 +119,7 @@ Detailed week reports are published in this repository documenting:
 - Results (quality scores, cost, latency, insights)
 - Lessons learned (what worked, what didn't, enterprise transferability)
 
+
 | Week | Report | Key Outcomes |
 |------|--------|--------------|
 | **Week 1** | [WEEK1.md](/marketing-team/reports/WEEK1.md) | Evaluation framework, three-environment strategy, decision criteria |
@@ -105,46 +130,34 @@ Detailed week reports are published in this repository documenting:
 
 ---
 
-## Why This Approach: Patterns Over Tools
+## Why Production Rigor for Marketing? (Enterprise Transferability)
 
-**The use case is marketing (what I actually need). The patterns are enterprise.**
+**The use case is marketing (low-risk sandbox). The patterns are enterprise (proven in regulated delivery).**
 
-This system demonstrates enterprise production-grade AI patterns that transfer directly to regulated industries:
+I'm applying the same production-grade patterns I've used in highly regulatede environments to master agentic tooling in a controlled context. These patterns transfer directly—I've already delivered them in high-stakes domains; now I'm proving they work with agentic orchestration.
 
-| Pattern | Marketing Implementation | Enterprise Translation |
-|---------|-------------------------|------------------------|
-| **HITL Approvals** | Human reviews content before publishing | Compliance officer approves financial advice, legal reviews contracts |
-| **RAG Grounding** | Brand guidelines + past posts context | Policy documents + regulatory requirements grounding |
-| **Security Layers** | Prompt Shield + Content Moderation + Groundedness Detection | Jailbreak prevention, harmful content filtering, hallucination detection for regulated outputs |
-| **Agentic Routing** | Supervisor analyzes topic → selects tools (RAG, web search, both, neither) | Risk engine analyzes transaction → routes to fraud detection, compliance check, manual review |
-| **Evaluation Pipelines** | Quality scoring (clarity, brand voice, accuracy) | Risk scoring (compliance, bias detection, hallucination checks) |
-| **Cost Monitoring** | Per-post cost tracking (<€2 target) | Per-transaction budget enforcement |
-| **Observability** | Full decision audit trail (what was generated, why, by whom) | Regulatory audit trail (explainability, version control) |
-| **Drift Detection** | Content quality degradation monitoring | Model performance degradation in production |
-| **Multi-Brand Isolation** | Separate PostgreSQL tables per brand (zero cross-contamination) | Separate tenant data stores (HIPAA, GDPR compliance for multi-client deployments) |
 
-**Production Bias**: Everything runs with logs, budgets, and evidence. Local-first for cost efficiency; Azure parity for enterprise deployment.
-
----
 
 ## Methodology: Evaluation-Driven Development
 
-Based on Chip Huyen's AI Engineering principles.
+Based on **Chip Huyen's AI Engineering principles** (industry standard for production ML/AI systems):
 
-**Core Tenet**: "Define what 'good' looks like BEFORE you build, and use those definitions to guide model selection, design, deployment, and iteration."
+> *"Define what 'good' looks like BEFORE you build, and use those definitions to guide model selection, design, deployment, and iteration."*
 
-**Our Application**:
-- Week 1: Define evaluation criteria (four pillars, rubric, metrics)
-- Weeks 2-4: Test alternatives systematically (prompts/RAG, patterns, frameworks)
-- Decision framework: Choose based on data (quality scores, cost, latency)
-- Weeks 5+: Build with confidence; monitor continuously
-- Publication: Share transparent testing process and outcomes
+### My Application (12-Week Process)
 
-**Key Validation Results**:
-- Week 3: Eval-optimizer pattern wins (8.56/10 avg quality vs 8.20/10 reflection)
-- Week 3: Claude Sonnet 4 + reference wins (9.5/10 vs 8.5/10 without reference)
-- Week 4: LangGraph supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs)
-- Week 4: Framework-agnostic architecture enables objective Week 5 comparison (same business logic, different orchestration)
+- **Week 1**: Define evaluation criteria (four pillars: clarity, engagement, brand voice, accuracy; human rubric 1-10; metrics targets)
+- **Weeks 2-4**: Test alternatives systematically (prompts/RAG configurations, orchestration patterns, frameworks)
+- **Decision framework**: Choose based on data (quality scores, cost, latency measurements—not opinions or vendor claims)
+- **Weeks 5+**: Build with confidence knowing choices are validated; monitor continuously for drift
+- **Publication**: Share transparent testing process and outcomes (methodology transparency)
+
+### Key Validation Results (Data-Driven Decisions)
+
+- ✅ **Week 3**: Eval-optimizer pattern wins (8.56/10 avg quality vs 8.20/10 reflection, 7.64/10 single-pass—20-piece test per condition)
+- ✅ **Week 3**: Claude Sonnet 4 + reference post wins (9.5/10 vs 8.5/10 without reference—narrative quality focus)
+- ✅ **Week 4**: LangGraph supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
+- ✅ **Week 4**: Framework-agnostic architecture enables objective Week 5 comparison (same business logic, different orchestration—isolates framework variable)
 
 ---
 
@@ -180,13 +193,16 @@ pip install -r requirements.txt
 # Follow setup cells for that week's specific requirements
 ```
 
-**Required API Keys vary by week**
+**Required API Keys** (varies by week):
+- OpenRouter API (Weeks 1-4 for model testing)
+- Tavily API (Week 2+ for web search)
+- Azure OpenAI (Weeks 5+ for production deployment)
 
 ---
 
 ## Architecture Philosophy
 
-### **Three-Environment Strategy**
+### Three-Environment Strategy (Enterprise Standard)
 
 **Local Development (Weeks 1-4)**:
 - **Purpose**: Rapid experimentation, pattern/framework/model testing
@@ -205,7 +221,7 @@ pip install -r requirements.txt
 - **Testing**: End-to-end validation, HITL approval workflow, cost/latency verification
 
 **Production Deployment (Week 6+)**:
-- **Purpose**: Live content generation with strict governance
+- **Purpose**: Live content generation for my brands with strict governance
 - **Stack**: Same as Staging (consistency guaranteed)
 - **Differences**: Separate resources, stricter RBAC, production secrets, higher availability targets
 - **Monitoring**: Application Insights + alerting on quality drift, cost overruns, failures
@@ -214,65 +230,83 @@ pip install -r requirements.txt
 
 ## Success Metrics
 
-### Technical
+### Technical (Systematic Validation)
 - Content quality (human rubric): ≥ 7/10 average ✅ **Achieved**: 8.56/10 (Week 3)
 - Technical generation cost: < €2 per post ✅ **Achieved**: €0.054/post (Week 4)
 - Generation latency: < 60 seconds ✅ **Achieved**: <40s (Week 4)
 - Routing accuracy: 100% ✅ **Achieved**: 22/22 scenarios (Week 4)
 
-### Business (Weeks 6+)
+### Business (Personal Use, Weeks 6+)
 - Content published: 50+ pieces (both brands)
-- Engagement rate: >2% target (accept baseline in Month 2)
-- Page views: +30%
-- Gig inquiries: 1-2 (assessments/pilots)
-- Network growth: +50 relevant connections
+- Engagement rate: >2% target (baseline acceptance Month 2)
+- Page views: +30% on LevelUp360 site
+- Network growth: +50 relevant connections (technical leaders, AI practitioners)
 
-### Learning
-- Skills assessment: Avg 8.8/10 across competencies (Week 4)
-- Testing notebooks: 6+ published (transparent methodology)
-- Case studies: 2 planned (LevelUp360, cosmetics brand)
-- Principles adherence: 100% data-driven decisions ✅ **Maintained**
+### Learning (Skill Expansion)
+- Agentic orchestration competency: LangGraph + CrewAI mastery via hands-on testing
+- Testing notebooks: 6+ published with transparent methodology
+- Weekly reports: 8 weeks documented (design decisions, testing data, outcomes)
+- Principles adherence: 100% data-driven decisions ✅ **Maintained** (no opinion-based framework choices)
 
 ---
 
 ## What I'll Share vs What Stays Private
 
-### **Public (This Repository)**
+### Public (This Repository)
 - Weekly reports documenting design decisions, testing results, outcomes
 - Week branches with complete code and notebooks (setup instructions per week)
 - Architecture diagrams and technical documentation
-- Sanitized brand configs and evaluation rubrics
-- Public tool adapters (web search, RAG interfaces)
+- Sanitized brand configs and evaluation rubrics (generic examples)
+- Public tool adapters (web search, RAG interfaces, orchestration patterns)
 - Cost and performance metrics from local and Azure environments
-- Case studies with real engagement data
+- Enterprise transferability insights (how patterns map to regulated workloads)
 
-### **Private (Not Included)**
-- Proprietary prompt engineering "personalities"
+### Private (Not Included)
+- Proprietary prompt engineering "personalities" (brand-specific voice tuning)
 - Detailed brand content and competitive intelligence
 - Production secrets, API keys, Azure resource IDs
-- Client-specific customizations and governance rules
-- Advanced evaluation logic and threshold tuning
-- Full Azure infrastructure as code (Terraform)
+- Client-specific customizations (when I take on paid work)
+- Advanced evaluation logic and threshold tuning (competitive advantage)
+- Full Azure infrastructure as code (Terraform—security-sensitive)
 
-**Why the Split**: Public content demonstrates methodology and capability. Private content is implementation-specific IP.
+**Why the Split**: Public content demonstrates **methodology and capability** (how I apply enterprise rigor to agentic systems). Private content is **implementation-specific details** (what makes my brands unique, production secrets).
 
 ---
 
-## About
+## About This Repository
 
-This repository documents a 12-week journey building a production agentic marketing system through Evaluation-Driven Development.
+### Background
 
-### Target Audience
-- **AI Engineers/Architects**: Production patterns (evaluation, observability, cost control)
-- **Security Architects**: Patterns translate directly to compliance-sensitive workloads
-- **Technical Leaders**: Data-driven AI architecture methodology
-- **Consultants**: Transferable patterns for enterprise AI delivery
+I've spent sevaral years building production-grade systems in regulated environments. This repository documents my systematic exploration of agentic AI orchestration (LangGraph, CrewAI, multi-agent patterns) applied to a real-world marketing use case, using the same production rigor I've applied in enterprise delivery.
 
-### Value Proposition
-The system serves two real brands and generates actual published content. The patterns demonstrated (approvals, RAG grounding, observability, cost guards, secure deployment, agentic routing with governance) translate directly to compliance-sensitive workloads in finance, healthcare, insurance, and legal industries.
+### Why Marketing as the Use Case?
 
-### Core Message
-Patterns, not tools. If I trust these patterns with my own brand, you can trust them for your regulated workloads.
+**Low-risk sandbox** to master new tooling (agentic frameworks) while applying familiar patterns (evaluation pipelines, cost controls, security, observability). Generates real published content for two brands (my AI consulting practice LevelUp360 + partner's cosmetics), so outcomes are real—but stakes are lower than finance/healthcare, allowing safe experimentation with orchestration frameworks before applying to higher-risk client work.
+
+### What's Demonstrated Here
+
+- ✅ **Enterprise production patterns** applied to agentic systems (evaluation frameworks, HITL approvals, cost budgets, security layers, audit trails—proven in regulated delivery)
+- ✅ **Systematic testing methodology** for agentic orchestration (60+ pieces tested Week 3, 110 routing scenarios Week 4—data-driven decisions, not vendor claims)
+- ✅ **Framework-agnostic architecture** enabling objective comparisons (LangGraph vs CrewAI tested with identical business logic—isolates orchestration variable)
+- ✅ **Transparent documentation** of design decisions, testing outcomes, lessons learned (12-week journey shared publicly)
+
+### Who Might Find This Useful
+
+- **AI architects/consultants**: See enterprise patterns (evaluation, security, cost, observability) applied to agentic orchestration—proven methodology
+- **Technical leaders**: Data-driven framework selection process (test systematically, measure outcomes, choose based on evidence—not hype)
+- **Security/compliance teams**: Production security patterns (Prompt Shield, groundedness detection, audit trails) validated in agentic context
+- **Enterprise delivery teams**: Reference implementation for agentic systems with production rigor (evaluation-first, cost-controlled, governance-embedded)
+
+### Core Value Proposition
+
+If you need **agentic AI delivered with enterprise production rigor** (evaluation frameworks, cost controls, security, HITL governance, observability, compliance readiness), this repository proves I can apply both:
+
+- ✅ **Production patterns** (already proven in regulated environments—finance, compliance, enterprise ML)
+- ✅ **Agentic orchestration** (systematically tested LangGraph/CrewAI—documented with transparent methodology)
+
+**Marketing is the sandbox. Enterprise delivery is the capability.**
+
+Patterns transfer. Tools are swappable. Rigor is non-negotiable.
 
 ---
 
