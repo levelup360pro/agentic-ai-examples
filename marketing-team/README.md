@@ -10,6 +10,23 @@
 
 ---
 
+## 📋 What This Repository Demonstrates
+
+**This is a solutions architecture methodology showcase**, not a software engineering portfolio.
+
+The focus is **how production-grade AI systems should be designed and validated**:
+
+- **Evaluation-Driven Development** — Define success metrics before building, test alternatives with real data, choose based on evidence (60+ pieces tested Week 3, 110 routing scenarios Week 4)
+- **Enterprise governance patterns** — HITL approvals, RAG grounding, cost monitoring (<€2 target, achieved €0.054), security layers (Azure Content Safety), observability, drift detection
+- **Production rigor from Day 1** — Compliance patterns embedded from start (not retrofitted after pilots fail)
+- **Framework-agnostic architecture** — Systematic LangGraph vs CrewAI comparison with identical business logic (isolates orchestration variable for objective evaluation)
+
+**Target audience**: IT/Business leaders evaluating AI implementation approaches, solutions architects designing enterprise systems, compliance/security teams needing governance patterns for regulated AI.
+
+**What I deliver to clients**: Methodology, architecture decisions, governance design, evaluation frameworks—then partner with engineering teams (or clients' internal teams) for production code refinement.
+
+---
+
 ## What I'm Building
 
 An **agentic marketing system** serving two real brands (my AI consulting practice LevelUp360 + partner's cosmetics brand), built with **the same production-grade patterns I've used in enterprise delivery for 10+ years**—now applied to agentic orchestration frameworks (LangGraph, CrewAI).
