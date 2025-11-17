@@ -298,9 +298,9 @@ CrewAI agents expect LiteLLM/LangChain-style LLMs. To preserve `LLMClient` we wo
 - Week 2: €8.60  
 - Week 3: €5.24  
 - Week 4: €2.41  
-- Week 5: ~€0
+- Week 5: ~€040
 
-**Total (Weeks 1–5)**: ~€18.40
+**Total (Weeks 1–5)**: ~€18.80
 
 ---
 
