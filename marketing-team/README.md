@@ -205,13 +205,13 @@ pip install -r requirements.txt
 
 ### Three-Environment Strategy (Enterprise Standard)
 
-**Local Development (Weeks 1-4)**:
+**Local Development (Weeks 1-5)**:
 - **Purpose**: Rapid experimentation, pattern/framework/model testing
 - **LLM**: OpenRouter API (GPT-4o-mini, GPT-4o, Claude Sonnet 4) for flexible model testing
 - **Vector Store**: Chroma (local file) with text-embedding-3-small (1536D)
 - **Search**: Tavily web search integration for evidence-based content
 - **Testing**: Jupyter notebooks with systematic evaluation (10-20 pieces per condition)
-- **Cost**: ~€18.40 for Weeks 1-4 testing phase
+- **Cost**: ~€18.80 for Weeks 1-5 testing phase
 
 **Staging Deployment (Week 6+)**:
 - **Purpose**: Production-parity validation before release
