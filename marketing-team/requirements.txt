@@ -12,7 +12,10 @@ tiktoken
 pyyaml
 rich
 ipykernel
-langchain_openai
 langgraph
 langchain-core
 langchain
+crewai
+litellm
+nest_asyncio
+agent-framework

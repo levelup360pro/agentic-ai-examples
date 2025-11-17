@@ -1,29 +1,12 @@
 # LevelUp360 Agentic Marketing System
 
-**Systematic exploration of agentic AI orchestration (LangGraph, CrewAI) for enterprise delivery, applied to dual-brand marketing use case.**
+**Systematic exploration of agentic AI orchestration (Microsoft Agent Framework, LangGraph, CrewAI) for enterprise delivery, applied to dual-brand marketing use case.**
 
-**Context**: Expanding my enterprise AI delivery capabilities (10+ years building production systems in regulated environments) into agentic orchestration patterns. Using marketing as a low-risk sandbox to master LangGraph/CrewAI with the same production rigor I've applied in finance/compliance workloads.
+**Context**: Expanding my enterprise AI delivery capabilities (10+ years building production systems in regulated environments) into agentic orchestration patterns. Using marketing as a low-risk sandbox to master Microsoft Agent Framework/LangGraph/CrewAI with the same production rigor I've applied in finance/compliance workloads.
 
 **Status**: Week 5 In Progress — CrewAI Integration + Framework Comparison  
 **Methodology**: Evaluation-Driven Development (data-driven architecture decisions—enterprise standard)  
 **Deployment Path**: Local testing (Weeks 1-4) → Azure production (Weeks 5+)
-
----
-
-## 📋 What This Repository Demonstrates
-
-**This is a solutions architecture methodology showcase**, not a software engineering portfolio.
-
-The focus is **how production-grade AI systems should be designed and validated**:
-
-- **Evaluation-Driven Development** — Define success metrics before building, test alternatives with real data, choose based on evidence (60+ pieces tested Week 3, 110 routing scenarios Week 4)
-- **Enterprise governance patterns** — HITL approvals, RAG grounding, cost monitoring (<€2 target, achieved €0.054), security layers (Azure Content Safety), observability, drift detection
-- **Production rigor from Day 1** — Compliance patterns embedded from start (not retrofitted after pilots fail)
-- **Framework-agnostic architecture** — Systematic LangGraph vs CrewAI comparison with identical business logic (isolates orchestration variable for objective evaluation)
-
-**Target audience**: IT/Business leaders evaluating AI implementation approaches, solutions architects designing enterprise systems, compliance/security teams needing governance patterns for regulated AI.
-
-**What I deliver to clients**: Methodology, architecture decisions, governance design, evaluation frameworks—then partner with engineering teams (or clients' internal teams) for production code refinement.
 
 ---
 
@@ -33,7 +16,7 @@ An **agentic marketing system** serving two real brands (my AI consulting practi
 
 ### Why Marketing as the Use Case?
 
-**Low-risk sandbox** to master agentic tooling (LangGraph supervisor patterns, CrewAI hierarchical teams, multi-agent coordination) while applying enterprise rigor I already know from regulated delivery (evaluation pipelines, cost budgets, HITL approvals, security layers, observability, drift detection).
+**Low-risk sandbox** to master agentic frameworks while applying enterprise rigor I already know from regulated delivery (evaluation pipelines, cost budgets, HITL approvals, security layers, observability, drift detection).
 
 Marketing generates real published content (not academic), but stakes are lower than finance/healthcare—safe environment to systematically test orchestration frameworks before applying to higher-stakes client work.
 
@@ -60,7 +43,7 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 
 ### Technical Stack (Locked After Systematic Testing)
 
-- **Orchestration**: LangGraph supervisor pattern (100% routing accuracy, Week 4 winner)
+- **Orchestration**: Microsoft Agent Framework with custom agents (Week 5 winner: custom LLMClient compatibility, Azure production benefits, 95%+ code reuse from LangGraph nodes)
 - **Pattern**: Eval-optimizer (8.56/10 avg quality, Week 3 winner)
 - **Model**: Claude Sonnet 4 with reference post (9.5/10 narrative quality, Week 3 winner)
 - **Grounding**: RAG with Chroma (local) → PostgreSQL + pgvector (production) for brand knowledge; text-embedding-3-small (1536D)
@@ -92,7 +75,7 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 | `week-02` | RAG system + baseline testing | ✅ Complete | Chroma vector store, 40-post corpus, Tavily search, brand guidelines refinement |
 | `week-03` | Orchestration patterns + model selection | ✅ Complete | Single-pass/reflection/eval-optimizer testing, Claude Sonnet 4 selection, cross-brand validation |
 | `week-04` | LangGraph multi-agent system | ✅ Complete | Supervisor pattern, 100% routing accuracy, framework-agnostic architecture, config-driven system |
-| `week-05` | CrewAI integration + framework comparison | 🔄 In Progress | CrewAI implementation, LangGraph vs CrewAI objective comparison |
+| `week-05` | Framework comparison + Microsoft Agent Framework adoption | ✅ Complete | CrewAI evaluation (rejected: LangChain dependency), Microsoft Agent Framework validation (custom LLMClient + state passing), Design decision #21: Microsoft Agent Framework for production |
 | `week-06` | Production deployment | 📅 Planned | Azure Container Apps, PostgreSQL + pgvector, HITL approval UI |
 | `week-07` | Observability + monitoring | 📅 Planned | Application Insights, LangSmith tracing, cost monitoring, quality drift detection |
 | `week-08` | End-to-end validation | 📅 Planned | Staging testing, dual-brand workflows, performance validation |
@@ -124,6 +107,7 @@ git checkout week-04  # For Week 4 LangGraph implementation
 - Each week builds on previous learnings but may refactor significantly
 - Week 3 tested patterns → Week 4 implemented winner (eval-optimizer)
 - Week 4 tested LangGraph → Week 5 tests CrewAI → one will be chosen for production
+- Week 5 tested CrewAI → Early rejection + Microsoft Agent Framework evaluation → Microsoft Agent Framework chosen for production
 - Branches preserve working code at each stage (no breaking changes when refactoring)
 
 ---
@@ -143,7 +127,7 @@ Detailed week reports are published in this repository documenting:
 | **Week 2** | [WEEK2.md](/marketing-team/reports/WEEK2.md) | RAG system (Chroma, 40-post corpus), Tavily search, corpus testing (25% → 100% retrieval success) |
 | **Week 3** | [WEEK3.md](/marketing-team/reports/WEEK3.md) | Orchestration pattern testing (60 pieces), eval-optimizer winner (8.56/10), model selection (Claude Sonnet 4), evaluation system calibration |
 | **Week 4** | [WEEK4.md](/marketing-team/reports/WEEK4.md) | LangGraph supervisor pattern, 100% routing accuracy (22/22 scenarios), framework-agnostic architecture, config-driven system (4.3x ROI) |
-| **Week 5** | WEEK5.md | *In progress* - CrewAI integration, framework comparison |
+| **Week 5** | [WEEK5.md](/marketing-team/reports/WEEK5.md) | Framework comparison (CrewAI rejected, Microsoft Agent Framework adopted), custom agent validation, Decision #21: production orchestration choice |
 
 ---
 
