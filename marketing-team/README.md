@@ -158,7 +158,7 @@ Based on **Chip Huyen's AI Engineering principles** (industry standard for produ
 - ✅ **Week 4**: LangGraph supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
 - ✅ **Week 4**: Framework-agnostic architecture enables objective Week 5 comparison (same business logic, different orchestration—isolates framework variable)
 - ✅ **Week 5**: CrewAI spike and early rejection. Strategic pivot to Microsoft Agent Framework 
-- ✅ **Week 4**: Microsoft Agent Framework supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
+- ✅ **Week 6**: Microsoft Agent Framework supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
 
 ---
 
