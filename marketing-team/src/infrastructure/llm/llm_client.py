@@ -4,6 +4,18 @@ Wraps provider-specific SDKs (OpenAI, Azure OpenAI, OpenRouter) with
 consistent retry, pricing, cost logging, and optional structured
 output parsing. All externally consumed results are immutable
 Pydantic models for clarity and downstream safety.
+
+Public API
+        LLMClient: High-level client with `get_completion` and `get_embedding`.
+        CompletionResult, EmbeddingResult: Pydantic results with cost/latency.
+
+Notes
+        - This module centralizes provider differences so example code can
+            depend on a stable interface.
+        - Pricing values are configurable via environment variables; defaults
+            are provided for local development and examples.
+        - Methods are instrumented with `langsmith.traceable` for optional
+            tracing during example runs.
 """
 
 from openai import OpenAI, AzureOpenAI
@@ -18,6 +30,7 @@ import random
 import logging
 import json
 import re
+import uuid
 from openai import RateLimitError, APIConnectionError, InternalServerError, APITimeoutError
 from langsmith import traceable
 from langchain_openai import ChatOpenAI, AzureChatOpenAI
@@ -154,12 +167,15 @@ class LLMClient:
         uses native or manual structured output parsing when a
         response_format is supplied.
         """
+        call_id = str(uuid.uuid4())
+        self.logger.info(
+            f"[LLMClient] Initiating | call_id={call_id} model={model} temperature={temperature} messages_count={len(messages)}"
+        )
 
-        
-        
+        result = None
         if tool_support:
             # Route to tool calling path
-            return self._execute_with_retry(
+            result = self._execute_with_retry(
                 operation=self._get_completion_with_tool_support,
                 operation_name="get_completion_tool_support",
                 model=model,
@@ -169,7 +185,7 @@ class LLMClient:
                 tools=tools)
         else:
             # Route to regular completion path
-            return self._execute_with_retry(
+            result = self._execute_with_retry(
                 operation=self._get_completion_internal,
                 operation_name="get_completion",
                 model=model,
@@ -177,14 +193,32 @@ class LLMClient:
                 temperature=temperature,
                 max_tokens=max_tokens,
                 response_format=response_format)
+        
+        if result:
+            self.logger.info(
+                f"[LLMClient] Complete | call_id={call_id} tokens={result.input_tokens}/{result.output_tokens} cost={result.cost:.6f} EUR latency={result.latency:.3f}s"
+            )
+        
+        return result
 
     @traceable(name="embedding_generation", run_type="embedding")
     def get_embedding(self, model: str, text: str) -> EmbeddingResult:
         """Generate embeddings with retry logic and cost tracking."""
-        return self._execute_with_retry(operation=self._get_embedding_internal,
+        call_id = str(uuid.uuid4())
+        self.logger.info(
+            f"[LLMClient] Initiating Embedding | call_id={call_id} model={model} text_len={len(text)}"
+        )
+
+        result = self._execute_with_retry(operation=self._get_embedding_internal,
                                         operation_name="get_embedding",
                                         model=model,
                                         text=text)
+        
+        if result:
+            self.logger.info(
+                f"[LLMClient] Complete Embedding | call_id={call_id} tokens={result.input_tokens} cost={result.cost:.6f} EUR latency={result.latency:.3f}s"
+            )
+        return result
 
     def log_api_call(self, model: str, input_tokens: int, output_tokens: int,
                      cost: float, latency: float, timestamp: datetime):

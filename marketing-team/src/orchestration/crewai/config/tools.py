@@ -1,3 +1,20 @@
+"""CrewAI StructuredTool adapters for generation and evaluation.
+
+This module exposes `make_generate_content_tool` and `make_evaluate_content_tool`,
+both of which return callables suitable for `crewai.StructuredTool.from_function`
+with `return_direct=True`. The returned functions catch exceptions and return
+JSON-friendly payloads so they are safe to call inside agent workflows.
+
+Public API
+    - make_generate_content_tool(generator, brand_config, generation_config, ...)
+    - make_evaluate_content_tool(evaluator, brand_config, evaluation_config, ...)
+
+Notes
+    - These adapters translate internal Python return shapes into stable JSON
+      payloads for agents and tasks. They intentionally avoid raising exceptions
+      to simplify Crew task wiring.
+"""
+
 from typing import Dict, Any, Optional, List, Callable
 import logging
 

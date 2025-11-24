@@ -14,6 +14,8 @@ Notes
             types and recursively cleans nested structures.
         - Query responses are normalized to flat lists for convenience.
         - Methods raise ``ChromaError`` with contextual messages on failure.
+        - This wrapper is intentionally thin: it focuses on safety and normalization
+            rather than altering the semantics of the underlying ChromaDB client.
 """
 import chromadb
 from chromadb import Settings
@@ -155,7 +157,7 @@ class VectorStore:
         try:
             collection = self.client.create_collection(
                 name=collection_name, 
-                metadata=metadata or {}
+                metadata=metadata
             )
             self.logger.info(f"Created new collection: {collection_name}")
             return collection

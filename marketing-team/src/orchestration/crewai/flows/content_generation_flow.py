@@ -52,11 +52,30 @@ class GenerateArgs(BaseModel):
     tool_contexts: dict
     correlation_id: str | None = None
 
+    """Pydantic args schema for the `generate_content` structured tool.
+
+    Attributes
+        topic: The content topic or brief.
+        brand: Brand key matching a YAML config in `configs/`.
+        template: Template key used to select prompt templates.
+        tool_contexts: A dict of pre-collected contexts (RAG/web) for generation.
+        correlation_id: Optional trace id propagated through payloads.
+    """
+
 class EvaluateArgs(BaseModel):
     content: str
     brand: str
     content_type: str
     correlation_id: str | None = None
+
+    """Pydantic args schema for the `evaluate_content` structured tool.
+
+    Attributes
+        content: The draft text to evaluate.
+        brand: Brand key used for rubric/voice checks.
+        content_type: Semantic type of content (e.g., 'linkedin_post').
+        correlation_id: Optional trace id to correlate tool calls.
+    """
 
 
 class CrewContentGenerationFlow(Flow[CrewContentGenerationState]):
@@ -81,6 +100,25 @@ class CrewContentGenerationFlow(Flow[CrewContentGenerationState]):
                    use_cot: bool = False,
                    quality_threshold: float = 7.0,
                    max_iterations: int = 1) -> Dict[str, Any]:
+        """Initialize flow runtime: build infra, agents, and tools.
+
+        Side effects
+            - Loads brand YAML via `load_brand_config` and stores in `self.brand_config`.
+            - Initializes vector store, LLM clients, RAG helper, prompt builder.
+            - Creates planner/generator/evaluator agents and binds StructuredTools.
+
+        Args
+            topic: Content topic to generate.
+            brand: Brand config key (filename stem in `configs/`).
+            template: Prompt template key to use for generation.
+            use_cot: Whether to enable chain-of-thought prompting patterns.
+            quality_threshold: Minimum acceptable evaluation score to stop iterating.
+            max_iterations: Maximum generation→evaluation cycles.
+
+        Returns
+            A minimal mapping (usually empty) used by Crew Flow starters; primary
+            state is stored on `self.state` and other instance attrs.
+        """
 
         # Load config
         brand_config = load_brand_config(brand=brand)
@@ -223,7 +261,19 @@ class CrewContentGenerationFlow(Flow[CrewContentGenerationState]):
 
     @listen(initialize)
     def run_planning(self, agent: Agent):
-        """Planning step (decide tools)."""
+        """Execute the planning Task to decide which research tools to use.
+
+        This method constructs a `planning_task` using `build_content_planning_task`
+        and runs it via a one-agent `Crew`. The Task must return a
+        `ContentGenerationPlan` (Pydantic) which is then stored on `self.state`.
+
+        Side effects
+            - sets `self.state.include_rag`, `self.state.include_web`
+            - sets `self.state.query_rag` and `self.state.query_web`
+
+        Args
+            agent: The planner Agent used to produce the research decision.
+        """
         logger.info("Planning start: topic=%s, brand=%s, agent=%s",
                     self.state.topic, self.state.brand,
                     type(agent).__name__)
@@ -251,7 +301,12 @@ class CrewContentGenerationFlow(Flow[CrewContentGenerationState]):
 
     @router(run_planning)
     def route_after_content_planning(self) -> str:
-        """Decide which research tools to run based on plan."""
+        """Router that returns the next step name based on planning decisions.
+
+        Returns
+            - `RESEARCH` if plan requested RAG or Web research
+            - `GENERATE` otherwise (skip research and proceed to content generation)
+        """
         if self.state.include_rag or self.state.include_web:
             logger.info(
                 "Router: proceeding to RESEARCH (include_rag=%s, include_web=%s)",
@@ -263,7 +318,17 @@ class CrewContentGenerationFlow(Flow[CrewContentGenerationState]):
 
     @listen(RESEARCH)
     def _run_research(self) -> str:
-        """Execute internal/external research based on plan."""
+        """Run configured research tools (RAG and/or Web) and append results to state.
+
+        Behavior
+            - If `self.state.include_rag` is True, calls `self.rag_search_tool` and
+              stores the result in `self.state.rag_context` and appends a tool
+              `MessageEvent` via `log_tool_event`.
+            - If `self.state.include_web` is True, similarly calls `self.web_search_tool`.
+
+        Returns
+            - `GENERATE` after research completes to continue the flow.
+        """
         logger.info("Research start: include_rag=%s, include_web=%s",
                     self.state.include_rag, self.state.include_web)
         if self.state.include_rag:
@@ -300,9 +365,22 @@ class CrewContentGenerationFlow(Flow[CrewContentGenerationState]):
 
     @listen(GENERATE)
     def run_content_generation(self) -> str:
-        """
-        Initial content generation (iteration 0).
-        Uses GENERATOR agent.
+        """Perform content generation and immediate evaluation, updating flow state.
+
+        Steps
+              1. Selects appropriate `system_template` on the generator agent
+                  depending on whether this is an initial draft or an optimization pass.
+              2. Builds `generation_task` and `evaluation_task` and runs them via a
+                  two-agent sequential `Crew` (generator then evaluator).
+              3. Writes generated draft into `self.state.content` and appends an
+                  assistant `MessageEvent` via `update_generation_output`.
+              4. Updates evaluation outputs via `update_evaluation_output_from_critique`.
+              5. Decides whether to iterate (return `GENERATE`) or stop based on
+                  `meets_threshold` and `max_iterations`.
+
+        Returns
+              - `GENERATE` to request another optimization iteration when needed
+              - otherwise implicitly falls through (end of flow).
         """
 
         if self.state.iteration_count == 0:

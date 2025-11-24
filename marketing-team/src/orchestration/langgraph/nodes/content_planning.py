@@ -33,7 +33,7 @@ def content_planning_node(
         state: ContentGenerationState,
         llm_client: LLMClient,
         content_planning_config: dict,
-        tools: List  # List of LangChain tool objects
+        tools: List  
 ) -> Dict[str, Any]:
     """
     Analyze the requested topic and decide which enrichment tools to call.

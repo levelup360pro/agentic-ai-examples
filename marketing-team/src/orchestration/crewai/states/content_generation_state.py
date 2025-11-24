@@ -1,3 +1,11 @@
+"""State models for the CrewAI content generation workflow.
+
+This module defines `MessageEvent` and `CrewContentGenerationState`, the
+Pydantic models used as the single source-of-truth for the Crew-based
+content generation flows. Models are intentionally framework-agnostic so the
+same state can be serialized and inspected outside Crew runs.
+"""
+
 from typing import Optional, Dict, Any, List, Literal
 from pydantic import BaseModel, Field
 from datetime import datetime

@@ -1,6 +1,12 @@
 ﻿name: "itconsulting"
 positioning: "Pragmatic IT consulting for building scalable systems"
 
+messaging_pillars:
+  - "Engineering discipline: design for production from day one"
+  - "Governance and compliance: audit trails, security, and RBAC"
+  - "Evidence-driven: measure cost, latency, and quality"
+  - "Practical patterns: reusable architectures over custom solutions"
+
 voice:
   tone: "direct, practical, evidence-led"
   style_guidelines:
@@ -41,19 +47,36 @@ factual_accuracy:
 formatting_rules:
   post_requirements: >
     - Character limit: 800 characters maximum
-    - ...
-
+    - Use short paragraphs (2-3 sentences max)
+    - Lead with problem or result, not background
+    - Include specific metrics when available (cost, latency, improvement %)
+    - No section headers for short posts
+    - End with clear CTA or key takeaway
+    - Avoid marketing jargon; use precise technical language
   long_post_requirements: >
     - Character limit: 2900 characters maximum
-    - ...
-
+    - Use section headers to structure narrative (e.g., "THE PROBLEM", "SOLUTION")
+    - Include bullet points for data, configurations, or results
+    - Share failures before successes to build credibility
+    - Balance technical depth with accessibility
+    - Use specific examples and measurements
+    - Mobile-friendly formatting with clear paragraph breaks
   blog_post_requirements: >
-    - Length: 1,500-2,500 words (optimized for 7-10 minute read)
-    - ...
-
+    - Length: 1,500-2,500 words (7-10 minute read)
+    - Markdown format with H1 title, H2/H3 section headers
+    - Structure: Hook → Context → Main Content (3-5 sections) → Takeaways → Conclusion → CTA
+    - Include code snippets, architecture diagrams, or data tables where relevant
+    - Each section 200-300 words
+    - SEO-friendly: use topic keywords in headers naturally
+    - Suggest visual elements with [DIAGRAM: description] placeholders
   newsletter_requirements: >
     - Length: 1,200-1,800 words (8-12 minute read)
-    - ...
+    - Subject line: 50-60 characters, specific and compelling
+    - Structure: Opening hook → 3-4 main sections → What's Next → CTA
+    - Scannable: short paragraphs, numbered lists, bullet points, pull quotes
+    - Use horizontal rules (---) between major sections
+    - Each issue must teach something actionable
+    - More conversational than blog, more structured than post
 
 models: 
   content_planning:
@@ -61,16 +84,38 @@ models:
     temperature: 0.5
     max_tokens: 1500
     system_message: |
-      You are a routing supervisor for content generation. Analyze queries and 
-      ...
+      You are a routing supervisor for IT consulting content generation.
+      
+      Analyze queries and decide which information sources to use:
+      - rag_search: Search internal brand content (past posts, methodologies, services)
+      - web_search: Search for current industry trends, standards, best practices
+      
+      Call rag_search when query mentions company-specific implementations or services.
+      Call web_search when query needs current industry data or technical standards.
+      Call both when comparing company approach to industry standards.
+      Call neither for pure opinion or creative content.
 
   content_generation:
     model: "anthropic/claude-sonnet-4"
     temperature: 0.5
     max_tokens: 1500
     system_message: |
-      You are a professional content generator for LevelUp360.
-      ...
+      You are a professional content generator for IT consulting.
+      
+      CORE PRINCIPLES:
+      1. Lead with problems and measurable results, not background
+      2. Use technical language precisely; avoid marketing jargon
+      3. Include specific metrics when available (cost, latency, improvement %)
+      4. Keep paragraphs short (2-3 sentences maximum)
+      5. Never fabricate statistics or sources
+      6. Follow brand voice and banned terms strictly
+      
+      STRUCTURE:
+      - First sentence: problem statement or specific result
+      - Build credibility through specifics and data
+      - End with clear CTA or key takeaway
+      
+      Always prioritize clarity and evidence over style.
 
   content_evaluation:
     model: "gpt-4o"
@@ -79,16 +124,37 @@ models:
     pattern: "evaluator_optimizer"
     quality_threshold: 7.0
     system_message: |
-      You are an expert content evaluator for marketing posts.
-      ...
+      You are an expert content evaluator for IT consulting posts.
+      
+      Evaluate content on:
+      1. Brand voice alignment (tone, banned terms, style guidelines)
+      2. Technical accuracy (no fabricated statistics or sources)
+      3. Structural effectiveness (hook, flow, CTA)
+      4. Clarity and precision (specific vs vague language)
+      
+      VIOLATIONS (automatic score caps):
+      - Banned terms used → brand_voice ≤ 6.0
+      - Fabricated sources → accuracy ≤ 5.0
+      - Unsourced statistics → accuracy -3.0
+      
+      Score 1-10 for each dimension. Be critical but fair.
 
   content_optimization:
     model: "anthropic/claude-sonnet-4"
     temperature: 0.5
     max_tokens: 1500
     system_message: |
-      You are a content optimizer. Improve content based on evaluation feedback.
-      ...
+      You are a content optimizer for IT consulting posts.
+      
+      Your task: Address evaluation feedback while staying on topic.
+      
+      CRITICAL CONSTRAINTS:
+      - Stay 100% on the original topic
+      - If feedback requests data, add data about the original topic
+      - If feedback requests examples, use relevant examples
+      - Do not change the subject matter
+      
+      Apply feedback improvements without topic drift.
 
   search_optimization:  
     model: "gpt-4o-mini"

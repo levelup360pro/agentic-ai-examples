@@ -5,7 +5,7 @@ Exports:
 - ContentGenerationState: TypedDict describing the workflow state shape.
 """
 
-from typing import TypedDict, Any, Annotated, Optional, Dict
+from typing import TypedDict, Any, Annotated, Optional, Dict, List
 from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
 from src.core.evaluation.content_evaluator import Critique
@@ -82,6 +82,10 @@ class ContentGenerationState(TypedDict):
     topic: str
     brand: str
     brand_config: Dict[str, Any]
+
+    # Optional chat history (LLM-style messages: role/content/extra)
+    messages: List[Dict[str, Any]] 
+
 
     # Prompt/generation controls
     template: str

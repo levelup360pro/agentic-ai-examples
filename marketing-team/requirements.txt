@@ -19,3 +19,4 @@ crewai
 litellm
 nest_asyncio
 agent-framework
+gradio>=4.0.0

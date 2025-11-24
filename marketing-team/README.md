@@ -4,9 +4,9 @@
 
 **Context**: Expanding my enterprise AI delivery capabilities (10+ years building production systems in regulated environments) into agentic orchestration patterns. Using marketing as a low-risk sandbox to master Microsoft Agent Framework/LangGraph/CrewAI with the same production rigor I've applied in finance/compliance workloads.
 
-**Status**: Week 5 In Progress — CrewAI Integration + Framework Comparison  
+**Status**: Week 6 Complete — v1.0-reference released (public code frozen, private hardening begins)  
 **Methodology**: Evaluation-Driven Development (data-driven architecture decisions—enterprise standard)  
-**Deployment Path**: Local testing (Weeks 1-4) → Azure production (Weeks 5+)
+**Deployment Path**: Local reference implementation complete → Azure production (Weeks 7+ private)
 
 ---
 
@@ -41,17 +41,15 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 - 🔄 **Multi-agent coordination strategies**: Eval-optimizer pattern winner Week 3 (8.56/10 avg quality vs 8.20 reflection, 7.64 single-pass)
 - 🔄 **Framework-agnostic architecture**: Same business logic, swappable orchestration—enables objective comparison without refactoring
 
-### Technical Stack (Locked After Systematic Testing)
+### Technical Stack (v1.0-reference)
 
-- **Orchestration**: Microsoft Agent Framework with custom agents (Week 5 winner: custom LLMClient compatibility, Azure production benefits, 95%+ code reuse from LangGraph nodes)
+- **Orchestration**: Microsoft Agent Framework (primary, Week 6) with custom typed state model; LangGraph (alternative implementation for comparison)
 - **Pattern**: Eval-optimizer (8.56/10 avg quality, Week 3 winner)
 - **Model**: Claude Sonnet 4 with reference post (9.5/10 narrative quality, Week 3 winner)
-- **Grounding**: RAG with Chroma (local) → PostgreSQL + pgvector (production) for brand knowledge; text-embedding-3-small (1536D)
+- **Grounding**: RAG with ChromaDB (local/reference) for brand knowledge; text-embedding-3-small (1536D)
 - **Search**: Tavily AI-first search API for LLM-optimized evidence retrieval
-- **Security**: Azure Content Safety (Prompt Shield, Content Moderation, Groundedness Detection)
-- **Analytics**: Automated LinkedIn post performance tracking with insights as retrieval context
-- **Multi-Brand Isolation**: Separate PostgreSQL tables per brand (zero cross-contamination)
-- **Deployment**: Azure Container Apps (Staging + Production) with Application Insights monitoring
+- **UI**: Gradio 5.33.1 (simple functional interface for brand config, document ingestion, content generation)
+- **Future (Private)**: Azure Container Apps, PostgreSQL + pgvector, Azure Content Safety, Application Insights
 
 ### Core Capabilities (Validated Metrics)
 
@@ -76,9 +74,8 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 | `week-03` | Orchestration patterns + model selection | ✅ Complete | Single-pass/reflection/eval-optimizer testing, Claude Sonnet 4 selection, cross-brand validation |
 | `week-04` | LangGraph multi-agent system | ✅ Complete | Supervisor pattern, 100% routing accuracy, framework-agnostic architecture, config-driven system |
 | `week-05` | Framework comparison + Microsoft Agent Framework adoption | ✅ Complete | CrewAI evaluation (rejected: LangChain dependency), Microsoft Agent Framework validation (custom LLMClient + state passing), Design decision #21: Microsoft Agent Framework for production |
-| `week-06` | Production deployment | 📅 Planned | Azure Container Apps, PostgreSQL + pgvector, HITL approval UI |
-| `week-07` | Observability + monitoring | 📅 Planned | Application Insights, LangSmith tracing, cost monitoring, quality drift detection |
-| `week-08` | End-to-end validation | 📅 Planned | Staging testing, dual-brand workflows, performance validation |
+| `week-06` | Microsoft Agent Framework + Gradio UI | ✅ Complete | Custom typed state model, executor/agent separation, simple functional UI, v1.0-reference release |
+| `week-07+` | Production hardening (private) | 🔒 Private | Azure deployment, HITL workflows, advanced features, governance automation, observability (insights shared, code private) |
 
 ### How to Use Week Branches
 
@@ -122,12 +119,13 @@ Detailed week reports are published in this repository documenting:
 
 
 | Week | Report | Key Outcomes |
-|------|--------|--------------|
+|------|--------|--------------||
 | **Week 1** | [WEEK1.md](/marketing-team/reports/WEEK1.md) | Evaluation framework, three-environment strategy, decision criteria |
 | **Week 2** | [WEEK2.md](/marketing-team/reports/WEEK2.md) | RAG system (Chroma, 40-post corpus), Tavily search, corpus testing (25% → 100% retrieval success) |
 | **Week 3** | [WEEK3.md](/marketing-team/reports/WEEK3.md) | Orchestration pattern testing (60 pieces), eval-optimizer winner (8.56/10), model selection (Claude Sonnet 4), evaluation system calibration |
 | **Week 4** | [WEEK4.md](/marketing-team/reports/WEEK4.md) | LangGraph supervisor pattern, 100% routing accuracy (22/22 scenarios), framework-agnostic architecture, config-driven system (4.3x ROI) |
 | **Week 5** | [WEEK5.md](/marketing-team/reports/WEEK5.md) | Framework comparison (CrewAI rejected, Microsoft Agent Framework adopted), custom agent validation, Decision #21: production orchestration choice |
+| **Week 6** | [WEEK6.md](/marketing-team/reports/WEEK6.md) | Microsoft Agent Framework migration, custom typed state model, Gradio UI, v1.0-reference release, transition to private hardening |
 
 ---
 
@@ -162,42 +160,99 @@ Based on **Chip Huyen's AI Engineering principles** (industry standard for produ
 
 ---
 
-## Quick Start (Week-Specific)
+## Quick Start (v1.0-reference)
 
-**Setup depends on which week you're exploring.** Each week branch contains:
-- Week-specific `requirements.txt`
-- Jupyter notebooks with setup instructions
-- Configuration examples
+**The public reference implementation is now complete and frozen at v1.0-reference.** You can run the full system locally with the Gradio UI.
 
-**General pattern** (adapt per week):
+### Running the Gradio Application
 
 ```bash
-# 1. Checkout the week branch
-git checkout week-04  # Example: Week 4 LangGraph
+# 1. Clone the repository
+git clone https://github.com/levelup360pro/levelup360-agentic-ai-eil
+cd levelup360-agentic-ai-eil
 
 # 2. Create virtual environment
-python3.11 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate  # Linux/Mac
 # OR
 .\.venv\Scripts\Activate.ps1  # Windows PowerShell
 
 # 3. Install dependencies
 pip install -U pip
-pip install -r requirements.txt
+pip install -e .  # Core framework
+pip install -r examples/marketing_team/requirements.txt  # Marketing example
 
 # 4. Configure environment
 # Copy .env.example to .env and add your API keys
-# (see week's README for required keys)
+cp .env.example .env
+# Edit .env with:
+#   OPENROUTER_API_KEY=sk-...  # For LLM access
+#   TAVILY_API_KEY=...         # For web search
 
-# 5. Run week's notebooks
-# Open notebooks/weekXX_*.ipynb
-# Follow setup cells for that week's specific requirements
+# 5. Navigate to marketing team example
+cd examples/marketing_team
+
+# 6. Run the Gradio UI
+python app.py
+
+# 7. Access the UI
+# Open browser to http://127.0.0.1:7860 (or port shown in terminal)
 ```
 
-**Required API Keys** (varies by week):
-- OpenRouter API (Weeks 1-4 for model testing)
-- Tavily API (Week 2+ for web search)
-- Azure OpenAI (Weeks 5+ for production deployment)
+### Using the Application
+
+**First-Time Setup (One Brand Pre-Loaded)**:
+
+If you have exactly one brand config in `configs/` (e.g., `levelup360.yaml`), the UI auto-loads it on startup. Skip to Tab 2.
+
+**Workflow**:
+
+1. **Configure Your Brand** (Tab 1: Brand Configuration)
+   - **Option A**: Select existing brand from dropdown → Click "Load Selected Brand"
+   - **Option B**: Upload new YAML config → Auto-validates and saves to `configs/`
+   - ✅ **Success**: "Active Brand Name" displays your brand; status shows green confirmation
+
+2. **Build Knowledge Base** (Tab 2: Knowledge Base)
+   - Click "Upload Documents" → Select `.md` or `.txt` files (brand guidelines, past content, reference materials)
+   - Click "Process & Store" → Watch progress bar (chunking → embedding → storage)
+   - ✅ **Success**: "Current Knowledge Base" shows chunk count and file list
+   - **Optional**: Click "Clear/Delete All Stored Documents" to reset (keeps configs, removes chunks)
+
+3. **Generate Content** (Tab 3: Content Generation)
+   - **Enter Topic**: "AI governance best practices for enterprise leaders"
+   - **Select Template**: 
+     - `LINKEDIN_POST_ZERO_SHOT` (no examples)
+     - `LINKEDIN_POST_FEW_SHOT` (shows example input box)
+   - **Optional**: Toggle "Use Chain of Thought (CoT)" for complex reasoning
+   - **Optional** (Few-Shot only): Add example posts → Click "Add Example"
+   - Click **"Generate Content"** → Workflow runs (planning → research → drafting → evaluation)
+   - ✅ **Output**:
+     - Generated content rendered as Markdown
+     - Evaluation scores (overall + per-dimension)
+     - Critique reasoning explaining strengths/weaknesses
+     - Full system trace (accordion) for debugging
+
+**Tips**:
+- **Multiple Brands**: Switch brands in Tab 1 → Tab 2 auto-refreshes to show that brand's knowledge base
+- **Iterative Refinement**: The workflow auto-iterates up to 3 times if quality score < threshold (configurable in brand YAML)
+- **Trace Inspection**: Open "Full System Trace" accordion to see every LLM call, tool execution, and routing decision
+- **Cost Tracking**: Check terminal logs for per-operation cost breakdown (planning, RAG, web search, generation, evaluation)
+
+### Exploring Week-by-Week Branches
+
+For historical context, each week 1-6 has its own branch with complete code and notebooks:
+
+```bash
+# Checkout a specific week
+git checkout week-04  # Example: Week 4 LangGraph implementation
+
+# Follow that week's setup instructions in notebooks/
+```
+
+**Required API Keys**:
+- **OpenRouter API**: For LLM access (GPT-4o, Claude Sonnet 4)
+- **Tavily API**: For web search tool
+- **Optional**: Azure OpenAI (for production Azure deployment)
 
 ---
 
@@ -205,13 +260,13 @@ pip install -r requirements.txt
 
 ### Three-Environment Strategy (Enterprise Standard)
 
-**Local Development (Weeks 1-5)**:
+**Local Development (Weeks 1-4)**:
 - **Purpose**: Rapid experimentation, pattern/framework/model testing
 - **LLM**: OpenRouter API (GPT-4o-mini, GPT-4o, Claude Sonnet 4) for flexible model testing
 - **Vector Store**: Chroma (local file) with text-embedding-3-small (1536D)
 - **Search**: Tavily web search integration for evidence-based content
 - **Testing**: Jupyter notebooks with systematic evaluation (10-20 pieces per condition)
-- **Cost**: ~€18.80 for Weeks 1-5 testing phase
+- **Cost**: ~€18.40 for Weeks 1-4 testing phase
 
 **Staging Deployment (Week 6+)**:
 - **Purpose**: Production-parity validation before release
@@ -248,6 +303,48 @@ pip install -r requirements.txt
 - Testing notebooks: 6+ published with transparent methodology
 - Weekly reports: 8 weeks documented (design decisions, testing data, outcomes)
 - Principles adherence: 100% data-driven decisions ✅ **Maintained** (no opinion-based framework choices)
+
+---
+
+## What Changes After Week 6 (v1.0-reference)
+
+**Week 6 marks the completion of the public reference implementation.** The codebase is now frozen at **v1.0-reference**, providing a stable foundation that demonstrates production-ready agentic AI architecture.
+
+### What's Included in v1.0-reference
+
+- ✅ **Full Agentic Workflow**: Microsoft Agent Framework orchestration (planning → research → generation → evaluation)
+- ✅ **Alternative Implementation**: LangGraph version for framework comparison
+- ✅ **RAG Integration**: Complete vector store (ChromaDB), document ingestion, brand-specific retrieval
+- ✅ **Evaluation Framework**: Automated critique generation, scoring, quality thresholds
+- ✅ **Simple Functional UI**: Gradio application for brand configuration, document upload, content generation
+- ✅ **Testing Notebooks**: End-to-end validation demonstrating routing accuracy, quality metrics, cross-brand workflows
+- ✅ **Documentation**: Architecture diagrams, design decisions (Weeks 1-6), implementation guides
+
+### What Continues (Weeks 7+: Documentation & Insights)
+
+From Week 7 onward, the journey continues with **production hardening and operational evolution**, shared through documentation rather than code:
+
+- ✅ **Architecture Diagrams**: Production deployment patterns, governance flows, infrastructure evolution
+- ✅ **Design Decisions**: Same rigor as Weeks 1-6 (Challenge → Solution → Rationale → Impact)
+- ✅ **High-Level Guides**: HITL workflows, Azure security patterns, observability strategies
+- ✅ **Demos & Videos**: Live system in action (both brands, approval workflows, monitoring dashboards)
+- ✅ **Metrics & Learnings**: Cost trends, quality data, operational insights from production
+
+### What Becomes Private (Production IP)
+
+- ❌ **Azure Infrastructure Code**: Terraform/Bicep, CI/CD pipelines, deployment scripts
+- ❌ **Production Features**: Advanced functionality, admin dashboards, monitoring panels
+- ❌ **Brand-Specific Tuning**: Exact scoring rubrics, proprietary prompts, competitive advantage
+- ❌ **Governance Implementation**: HITL workflow code, approval automation, compliance checking
+- ❌ **Proprietary Integrations**: Client-specific connectors, custom pipelines, optimizations
+
+### Why This Boundary?
+
+**v1.0-reference proves the capability**: "Here's a production-ready agentic system with RAG, routing, evaluation, and UI—you can run it yourself."
+
+**Private work proves operational maturity**: Deploying at scale, securing for regulated industries, integrating into real business workflows.
+
+This approach maximizes transparency (show how real systems evolve) while protecting competitive advantage (exact production configurations, proprietary tuning).
 
 ---
 

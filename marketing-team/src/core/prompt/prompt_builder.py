@@ -3,6 +3,15 @@
 Builds user messages by injecting brand guidelines and optional tool context
 for RAG and web search. Deterministic path can call tools internally; agentic
 path expects pre-fetched tool contexts. No model calls are performed here.
+
+Public API
+        PromptBuilder: Main class with `build_user_message` and `build_generation_prompt`.
+
+Notes
+        - Keep prompt building pure: external I/O or model calls are intentionally
+            avoided so the class can be unit-tested easily.
+        - The builder relies on `RAGHelper` and `VectorStore` for context
+            generation when required but accepts pre-fetched contexts for agentic flows.
 """
 from typing import Optional, Dict, List
 from src.core.rag.vector_store import VectorStore
