@@ -7,6 +7,15 @@ Keeps embedding logic separate from vector store for flexibility and testability
 
 Works seamlessly with DocumentLoader to create a complete document processing pipeline:
     DocumentLoader → RawDocument → RAGHelper → Document → VectorStore
+
+Public API
+    RAGHelper: Chunking and embedding helpers used prior to vector insertion.
+    prepare_text_for_rag: Convenience wrapper for small snippets.
+
+Notes
+    - RAGHelper intentionally avoids interacting with vector stores so unit
+      tests can focus on chunking/embedding behavior in isolation.
+    - Embedding client is expected to expose `get_embedding(model, text)`.
 """
 
 from pathlib import Path
@@ -54,7 +63,13 @@ class RAGHelper:
         self.chunk_threshold = chunk_threshold
         
         # Initialize tokenizer for the embedding model
-        self.encoding = tiktoken.encoding_for_model(embedding_model)
+        # Strip provider prefix if present (e.g. "openai/text-embedding-3-small" -> "text-embedding-3-small")
+        clean_model_name = embedding_model.split("/")[-1]
+        try:
+            self.encoding = tiktoken.encoding_for_model(clean_model_name)
+        except KeyError:
+            # Fallback to cl100k_base (standard for GPT-4/3.5/Embeddings) if specific model mapping fails
+            self.encoding = tiktoken.get_encoding("cl100k_base")
     
     def embed_batch(self, texts: List[str]) -> List[List[float]]:
         """

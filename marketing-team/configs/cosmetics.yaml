@@ -1,5 +1,11 @@
-name: "Aurora"
+name: "aurora"
 positioning: "Clean, natural cosmetics with science-backed formulations"
+
+messaging_pillars:
+  - "Ingredient transparency: full disclosure of actives and concentrations"
+  - "Science-backed formulations: clinical testing and dermatologist validation"
+  - "Sustainable beauty: refillable packaging and ethical sourcing"
+  - "Sensitive-skin friendly: hypoallergenic and cruelty-free"
 
 voice:
   tone: "warm, aspirational, authentic"
@@ -36,35 +42,138 @@ factual_accuracy:
 
 formatting_rules:
   post_requirements: >
-    - Hook: 1-2 lines describing the consumer problem or sensory benefit
-    - Ingredient or process explanation: 2-4 lines (how it helps, evidence)
+    - Character limit: 800 characters maximum
+    - Hook: 1-2 lines describing consumer problem or sensory benefit
+    - Ingredient or process explanation: 2-4 lines (how it helps, clinical evidence)
     - Usage guidance and safety notes: 1-2 lines
-    - Closing: benefit, micro-CTA (link or product)
-    - ...
-
+    - Closing: benefit summary with micro-CTA (link or product name)
+    - Use accessible language; avoid technical jargon
+    - Include product imagery or ingredient close-ups when possible
   long_post_requirements: >
     - Character limit: 2900 characters maximum
-    - ...
-
+    - Use conversational section headers (e.g., "WHY WE CHOSE THIS INGREDIENT")
+    - Include bullet points for ingredient lists, benefits, or usage steps
+    - Balance education with aspiration (science + sensory appeal)
+    - Share formulation journey or sustainability story for authenticity
+    - Use emojis sparingly for visual breaks (plant, droplet, sparkle)
+    - Mobile-friendly: short paragraphs with clear spacing
   blog_post_requirements: >
-    - Length: 1,500-2,500 words (optimized for 7-10 minute read)
-    - ...
-
+    - Length: 1,500-2,500 words (7-10 minute read)
+    - Markdown format with H1 title, H2/H3 section headers
+    - Structure: Hook → Ingredient Deep-Dive → Clinical Evidence → Usage Guide → Sustainability → Conclusion → CTA
+    - Include ingredient breakdown tables, before/after data, sourcing stories
+    - Each section 200-300 words
+    - SEO-friendly: use ingredient names and benefits in headers naturally
+    - Suggest visuals with [IMAGE: product shot], [CHART: clinical results]
   newsletter_requirements: >
     - Length: 1,200-1,800 words (8-12 minute read)
-    - ...
+    - Subject line: 50-60 characters, benefit-focused ("Glowing skin starts here")
+    - Structure: Welcome → Featured Product/Ingredient → How-To/Tips → Sustainability Update → Exclusive Offer
+    - Scannable: short paragraphs, numbered steps, bullet benefits, pull quotes from customers
+    - Use horizontal rules (---) between major sections
+    - Each issue must provide skincare education or exclusive value
+    - Warm, conversational tone with product links naturally integrated
 
-generation_system_message: |
-  You are a professional content generator.
-  ...
+models: 
+  content_planning:
+    model: "anthropic/claude-sonnet-4"
+    temperature: 0.5
+    max_tokens: 1500
+    system_message: |
+      You are a routing supervisor for Aurora cosmetics content generation.
+      
+      Analyze queries and decide which information sources to use:
+      - rag_search: Search internal brand content (past posts, product info, ingredient data)
+      - web_search: Search for skincare trends, ingredient research, sustainability news
+      
+      Call rag_search when query mentions Aurora products, formulations, or brand story.
+      Call web_search when query needs current beauty trends or ingredient science.
+      Call both when comparing Aurora approach to industry standards.
+      Call neither for pure creative or aspirational content.
 
-evaluation_system_message: |
-  You are an expert content evaluator for marketing posts.
-  ...
+  content_generation:
+    model: "anthropic/claude-sonnet-4"
+    temperature: 0.5
+    max_tokens: 1500
+    system_message: |
+      You are a professional content generator for Aurora clean cosmetics.
+      
+      CORE PRINCIPLES:
+      1. Lead with consumer benefits and sensory appeal
+      2. Educate on ingredients with accessible language (avoid technical jargon)
+      3. Include clinical evidence when making efficacy claims
+      4. Highlight sustainability and transparency touchpoints
+      5. Never use banned terms ("chemical-free", greenwashing language)
+      6. Cite sources for clinical claims
+      
+      STRUCTURE:
+      - First sentence: consumer problem or sensory hook
+      - Build trust through ingredient transparency and evidence
+      - End with clear benefit and simple CTA
+      
+      Balance science with aspiration; be warm and authentic.
 
-optimization_system_message: |
-  You are a content optimizer. Improve content based on evaluation feedback.
-  ...
+  content_evaluation:
+    model: "gpt-4o"
+    temperature: 0.3
+    max_tokens: 1500
+    pattern: "evaluator_optimizer"
+    quality_threshold: 7.0
+    system_message: |
+      You are an expert content evaluator for clean beauty posts.
+      
+      Evaluate content on:
+      1. Brand voice alignment (tone, banned terms, style guidelines)
+      2. Scientific accuracy (no false claims, proper ingredient descriptions)
+      3. Accessibility (clear language, consumer-friendly)
+      4. Trust-building (transparency, clinical evidence, no greenwashing)
+      
+      VIOLATIONS (automatic score caps):
+      - Banned terms used ("chemical-free") → brand_voice ≤ 6.0
+      - Unsubstantiated efficacy claims → accuracy ≤ 5.0
+      - Greenwashing language → trust ≤ 6.0
+      
+      Score 1-10 for each dimension. Prioritize consumer trust.
+
+  content_optimization:
+    model: "anthropic/claude-sonnet-4"
+    temperature: 0.5
+    max_tokens: 1500
+    system_message: |
+      You are a content optimizer for Aurora cosmetics posts.
+      
+      Your task: Address evaluation feedback while staying on topic.
+      
+      CRITICAL CONSTRAINTS:
+      - Stay 100% on the original product/ingredient topic
+      - If feedback requests evidence, add clinical data or ingredient science
+      - If feedback requests clarity, simplify without losing accuracy
+      - Do not change the product or ingredient focus
+      
+      Apply feedback improvements while maintaining warm, accessible tone.
+
+  search_optimization:  
+    model: "gpt-4o-mini"
+    temperature: 0.5
+    max_tokens: 100
+
+  vectorization:
+    model: "text-embedding-3-small"
+    chunk_size: 150
+    chunk_overlap: 30
+    chunk_threshold: 150
+
+
+retrieval:  
+  rag:
+    max_results: 5
+    max_distance: 0.50
+  
+  search:
+    max_results: 5
+    search_depth: "advanced"
+    search_type: "general"
+
 
 cta_guidelines:
   principle: "CTAs should be low-friction and product- or education-focused."

@@ -66,13 +66,38 @@ def _validate_brand_config(config: Dict[str, Any], brand: str) -> None:
     """
     
     # Required top-level sections
-    required_sections = ['name', 'positioning', 'models', 'voice', 'formatting_rules', 'retrieval']
+    required_sections = [
+        'name', 
+        'positioning', 
+        'messaging_pillars',
+        'context_specific_points',
+        'content_generation_rules',
+        'factual_accuracy',
+        'models', 
+        'voice', 
+        'formatting_rules', 
+        'retrieval'
+    ]
     
     for section in required_sections:
         if section not in config:
             raise BrandConfigError(
                 f"Missing required section '{section}' in {brand}.yaml\n"
                 f"Required sections: {required_sections}"
+            )
+            
+    # Validate list sections
+    list_sections = [
+        'messaging_pillars',
+        'context_specific_points',
+        'content_generation_rules',
+        'factual_accuracy'
+    ]
+    
+    for section in list_sections:
+        if not isinstance(config[section], list):
+            raise BrandConfigError(
+                f"Section '{section}' must be a list in {brand}.yaml"
             )
     
     # Validate models section

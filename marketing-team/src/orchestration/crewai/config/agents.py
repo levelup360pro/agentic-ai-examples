@@ -1,6 +1,27 @@
+"""Agent factory helpers for CrewAI integration.
+
+This module exposes convenience factories that build pre-configured
+`crewai.Agent` instances for the marketing example. The factories read
+model/provider settings from the provided `brand_config` and create
+lightweight agents suitable for demo workflows.
+
+Public API
+    - build_content_planner_agent(brand_config, llm=None)
+    - build_content_generator_agent(brand_config, llm=None)
+    - build_content_evaluator_agent(brand_config, llm=None)
+    - build_content_optimizer_agent(brand_config, llm=None)
+
+Notes
+    - The returned `Agent` objects are configured for local demos and
+      rely on environment variables for API keys when necessary.
+    - The internal helper `_make_agent_llm_from_config` maps brand_config
+      sections to `crewai.LLM` connection parameters.
+"""
+
 from typing import Optional, Literal
 import os
 from crewai import LLM, Agent
+
 
 def _make_agent_llm_from_config(
     brand_config: dict,
@@ -11,7 +32,10 @@ def _make_agent_llm_from_config(
         "content_optimization",
     ],
 ) -> LLM:
-    """
+    """Create a `crewai.LLM` configured from brand_config["models"][section].
+
+    This helper centralizes provider mapping so agent builders do not need
+    to duplicate environment logic.
     """
     cfg = brand_config["models"][section]
     provider = cfg.get("provider", "openrouter")
@@ -46,6 +70,16 @@ def build_content_planner_agent(
     brand_config: dict,
     llm: Optional[LLM] = None,
 ) -> Agent:
+    """Build an Agent specialized in planning research for a topic/brand.
+
+    Args
+        brand_config: The parsed brand YAML dict containing `models` sections.
+        llm: Optional pre-configured `crewai.LLM` instance; if omitted the helper
+             `_make_agent_llm_from_config` is used to build one from config.
+
+    Returns
+        A configured `crewai.Agent` suitable for use as a planning agent in Crew flows.
+    """
     gen_cfg = brand_config["models"]["content_planning"]
 
     if llm is None:
@@ -73,6 +107,18 @@ def build_content_generator_agent(
     brand_config: dict,
     llm: Optional[LLM] = None,  # optional if you use return_direct tools for compose
 ) -> Agent:
+    """Build a content generator Agent.
+
+    The generator agent's LLM may be optional when generation is performed via
+    `StructuredTool(return_direct=True)`; in that case `llm` can remain None.
+
+    Args
+        brand_config: Parsed brand YAML dict.
+        llm: Optional `crewai.LLM` instance to use for direct agent calls.
+
+    Returns
+        Configured `crewai.Agent` for content composition tasks.
+    """
     gen_cfg = brand_config["models"]["content_generation"]
     if llm is None and gen_cfg.get("provider"):
         llm = _make_agent_llm_from_config(brand_config, "content_generation")
@@ -96,6 +142,15 @@ def build_content_evaluator_agent(
     brand_config: dict,
     llm: Optional[LLM] = None,  # optional if you use return_direct tools for evaluate
 ) -> Agent:
+    """Build an evaluator Agent configured to score and critique content.
+
+    Args
+        brand_config: Parsed brand YAML dict including evaluation model settings.
+        llm: Optional `crewai.LLM` instance; if omitted, one is created from config.
+
+    Returns
+        `crewai.Agent` that focuses on scoring, violations, and improvement actions.
+    """
     eval_cfg = brand_config["models"]["content_evaluation"]
     if llm is None and eval_cfg.get("provider"):
         llm = _make_agent_llm_from_config(brand_config, "content_evaluation")
@@ -119,6 +174,12 @@ def build_content_optimizer_agent(
     brand_config: dict,
     llm: Optional[LLM] = None,  # optional; often unnecessary if you just swap system_message on regen
 ) -> Agent:
+    """Build an agent used for optimization / iterative refinement runs.
+
+    Typically used when the flow decides to regenerate using an optimization
+    system_message and prior critique. The agent mirrors the generator but uses
+    the optimization system_template.
+    """
     opt_cfg = brand_config["models"]["content_optimization"]
     if llm is None and opt_cfg.get("provider"):
         llm = _make_agent_llm_from_config(brand_config, "content_optimization")

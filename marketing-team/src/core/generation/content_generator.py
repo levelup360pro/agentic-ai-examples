@@ -1,8 +1,19 @@
-"""
-Content Generator
+"""Content Generator
+
 Orchestrates content generation using LLM.
 Supports both deterministic (non-agentic) and agentic workflows
 with minimal code duplication via shared private helpers.
+
+Public API
+        ContentGenerator: Primary class exposing `generate`, `generate_from_context`,
+        and `generate_batch` for deterministic and agentic scenarios.
+
+Notes
+        - Deterministic mode may perform internal tool calls (RAG/search) via
+            the `PromptBuilder` while agentic mode expects pre-fetched tool contexts.
+        - The class accepts an optional `ContentEvaluator` to enable reflection
+            and evaluator-optimizer patterns. If not provided, those patterns will
+            raise when invoked.
 """
 
 from typing import Dict, Optional, List, Any, Tuple
@@ -64,7 +75,6 @@ class ContentGenerator:
     # -------------------------------
     def generate(
         self,
-        *,
         topic: str,
         brand: str,
         brand_config: dict,
@@ -172,11 +182,11 @@ class ContentGenerator:
     # ----------------------------
     def generate_from_context(
         self,
-        *,
         topic: str,
         brand: str,
         brand_config: dict,
         template: str,
+        examples: Optional[List[str]] = None,
         tool_contexts: Optional[Dict[str, str]] = None,  # {"rag_search": "...", "web_search": "..."}
         use_cot: bool = False,
         pattern: str = "single_pass",
@@ -197,6 +207,7 @@ class ContentGenerator:
         # Build user prompt from tool contexts (no tool calls here)
         user_prompt = self.prompt_builder.build_generation_prompt(
             template=template_obj,
+            examples=examples,
             topic=topic,
             brand=brand,
             brand_config=brand_config,
@@ -253,8 +264,7 @@ class ContentGenerator:
     # ------------------------
     def generate_batch(
         self,
-        topics: List[str],
-        *,
+        topics: List[str],       
         brand: str,
         brand_config: dict,
         template: str,
@@ -350,8 +360,7 @@ class ContentGenerator:
         ]
 
     def _run_pattern(
-        self,
-        *,
+        self,       
         pattern: str,
         model: str,
         messages: List[Dict[str, str]],
@@ -405,8 +414,7 @@ class ContentGenerator:
             )
 
     def _run_reflection(
-        self,
-        *,
+        self,      
         model: str,
         messages: List[Dict[str, str]],
         temperature: float,
@@ -476,8 +484,7 @@ class ContentGenerator:
         return aggregated, iterations, final_critique
 
     def _run_evaluator_optimizer(
-        self,
-        *,
+        self,      
         model: str,
         messages: List[Dict[str, str]],
         template_key: str,

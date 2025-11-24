@@ -1,3 +1,10 @@
+"""Helpers to update and inspect `CrewContentGenerationState` during flows.
+
+Provides utility functions for appending traceable `MessageEvent` entries,
+updating generation outputs, mapping evaluator payloads back into state, and
+exporting snapshots suitable for logging or persistence.
+"""
+
 from __future__ import annotations
 import logging
 from typing import Dict, Any, Optional, List
