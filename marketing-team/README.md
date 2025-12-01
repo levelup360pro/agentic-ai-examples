@@ -75,7 +75,7 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 | `week-04` | LangGraph multi-agent system | ✅ Complete | Supervisor pattern, 100% routing accuracy, framework-agnostic architecture, config-driven system |
 | `week-05` | Framework comparison + Microsoft Agent Framework adoption | ✅ Complete | CrewAI evaluation (rejected: LangChain dependency), Microsoft Agent Framework validation (custom LLMClient + state passing), Design decision #21: Microsoft Agent Framework for production |
 | `week-06` | Microsoft Agent Framework + Gradio UI | ✅ Complete | Custom typed state model, executor/agent separation, simple functional UI, v1.0-reference release |
-| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
+| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete 🔒 Private | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
 | `week-08+` | Production hardening (private) | 🔒 Private | End-to-end Azure testing, HITL workflows, advanced features, governance automation, observability (insights shared, code private) |
 
 ### How to Use Week Branches
