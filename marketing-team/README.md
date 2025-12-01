@@ -4,7 +4,7 @@
 
 **Context**: Expanding my enterprise AI delivery capabilities (10+ years building production systems in regulated environments) into agentic orchestration patterns. Using marketing as a low-risk sandbox to master Microsoft Agent Framework/LangGraph/CrewAI with the same production rigor I've applied in finance/compliance workloads.
 
-**Status**: Week 6 Complete — v1.0-reference released (public code frozen, private hardening begins)  
+**Status**: Week 7 Complete — Azure infrastructure deployed, CI/CD automated (production hardening in progress)  
 **Methodology**: Evaluation-Driven Development (data-driven architecture decisions—enterprise standard)  
 **Deployment Path**: Local reference implementation complete → Azure production (Weeks 7+ private)
 
@@ -75,7 +75,8 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 | `week-04` | LangGraph multi-agent system | ✅ Complete | Supervisor pattern, 100% routing accuracy, framework-agnostic architecture, config-driven system |
 | `week-05` | Framework comparison + Microsoft Agent Framework adoption | ✅ Complete | CrewAI evaluation (rejected: LangChain dependency), Microsoft Agent Framework validation (custom LLMClient + state passing), Design decision #21: Microsoft Agent Framework for production |
 | `week-06` | Microsoft Agent Framework + Gradio UI | ✅ Complete | Custom typed state model, executor/agent separation, simple functional UI, v1.0-reference release |
-| `week-07+` | Production hardening (private) | 🔒 Private | Azure deployment, HITL workflows, advanced features, governance automation, observability (insights shared, code private) |
+| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
+| `week-08+` | Production hardening (private) | 🔒 Private | End-to-end Azure testing, HITL workflows, advanced features, governance automation, observability (insights shared, code private) |
 
 ### How to Use Week Branches
 
@@ -119,13 +120,14 @@ Detailed week reports are published in this repository documenting:
 
 
 | Week | Report | Key Outcomes |
-|------|--------|--------------||
-| **Week 1** | [WEEK1.md](/marketing-team/reports/WEEK1.md) | Evaluation framework, three-environment strategy, decision criteria |
-| **Week 2** | [WEEK2.md](/marketing-team/reports/WEEK2.md) | RAG system (Chroma, 40-post corpus), Tavily search, corpus testing (25% → 100% retrieval success) |
-| **Week 3** | [WEEK3.md](/marketing-team/reports/WEEK3.md) | Orchestration pattern testing (60 pieces), eval-optimizer winner (8.56/10), model selection (Claude Sonnet 4), evaluation system calibration |
-| **Week 4** | [WEEK4.md](/marketing-team/reports/WEEK4.md) | LangGraph supervisor pattern, 100% routing accuracy (22/22 scenarios), framework-agnostic architecture, config-driven system (4.3x ROI) |
-| **Week 5** | [WEEK5.md](/marketing-team/reports/WEEK5.md) | Framework comparison (CrewAI rejected, Microsoft Agent Framework adopted), custom agent validation, Decision #21: production orchestration choice |
-| **Week 6** | [WEEK6.md](/marketing-team/reports/WEEK6.md) | Microsoft Agent Framework migration, custom typed state model, Gradio UI, v1.0-reference release, transition to private hardening |
+|------|--------|--------|
+| **Week 1** | [WEEK1.md](reports/WEEK1.md) | Evaluation framework, three-environment strategy, decision criteria |
+| **Week 2** | [WEEK2.md](reports/WEEK2.md) | RAG system (Chroma, 40-post corpus), Tavily search, corpus testing (25% → 100% retrieval success) |
+| **Week 3** | [WEEK3.md](reports/WEEK3.md) | Orchestration pattern testing (60 pieces), eval-optimizer winner (8.56/10), model selection (Claude Sonnet 4), evaluation system calibration |
+| **Week 4** | [WEEK4.md](reports/WEEK4.md) | LangGraph supervisor pattern, 100% routing accuracy (22/22 scenarios), framework-agnostic architecture, config-driven system (4.3x ROI) |
+| **Week 5** | [WEEK5.md](reports/WEEK5.md) | Framework comparison (CrewAI rejected, Microsoft Agent Framework adopted), custom agent validation, Decision #21: production orchestration choice |
+| **Week 6** | [WEEK6.md](reports/WEEK6.md) | Microsoft Agent Framework migration, custom typed state model, Gradio UI, v1.0-reference release, transition to private hardening |
+| **Week 7** | [WEEK7.md](reports/WEEK7.md) | Azure infrastructure (14 Terraform modules), two-project architecture, GitHub Actions CI/CD, unified local/Azure codebase, managed identity authentication |
 
 ---
 
@@ -159,6 +161,7 @@ Based on **Chip Huyen's AI Engineering principles** (industry standard for produ
 - ✅ **Week 4**: Framework-agnostic architecture enables objective Week 5 comparison (same business logic, different orchestration—isolates framework variable)
 - ✅ **Week 5**: CrewAI spike and early rejection. Strategic pivot to Microsoft Agent Framework 
 - ✅ **Week 6**: Microsoft Agent Framework supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
+- ✅ **Week 7**: Azure infrastructure deployed (14 Terraform modules, two-project architecture, GitHub Actions CI/CD, managed identity authentication)
 
 ---
 
@@ -270,17 +273,19 @@ git checkout week-06  # Example: Week 6 Microsoft Agent Framework implementation
 - **Testing**: Jupyter notebooks with systematic evaluation (10-20 pieces per condition)
 - **Cost**: ~€18.80 for Weeks 1-5 testing phase
 
-**Staging Deployment (Week 6+)**:
+**Staging Deployment (Week 7+)**:
 - **Purpose**: Production-parity validation before release
-- **LLM**: Azure OpenAI (GPT-4o + Claude Sonnet 4 based on Week 3 selection)
-- **Vector Store**: PostgreSQL + pgvector (1536D, persistent)
-- **Platform**: Azure Container Apps (stateless, scalable)
-- **Monitoring**: Application Insights (full observability)
+- **LLM**: Azure AI Foundry (GPT-4o + text-embedding-3-small deployments)
+- **Vector Store**: PostgreSQL Flexible Server + pgvector (1536D, persistent, AAD auth)
+- **Platform**: Azure Container Apps (VNet-integrated, scale-to-zero)
+- **Infrastructure**: Terraform (14 modules), two-project architecture, GitHub Actions CI/CD
+- **Security**: Managed identities, private endpoints, customer-managed keys
+- **Monitoring**: Application Insights + Log Analytics (full observability)
 - **Testing**: End-to-end validation, HITL approval workflow, cost/latency verification
 
-**Production Deployment (Week 6+)**:
+**Production Deployment (Week 8+)**:
 - **Purpose**: Live content generation for my brands with strict governance
-- **Stack**: Same as Staging (consistency guaranteed)
+- **Stack**: Same as Staging (Terraform modules, managed identities, private endpoints)
 - **Differences**: Separate resources, stricter RBAC, production secrets, higher availability targets
 - **Monitoring**: Application Insights + alerting on quality drift, cost overruns, failures
 
@@ -310,7 +315,7 @@ git checkout week-06  # Example: Week 6 Microsoft Agent Framework implementation
 
 ## What Changes After Week 6 (v1.0-reference)
 
-**Week 6 marks the completion of the public reference implementation.** The codebase is now frozen at **v1.0-reference**, providing a stable foundation that demonstrates production-ready agentic AI architecture.
+**Week 6 marked the completion of the public reference implementation.** The codebase is now frozen at **v1.0-reference**, providing a stable foundation that demonstrates production-ready agentic AI architecture.
 
 ### What's Included in v1.0-reference
 
@@ -350,7 +355,7 @@ This approach maximizes transparency (show how real systems evolve) while protec
 
 ---
 
-## What I'll Share vs What Stays Private
+## What Is Shared After Week 6 vs What Stays Private
 
 ### Public (This Repository)
 - Weekly reports documenting design decisions, testing results, outcomes
