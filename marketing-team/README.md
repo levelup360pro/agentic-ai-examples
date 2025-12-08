@@ -75,7 +75,7 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 | `week-04` | LangGraph multi-agent system | ✅ Complete | Supervisor pattern, 100% routing accuracy, framework-agnostic architecture, config-driven system |
 | `week-05` | Framework comparison + Microsoft Agent Framework adoption | ✅ Complete | CrewAI evaluation (rejected: LangChain dependency), Microsoft Agent Framework validation (custom LLMClient + state passing), Design decision #21: Microsoft Agent Framework for production |
 | `week-06` | Microsoft Agent Framework + Gradio UI | ✅ Complete | Custom typed state model, executor/agent separation, simple functional UI, v1.0-reference release |
-| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete 🔒 Private | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
+| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
 | `week-08+` | Production hardening (private) | 🔒 Private | End-to-end Azure testing, HITL workflows, advanced features, governance automation, observability (insights shared, code private) |
 
 ### How to Use Week Branches
@@ -128,6 +128,7 @@ Detailed week reports are published in this repository documenting:
 | **Week 5** | [WEEK5.md](reports/WEEK5.md) | Framework comparison (CrewAI rejected, Microsoft Agent Framework adopted), custom agent validation, Decision #21: production orchestration choice |
 | **Week 6** | [WEEK6.md](reports/WEEK6.md) | Microsoft Agent Framework migration, custom typed state model, Gradio UI, v1.0-reference release, transition to private hardening |
 | **Week 7** | [WEEK7.md](reports/WEEK7.md) | Azure infrastructure (14 Terraform modules), two-project architecture, GitHub Actions CI/CD, unified local/Azure codebase, managed identity authentication |
+| **Week 8** | [WEEK8.md](reports/WEEK8.md) | Hexagonal architecture with Ports & Adapters pattern, protocol-based dependency injection, full end-to-end observability via Agent Framework |
 
 ---
 
@@ -162,10 +163,13 @@ Based on **Chip Huyen's AI Engineering principles** (industry standard for produ
 - ✅ **Week 5**: CrewAI spike and early rejection. Strategic pivot to Microsoft Agent Framework 
 - ✅ **Week 6**: Microsoft Agent Framework supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
 - ✅ **Week 7**: Azure infrastructure deployed (14 Terraform modules, two-project architecture, GitHub Actions CI/CD, managed identity authentication)
+- ✅ **Week 8**: Hexagonal architecture with Ports & Adapters pattern, protocol-based dependency injection, full end-to-end observability via Agent Framework
+
 
 ---
 
-## Quick Start (v1.0-reference)
+
+- ✅ **Week 6**: ## Quick Start (v1.0-reference)
 
 **The public reference implementation is now complete and frozen at v1.0-reference.** You can run the full system locally with the Gradio UI.
 
