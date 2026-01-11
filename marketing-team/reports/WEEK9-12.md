@@ -1,4 +1,4 @@
-# WEEK 9-12: Production Observability, Security, HITL Governance & Dual-Model Architecture
+# WEEK 9-12: Observability, Security, Framework Portability, HITL & Checkpointing, PII Detection
 
 **Status:** Complete ✅  
 **Focus Areas:** Observability & cost telemetry, Cloudflare security perimeter, PII sanitization & guardrails, Framework-agnostic hexagonal agents, HITL content lifecycle & checkpointing, Persisted workflow traces, Dual-model LLM configuration, Deployment robustness
