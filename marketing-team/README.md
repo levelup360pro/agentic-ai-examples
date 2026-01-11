@@ -15,8 +15,12 @@
 ![HITL Content Lifecycle](architecture/agentic-content-generation-engine-agentic-workflow-view.png)
 *Two human gates. No auto-publish. Every approval traced to authenticated identity.*
 
+
+
 ![Infrastructure](architecture/agentic-content-generation-engine-infrastructure-view.png)
 *100% Private Link. Cloudflare edge. Managed Identity. Key Vault.*
+
+
 
 ![Hexagonal Architecture](architecture/agentic-content-generation-engine-logical-view.png)
 *Framework-agnostic core. Protocol-driven boundaries. Swap infrastructure without touching business logic.*
