@@ -1,31 +1,45 @@
 # LevelUp360 Agentic Marketing System
 
-**Systematic exploration of agentic AI orchestration (Microsoft Agent Framework, LangGraph, CrewAI) for enterprise delivery, applied to dual-brand marketing use case.**
+**Bank-grade, GDPR & EU AI Act Article 14–aligned agentic content system — built solo in 12 weeks with production security, two human-in-the-loop gates, PII sanitisation, and full audit trails. Reference implementation public (Weeks 1–6); production architecture documented (Weeks 7–12, code private).**
 
-**Context**: Expanding my enterprise AI delivery capabilities (10+ years building production systems in regulated environments) into agentic orchestration patterns. Using marketing as a low-risk sandbox to master Microsoft Agent Framework/LangGraph/CrewAI with the same production rigor I've applied in finance/compliance workloads.
+**Context**: Expanding my enterprise AI delivery capabilities (20+years in the industry, 10+ years building production systems in regulated environments) into agentic orchestration patterns. Started as a low-risk marketing sandbox; ended as an insurable, bank-grade agentic system with HITL governance, PII guardrails, and full decision traceability.
 
-**Status**: Week 7 Complete — Azure infrastructure deployed, CI/CD automated (production hardening in progress)  
+**Status**: 12-Week Journey Complete ✅ — EU AI Act Article 14 compliant (seven months early). Production system running: two HITL gates, PII sanitisation at workflow boundaries, workflow traces, identity without PII, ~€29/week operational cost at current volume.  
 **Methodology**: Evaluation-Driven Development (data-driven architecture decisions—enterprise standard)  
 **Deployment Path**: Local reference implementation complete → Azure production (Weeks 7+ private)
 
 ---
 
-## What I'm Building
+## Architecture Overview
 
-An **agentic marketing system** serving two real brands (my AI consulting practice LevelUp360 + partner's cosmetics brand), built with **the same production-grade patterns I've used in enterprise delivery for 10+ years**—now applied to agentic orchestration frameworks (LangGraph, CrewAI).
+![HITL Content Lifecycle](architecture/agentic-content-generation-engine-agentic-workflow-view.png)
+*Two human gates. No auto-publish. Every approval traced to authenticated identity.*
+
+![Infrastructure](architecture/agentic-content-generation-engine-infrastructure-view.png)
+*100% Private Link. Cloudflare edge. Managed Identity. Key Vault.*
+
+![Hexagonal Architecture](architecture/agentic-content-generation-engine-logical-view.png)
+*Framework-agnostic core. Protocol-driven boundaries. Swap infrastructure without touching business logic.*
+
+---
+
+
+## What I Built
+
+An **agentic marketing system** serving two real brands (my AI consulting practice LevelUp360 + partner's cosmetics brand), built with **the same production-grade patterns I've used in enterprise delivery for 10+ years**—now applied to agentic orchestration frameworks (LangGraph as baseline, Microsoft Agent Framework for production; CrewAI evaluated and rejected Week 5).
 
 ### Why Marketing as the Use Case?
 
-**Low-risk sandbox** to master agentic frameworks while applying enterprise rigor I already know from regulated delivery (evaluation pipelines, cost budgets, HITL approvals, security layers, observability, drift detection).
+Marketing started as a **low-risk sandbox** to master agentic frameworks while applying enterprise rigor I already know from regulated delivery (evaluation pipelines, cost budgets, HITL approvals, security layers, observability, drift detection).
 
-Marketing generates real published content (not academic), but stakes are lower than finance/healthcare—safe environment to systematically test orchestration frameworks before applying to higher-stakes client work.
+By Week 12, the same system operates with **bank-grade controls**: two explicit HITL gates, PII sanitisation at workflow boundaries, Entra GUID–based identity without PII, Cloudflare perimeter, and workflow traces aligned with EU AI Act Article 14 human-oversight requirements.
 
 ### What's Familiar (Enterprise Patterns I've Delivered Before)
 
 These patterns are **proven in my production work** (finance, compliance, regulated ML systems). I'm applying them here to validate they work with agentic orchestration:
 
 - ✅ **Evaluation-Driven Development**: Define metrics before building, test systematically, choose based on data (not opinions)
-- ✅ **Cost Controls**: Runtime budget enforcement, per-operation tracking (achieved €0.054/post Week 4 vs <€2 target)
+- ✅ **Cost Controls**: Runtime budget enforcement, per-operation tracking, and explicit cost modelling (see Cost Transparency; all-in cost ≈€0.30–0.55/post depending on volume, vs <€2 target)
 - ✅ **Security Layers**: Azure Content Safety integrated from Day 1 (Prompt Shield, content moderation, groundedness detection)
 - ✅ **HITL Approval Workflows**: Human-in-the-loop governance before any output goes live
 - ✅ **Full Observability**: Application Insights monitoring, decision audit trails, lineage tracking
@@ -37,7 +51,7 @@ These patterns are **proven in my production work** (finance, compliance, regula
 This is the **skill expansion** focus—mastering agentic orchestration frameworks through hands-on testing:
 
 - 🔄 **LangGraph supervisor patterns**: 100% routing accuracy achieved Week 4 (22/22 scenarios, 110/110 runs)
-- 🔄 **CrewAI hierarchical orchestration**: Week 5 testing in progress (objective comparison vs LangGraph)
+- 🔄 **CrewAI hierarchical orchestration**: Week 5 spike and early rejection (LangChain dependency, complexity); informed pivot to Microsoft Agent Framework for production
 - 🔄 **Multi-agent coordination strategies**: Eval-optimizer pattern winner Week 3 (8.56/10 avg quality vs 8.20 reflection, 7.64 single-pass)
 - 🔄 **Framework-agnostic architecture**: Same business logic, swappable orchestration—enables objective comparison without refactoring
 
@@ -45,18 +59,18 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 
 - **Orchestration**: Microsoft Agent Framework (primary, Week 6) with custom typed state model; LangGraph (alternative implementation for comparison)
 - **Pattern**: Eval-optimizer (8.56/10 avg quality, Week 3 winner)
-- **Model**: Claude Sonnet 4 with reference post (9.5/10 narrative quality, Week 3 winner)
-- **Grounding**: RAG with ChromaDB (local/reference) for brand knowledge; text-embedding-3-small (1536D)
+- **LLM Provider**: Provider-agnostic configuration with dual-model support (OpenRouter for dev, Azure AI Foundry for production); see WEEK9+.md for architecture details
+- **Grounding**: RAG with ChromaDB (local/reference) for brand knowledge; embedding model configurable per environment
 - **Search**: Tavily AI-first search API for LLM-optimized evidence retrieval
-- **UI**: Gradio 5.33.1 (simple functional interface for brand config, document ingestion, content generation)
-- **Future (Private)**: Azure Container Apps, PostgreSQL + pgvector, Azure Content Safety, Application Insights
+- **UI (local reference)**: Gradio 5.33.1 (simple functional interface for brand config, document ingestion, content generation)
+- **Production Platform (private code)**: Azure Container Apps, PostgreSQL + pgvector, Azure Content Safety, OpenTelemetry + Application Insights, Cloudflare security perimeter, Azure Container Apps Easy Auth (Entra ID)
 
 ### Core Capabilities (Validated Metrics)
 
-- **Quality-First**: >7/10 content quality via human rubric evaluation ✅ **Achieved**: 8.56/10 (Week 3)
-- **Cost-Efficient**: <€2 per post operational cost ✅ **Achieved**: €0.054/post (Week 4)
-- **Performance**: <60s generation latency ✅ **Achieved**: <40s (Week 4)
-- **Routing Accuracy**: 100% correct tool selection ✅ **Achieved**: 22/22 scenarios (Week 4)
+- **Quality-First**: ≥9/10 content quality via human rubric evaluation ✅ **Achieved**: ≈9/10 after brand YAML refinements (≥8.56/10 from Week 3 baseline)
+- **Cost-Efficient**: <€2 per post operational cost ✅ **Achieved**: ≈€0.30–0.55/post all-in depending on volume (API-only cost ≈€0.04/post)
+- **Performance**: <60s generation latency ✅ **Achieved**: <20s in production (≈<40s in earlier Week 4 tests)
+- **Routing Accuracy**: 100% correct tool selection ✅ **Achieved**: 22/22 scenarios 
 - **Production-Grade**: HITL approvals, observability, cost monitoring, evaluation pipelines (enterprise standard)
 
 ---
@@ -75,7 +89,7 @@ This is the **skill expansion** focus—mastering agentic orchestration framewor
 | `week-04` | LangGraph multi-agent system | ✅ Complete | Supervisor pattern, 100% routing accuracy, framework-agnostic architecture, config-driven system |
 | `week-05` | Framework comparison + Microsoft Agent Framework adoption | ✅ Complete | CrewAI evaluation (rejected: LangChain dependency), Microsoft Agent Framework validation (custom LLMClient + state passing), Design decision #21: Microsoft Agent Framework for production |
 | `week-06` | Microsoft Agent Framework + Gradio UI | ✅ Complete | Custom typed state model, executor/agent separation, simple functional UI, v1.0-reference release |
-| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
+| `week-07` | Azure Infrastructure + CI/CD | ✅ Complete 🔒 Private | Full Terraform infrastructure (14 modules), two-project architecture, GitHub Actions CI/CD, unified app codebase, managed identity auth |
 | `week-08+` | Production hardening (private) | 🔒 Private | End-to-end Azure testing, HITL workflows, advanced features, governance automation, observability (insights shared, code private) |
 
 ### How to Use Week Branches
@@ -129,6 +143,7 @@ Detailed week reports are published in this repository documenting:
 | **Week 6** | [WEEK6.md](reports/WEEK6.md) | Microsoft Agent Framework migration, custom typed state model, Gradio UI, v1.0-reference release, transition to private hardening |
 | **Week 7** | [WEEK7.md](reports/WEEK7.md) | Azure infrastructure (14 Terraform modules), two-project architecture, GitHub Actions CI/CD, unified local/Azure codebase, managed identity authentication |
 | **Week 8** | [WEEK8.md](reports/WEEK8.md) | Hexagonal architecture with Ports & Adapters pattern, protocol-based dependency injection, full end-to-end observability via Agent Framework |
+| **Week 9-12** | [WEEK9-12.md](reports/WEEK9-12.md) | Observability & cost telemetry, Cloudflare security perimeter, PII sanitization & guardrails, Framework-agnostic hexagonal agents, HITL content lifecycle & checkpointing, Persisted workflow traces, Dual-model LLM configuration, Deployment robustness |
 
 ---
 
@@ -164,6 +179,7 @@ Based on **Chip Huyen's AI Engineering principles** (industry standard for produ
 - ✅ **Week 6**: Microsoft Agent Framework supervisor achieves 100% routing accuracy (22/22 scenarios, 110/110 runs—zero misroutes)
 - ✅ **Week 7**: Azure infrastructure deployed (14 Terraform modules, two-project architecture, GitHub Actions CI/CD, managed identity authentication)
 - ✅ **Week 8**: Hexagonal architecture with Ports & Adapters pattern, protocol-based dependency injection, full end-to-end observability via Agent Framework
+- ✅ **Week 9+**: Unified observability stack (OpenTelemetry + Application Insights), Cloudflare security perimeter (DDoS/bot protection/zero-trust), and multi-framework agent portability (Agent Framework + LangGraph adapters)
 
 
 ---
@@ -279,28 +295,28 @@ git checkout week-06  # Example: Week 6 Microsoft Agent Framework implementation
 
 **Staging Deployment (Week 7+)**:
 - **Purpose**: Production-parity validation before release
-- **LLM**: Azure AI Foundry (GPT-4o + text-embedding-3-small deployments)
-- **Vector Store**: PostgreSQL Flexible Server + pgvector (1536D, persistent, AAD auth)
+- **LLM**: Azure AI Foundry (production-grade chat and embedding model deployments)
+- **Vector Store**: PostgreSQL Flexible Server + pgvector (persistent, AAD auth)
 - **Platform**: Azure Container Apps (VNet-integrated, scale-to-zero)
 - **Infrastructure**: Terraform (14 modules), two-project architecture, GitHub Actions CI/CD
-- **Security**: Managed identities, private endpoints, customer-managed keys
-- **Monitoring**: Application Insights + Log Analytics (full observability)
-- **Testing**: End-to-end validation, HITL approval workflow, cost/latency verification
+- **Security**: Managed identities, private endpoints, customer-managed keys, Cloudflare security perimeter (DDoS/bot protection/zero-trust)
+- **Monitoring**: OpenTelemetry + Application Insights + Log Analytics (full observability)
+- **Testing**: End-to-end validation, HITL approval workflow, cost/latency verification, workflow trace inspection
 
 **Production Deployment (Week 8+)**:
 - **Purpose**: Live content generation for my brands with strict governance
-- **Stack**: Same as Staging (Terraform modules, managed identities, private endpoints)
+- **Stack**: Same as Staging (including Cloudflare perimeter, Terraform modules, managed identities, private endpoints)
 - **Differences**: Separate resources, stricter RBAC, production secrets, higher availability targets
-- **Monitoring**: Application Insights + alerting on quality drift, cost overruns, failures
+- **Monitoring**: OpenTelemetry + Application Insights with alerting on quality drift, cost overruns, failures
 
 ---
 
 ## Success Metrics
 
 ### Technical (Systematic Validation)
-- Content quality (human rubric): ≥ 7/10 average ✅ **Achieved**: 8.56/10 (Week 3)
-- Technical generation cost: < €2 per post ✅ **Achieved**: €0.054/post (Week 4)
-- Generation latency: < 60 seconds ✅ **Achieved**: <40s (Week 4)
+- Content quality (human rubric): ≥ 9/10 average ✅ **Achieved**: ≈9/10 after brand YAML refinements (≥8.56/10 Week 3 baseline)
+- Technical generation cost: < €2 per post ✅ **Achieved**: ≈€0.30–0.55/post all-in depending on weekly volume (API-only cost ≈€0.04/post)
+- Generation latency: < 60 seconds ✅ **Achieved**: <20s in production (≈<40s in Week 4 baseline)
 - Routing accuracy: 100% ✅ **Achieved**: 22/22 scenarios (Week 4)
 
 ### Business (Personal Use, Weeks 6+)
@@ -310,10 +326,50 @@ git checkout week-06  # Example: Week 6 Microsoft Agent Framework implementation
 - Network growth: +50 relevant connections (technical leaders, AI practitioners)
 
 ### Learning (Skill Expansion)
-- Agentic orchestration competency: LangGraph + CrewAI mastery via hands-on testing
+- Agentic orchestration competency: LangGraph + Microsoft Agent Framework mastery via hands-on testing; CrewAI spike and explicit rejection
 - Testing notebooks: 6+ published with transparent methodology
 - Weekly reports: 8 weeks documented (design decisions, testing data, outcomes)
 - Principles adherence: 100% data-driven decisions ✅ **Maintained** (no opinion-based framework choices)
+
+---
+
+## Cost Transparency
+
+### Production Costs (Weekly)
+
+| Component | Weekly Cost | Type |
+|-----------|-------------|------|
+| Azure Container Apps | €8.00 | Fixed |
+| Azure PostgreSQL + pgvector | €7.00 | Fixed |
+| Cloudflare Pro (WAF, DDoS, Zero-Trust) | €6.25 | Fixed |
+| Azure Application Insights | €1.50 | Fixed |
+| Azure AI Foundry (LLM inference) | €2.00 | Variable |
+| Azure AI Language (PII detection) | €1.00 | Variable |
+| **Total** | **~€26 fixed + ~€3 variable** | **~€29/week at current volume** |
+
+### Cost Per Post (All-In)
+
+Infrastructure costs are mostly fixed regardless of volume. Per-post cost decreases with scale:
+
+| Weekly Volume | Total Weekly Cost | Cost Per Post |
+|---------------|-------------------|---------------|
+| 50 posts | ~€28 | ~€0.56 |
+| 100 posts | ~€30 | ~€0.30 |
+| 200 posts | ~€34 | ~€0.17 |
+
+**Note:** Roughly 70% of production cost is security and observability (Cloudflare, Application Insights, managed identity infrastructure). This is intentional — a bank-grade, insurable posture has a cost, but it is what makes the system suitable for regulated environments.
+
+### Development Costs (12-Week Build)
+
+| Component | Total | Notes |
+|-----------|-------|-------|
+| LLM API calls (OpenRouter) | €10.80 | Pattern testing, evaluation runs |
+| PII detection testing | €0.16 | ~100 test inputs |
+| PostgreSQL (dev) | €33.00 | Quarter allocation |
+| Embeddings | €0.41 | text-embedding-3-small |
+| **Total development** | **~€44** | Excludes time investment |
+
+These numbers separate **build-time cost** from **steady-state production cost**, and make it clear that most ongoing spend goes into security and observability rather than raw inference.
 
 ---
 
@@ -386,11 +442,25 @@ This approach maximizes transparency (show how real systems evolve) while protec
 
 ### Background
 
-I've spent sevaral years building production-grade systems in regulated environments. This repository documents my systematic exploration of agentic AI orchestration (LangGraph, CrewAI, multi-agent patterns) applied to a real-world marketing use case, using the same production rigor I've applied in enterprise delivery.
+I've spent several years building production-grade systems in regulated environments. This repository documents my systematic exploration of agentic AI orchestration (LangGraph, Microsoft Agent Framework, and evaluated-but-rejected CrewAI) applied to a real-world marketing use case, using the same production rigor I've applied in enterprise delivery.
 
 ### Why Marketing as the Use Case?
 
-**Low-risk sandbox** to master new tooling (agentic frameworks) while applying familiar patterns (evaluation pipelines, cost controls, security, observability). Generates real published content for two brands (my AI consulting practice LevelUp360 + partner's cosmetics), so outcomes are real—but stakes are lower than finance/healthcare, allowing safe experimentation with orchestration frameworks before applying to higher-risk client work.
+Marketing is the **visible use case**; the architecture is **enterprise-grade**. It began as a low-risk sandbox to master new tooling (agentic frameworks) while applying familiar patterns (evaluation pipelines, cost controls, security, observability). It now powers real published content for two brands (my AI consulting practice LevelUp360 + partner's cosmetics) with the same governance, HITL, and audit expectations I use in regulated workloads.
+
+---
+
+## The Insurable AI
+
+This system is designed as an **insurable, bank-grade agentic workflow** rather than a toy demo:
+
+- **Two explicit HITL gates**: One for ideas (Gate 1) and one for drafts (Gate 2). No auto-publish; every post passes through a human decision point.
+- **Identity without PII**: HITL actions (approve/reject/regenerate) are linked to authenticated Entra user GUIDs, stored as `actor_user_id` without names/emails.
+- **PII sanitisation at workflow boundaries**: A shared `PIIGuard` backed by Azure AI Language PII detection sanitises external topics on entry and RAG summaries post-retrieval, before any LLM sees them.
+- **Append-only workflow traces**: Per-content JSON traces and PostgreSQL-backed status histories capture full lifecycle and decision lineage for each post.
+- **EU AI Act alignment**: Architecture and governance are aligned with Article 14 (human oversight), Article 12 (traceability), and Article 15 (resilience against unauthorised changes), seven months ahead of enforcement.
+
+The marketing domain keeps experimentation risk low; the **governance, auditability, and safety patterns** are the same ones I would apply in a bank or regulated enterprise.
 
 ### What's Demonstrated Here
 
