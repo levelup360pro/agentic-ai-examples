@@ -460,6 +460,10 @@ This system is designed as an **insurable, bank-grade agentic workflow** rather 
 - **Append-only workflow traces**: Per-content JSON traces and PostgreSQL-backed status histories capture full lifecycle and decision lineage for each post.
 - **EU AI Act alignment**: Architecture and governance are aligned with Article 14 (human oversight), Article 12 (traceability), and Article 15 (resilience against unauthorised changes), seven months ahead of enforcement.
 
+### Security Framework
+
+Architecture mapped against [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org)—8 of 10 risks fully covered, 2 partial. [Full mapping](reports/OWASP_AGENTIC_TOP_10_MAPPING.md).
+
 The marketing domain keeps experimentation risk low; the **governance, auditability, and safety patterns** are the same ones I would apply in a bank or regulated enterprise.
 
 ### What's Demonstrated Here
