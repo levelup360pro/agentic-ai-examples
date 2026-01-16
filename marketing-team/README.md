@@ -462,7 +462,7 @@ This system is designed as an **insurable, bank-grade agentic workflow** rather 
 
 ### Security Framework
 
-Architecture mapped against [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org)—8 of 10 risks fully covered, 2 partial. [Full mapping](reports/OWASP_AGENTIC_TOP_10_MAPPING.md).
+Architecture mapped against [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)—8 of 10 risks fully covered, 2 partial. [Full mapping](reports/OWASP_AGENTIC_TOP_10_MAPPING.md).
 
 The marketing domain keeps experimentation risk low; the **governance, auditability, and safety patterns** are the same ones I would apply in a bank or regulated enterprise.
 

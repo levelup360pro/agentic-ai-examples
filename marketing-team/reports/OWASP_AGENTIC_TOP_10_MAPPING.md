@@ -1,6 +1,6 @@
 # OWASP Top 10 for Agentic Applications 2026 — Security Mapping (Public Version)
 
-This document maps the system architecture against the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org), the most actionable security framework for agentic AI systems.
+This document maps the system architecture against the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the most actionable security framework for agentic AI systems.
 
 ---
 
@@ -219,5 +219,5 @@ If scope expands (platformization, higher-stakes actions):
 
 - **Framework:** OWASP Top 10 for Agentic Applications 2026
 - **Version:** December 2025
-- **Source:** [genai.owasp.org](https://genai.owasp.org)
+- **Source:** [genai.owasp.org](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
 - **Related:** OWASP Top 10 for LLM Applications 2025, OWASP Agentic AI Threats & Mitigations Guide
