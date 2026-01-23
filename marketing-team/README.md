@@ -375,11 +375,11 @@ These numbers separate **build-time cost** from **steady-state production cost**
 
 ## What Changes After Week 6 (v1.0-reference)
 
-**Week 6 marked the completion of the public reference implementation.** The codebase is now frozen at **v1.0-reference**, providing a stable foundation that demonstrates production-ready agentic AI architecture.
+**Week 6 marked the completion of the public reference implementation.** The codebase is now frozen at **v1.0-reference**, providing a stable foundation that demonstrates agentic AI architecture.
 
 ### What's Included in v1.0-reference
 
-- ✅ **Full Agentic Workflow**: Microsoft Agent Framework orchestration (planning → research → generation → evaluation)
+- ✅ **Basic Agentic Workflow**: Microsoft Agent Framework orchestration (planning → research → generation → evaluation)
 - ✅ **Alternative Implementation**: LangGraph version for framework comparison
 - ✅ **RAG Integration**: Complete vector store (ChromaDB), document ingestion, brand-specific retrieval
 - ✅ **Evaluation Framework**: Automated critique generation, scoring, quality thresholds
@@ -389,7 +389,7 @@ These numbers separate **build-time cost** from **steady-state production cost**
 
 ### What Continues (Weeks 7+: Documentation & Insights)
 
-From Week 7 onward, the journey continues with **production hardening and operational evolution**, shared through documentation rather than code:
+From Week 7 onward, the journey continues with **advanced orchestration, production hardening and operational evolution**, shared through documentation rather than code:
 
 - ✅ **Architecture Diagrams**: Production deployment patterns, governance flows, infrastructure evolution
 - ✅ **Design Decisions**: Same rigor as Weeks 1-6 (Challenge → Solution → Rationale → Impact)
@@ -407,7 +407,7 @@ From Week 7 onward, the journey continues with **production hardening and operat
 
 ### Why This Boundary?
 
-**v1.0-reference proves the capability**: "Here's a production-ready agentic system with RAG, routing, evaluation, and UI—you can run it yourself."
+**v1.0-reference proves the capability**: "Here's an agentic system with RAG, routing, evaluation, and UI—you can run it yourself."
 
 **Private work proves operational maturity**: Deploying at scale, securing for regulated industries, integrating into real business workflows.
 
@@ -427,14 +427,14 @@ This approach maximizes transparency (show how real systems evolve) while protec
 - Enterprise transferability insights (how patterns map to regulated workloads)
 
 ### Private (Not Included)
-- Proprietary prompt engineering "personalities" (brand-specific voice tuning)
+- Proprietary config. driven behaviour
 - Detailed brand content and competitive intelligence
-- Production secrets, API keys, Azure resource IDs
-- Client-specific customizations (when I take on paid work)
-- Advanced evaluation logic and threshold tuning (competitive advantage)
-- Full Azure infrastructure as code (Terraform—security-sensitive)
+- Production hardening
+- Client-specific customizations
+- Advanced logic (competitive advantage)
+- Full infrastructure as code (Terraform—security-sensitive) 
 
-**Why the Split**: Public content demonstrates **methodology and capability** (how I apply enterprise rigor to agentic systems). Private content is **implementation-specific details** (what makes my brands unique, production secrets).
+**Why the Split**: Public content demonstrates **methodology and capability** (how I apply enterprise rigor to agentic systems). Private content is **implementation-specific details** (what makes my brands unique, production hardening, advanced logic).
 
 ---
 
