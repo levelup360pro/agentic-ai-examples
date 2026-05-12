@@ -93,6 +93,7 @@ Current behavior:
 - the **`name` field** becomes the runtime brand identifier once the config is loaded and passed into generation/retrieval flows
 
 This makes the mismatch a known public-reference inconsistency.
+TODO: align the filename and `name` field if the public reference implementation is updated.
 
 ## 6. UI Design
 ### 6.1 Tabs
@@ -248,6 +249,7 @@ For `evaluator_optimizer`, `_generate_rubric()` builds a rubric from:
 
 ### 11.5 Important implementation note
 Known bug: the agent passes `brand_config=evaluator_config` into `ContentEvaluator.evaluate_content()` instead of the full brand config. As implemented, rubric generation depends on evaluator config shape rather than the full YAML schema in the active path.
+TODO: update the agent path to pass the full brand config if this runtime path is revised.
 
 ## 12. LLM and Search Infrastructure
 ### 12.1 `LLMClient`
@@ -403,8 +405,8 @@ In the active Microsoft Agent Framework workflow, tools are **not** invoked thro
 3. The active path lacks public HITL approval or publishing steps.
 4. Brand isolation is metadata-based, not physically separated per collection/table.
 5. `generate_content()` does not pass a `pattern` input, so `StartExecutor` defaults thread pattern to `single_pass`.
-6. Known bug: `ContentEvaluationAgent.run()` currently uses evaluator config where full brand config would be expected for rubric generation.
-7. Known bug: `generate_content()` contains duplicate `except Exception` blocks; the second block is unreachable.
+6. Known bug: `ContentEvaluationAgent.run()` currently uses evaluator config where full brand config would be expected for rubric generation. TODO: pass the full brand config in a future code fix.
+7. Known bug: `generate_content()` contains duplicate `except Exception` blocks; the second block is unreachable. TODO: remove the dead handler in a future code fix.
 8. Embedding provider configuration differs between app initialization and workflow construction.
 
 ## 18. Alignment Guidance
