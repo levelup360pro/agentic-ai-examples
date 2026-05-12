@@ -106,6 +106,7 @@ These modules are present, but the Gradio app invokes the Microsoft Agent Framew
 | Brand configuration | YAML files in `configs/` |
 | Knowledge base | Local ChromaDB persisted under `data/chroma_db/` |
 | Retrieval isolation | Metadata filter by brand inside one collection |
+| Retrieval threshold | Brand-configured `max_distance`, currently `0.50` in the public YAML configs |
 | Workflow state | In-memory `ContentThreadState` stored in workflow shared state |
 | Cost logging | CSV append log in `data/api_calls.csv` |
 | Reports and decisions | Markdown documents under `reports/` |

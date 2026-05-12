@@ -4,6 +4,8 @@ _Compiled from `marketing-team/reports/WEEK*.md`. Numbering is normalized sequen
 
 _Note: the request referenced a Draw.io source file, but this checkout only contains the rendered PNG architecture views under `marketing-team/architecture/`; those README-linked diagrams were used for alignment._
 
+_Scope note: this file compiles decisions across the full 12-week journey. Some active decisions describe the later private production target state, while the public runnable reference implementation remains the Week 6 local system under `marketing-team/`._
+
 ### Decision 1 — Methodological Approach: Evaluation-Driven Development
 
 **Date:** 2026-01-16T07:41:11Z
@@ -93,6 +95,8 @@ The project spends extra evaluation effort up front, but the eventual model choi
 
 Use PostgreSQL with pgvector as the semantic-search baseline and keep hybrid search as an evidence-gated option.
 
+_Implementation note: the current public reference implementation still uses local ChromaDB; PostgreSQL + pgvector is the later production-direction decision reflected in private Weeks 7-12 material._
+
 **Context**
 
 The system needed durable retrieval, low cost, and room for production operations; alternatives included Azure AI Search, ChromaDB, FAISS, and larger embedding models.
@@ -117,7 +121,9 @@ The architecture gets a production-ready store with future hybrid search headroo
 
 **Decision**
 
-Apply a 0.60 maximum distance threshold so weak vector matches are dropped instead of forced into prompts.
+Apply a maximum distance threshold so weak vector matches are dropped instead of forced into prompts.
+
+_Implementation note: the current public brand configs use `max_distance: 0.50`; the earlier 0.60 threshold recorded here reflects the initial decision before later tuning._
 
 **Context**
 
