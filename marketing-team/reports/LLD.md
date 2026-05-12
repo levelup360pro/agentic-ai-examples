@@ -86,7 +86,13 @@ Brand definitions are stored as YAML files under `configs/`.
 - `vectorization`
 
 ### 5.5 Important implementation note
-The filename `cosmetics.yaml` contains `name: "aurora"`. Runtime brand identity therefore depends on which field is used by the code path.
+The filename `cosmetics.yaml` contains `name: "aurora"`.
+
+Current behavior:
+- the **filename stem** is the lookup key for loading configs from disk
+- the **`name` field** becomes the runtime brand identifier once the config is loaded and passed into generation/retrieval flows
+
+This makes the mismatch a known public-reference inconsistency.
 
 ## 6. UI Design
 ### 6.1 Tabs
@@ -241,7 +247,7 @@ For `evaluator_optimizer`, `_generate_rubric()` builds a rubric from:
 - returns critique, metadata, and `meets_quality_threshold`
 
 ### 11.5 Important implementation note
-The agent passes `brand_config=evaluator_config` into `ContentEvaluator.evaluate_content()` instead of the full brand config. This means rubric generation behavior depends on evaluator config shape rather than the full YAML schema in the active path.
+Known bug: the agent passes `brand_config=evaluator_config` into `ContentEvaluator.evaluate_content()` instead of the full brand config. As implemented, rubric generation depends on evaluator config shape rather than the full YAML schema in the active path.
 
 ## 12. LLM and Search Infrastructure
 ### 12.1 `LLMClient`
@@ -397,8 +403,8 @@ In the active Microsoft Agent Framework workflow, tools are **not** invoked thro
 3. The active path lacks public HITL approval or publishing steps.
 4. Brand isolation is metadata-based, not physically separated per collection/table.
 5. `generate_content()` does not pass a `pattern` input, so `StartExecutor` defaults thread pattern to `single_pass`.
-6. `ContentEvaluationAgent.run()` currently uses evaluator config where full brand config would be expected for rubric generation.
-7. `generate_content()` contains duplicate `except Exception` blocks; the second block is unreachable.
+6. Known bug: `ContentEvaluationAgent.run()` currently uses evaluator config where full brand config would be expected for rubric generation.
+7. Known bug: `generate_content()` contains duplicate `except Exception` blocks; the second block is unreachable.
 8. Embedding provider configuration differs between app initialization and workflow construction.
 
 ## 18. Alignment Guidance
