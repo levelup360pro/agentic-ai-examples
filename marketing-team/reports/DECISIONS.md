@@ -1238,7 +1238,7 @@ Protocols extend the project’s hexagonal discipline to human-governed content 
 
 **Consequence**
 
-Testing and swapability improve, but more abstraction layers must be maintained.
+Testing and swappability improve, but more abstraction layers must be maintained.
 
 **Evidence**
 
