@@ -3,7 +3,7 @@
 ## 1. Purpose
 This document describes the **current public implementation** of the `marketing-team` example in this repository.
 
-It intentionally documents the runnable reference system under `/home/runner/work/agentic-ai-examples/agentic-ai-examples/marketing-team`, not the later private production hardening described in parts of `README.md`, `DECISIONS.md`, and the architecture PNGs.
+It intentionally documents the runnable reference system under `marketing-team/`, not the later private production hardening described in parts of `README.md`, `DECISIONS.md`, and the architecture PNGs.
 
 ## 2. Scope
 ### In scope

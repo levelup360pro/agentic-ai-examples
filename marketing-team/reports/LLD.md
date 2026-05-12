@@ -1,7 +1,7 @@
 # Low Level Design (LLD)
 
 ## 1. Purpose
-This document describes the detailed design of the **current public implementation** located in `/home/runner/work/agentic-ai-examples/agentic-ai-examples/marketing-team`.
+This document describes the detailed design of the **current public implementation** located in `marketing-team/`.
 
 It focuses on executable code paths and local data structures, and it intentionally separates them from later private production features described elsewhere.
 

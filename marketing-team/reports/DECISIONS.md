@@ -30,7 +30,7 @@ The project gains a traceable decision trail and recurring experiments, but it m
 
 **Evidence**
 
-- `marketing-team/reports/WEEK1.md#L24-L39`
+- [WEEK1.md#L24-L39](WEEK1.md#L24-L39)
 
 ### Decision 2 — Three-Environment Strategy
 
@@ -56,7 +56,7 @@ Deployment becomes clearer and safer, but environment management and release coo
 
 **Evidence**
 
-- `marketing-team/reports/WEEK1.md#L40-L59`
+- [WEEK1.md#L40-L59](WEEK1.md#L40-L59)
 
 ### Decision 3 — Model Selection Strategy: Test Before Committing
 
@@ -82,8 +82,8 @@ The project spends extra evaluation effort up front, but the eventual model choi
 
 **Evidence**
 
-- `marketing-team/reports/WEEK1.md#L60-L92`
-- `marketing-team/reports/WEEK3.md#L28-L69`
+- [WEEK1.md#L60-L92](WEEK1.md#L60-L92)
+- [WEEK3.md#L28-L69](WEEK3.md#L28-L69)
 
 ### Decision 4 — Vector Store: PostgreSQL + pgvector (Semantic Search Baseline, Hybrid Search Optional)
 
@@ -111,7 +111,7 @@ The architecture gets a production-ready store with future hybrid search headroo
 
 **Evidence**
 
-- `marketing-team/reports/WEEK1.md#L93-L182`
+- [WEEK1.md#L93-L182](WEEK1.md#L93-L182)
 
 ### Decision 5 — RAG Distance Threshold for Quality Control
 
@@ -139,7 +139,7 @@ Some queries intentionally fall back to no RAG context, trading recall for lower
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L27-L53`
+- [WEEK2.md#L27-L53](WEEK2.md#L27-L53)
 
 ### Decision 6 — RAG Chunking Strategy (150 Tokens, 30 Overlap)
 
@@ -165,7 +165,7 @@ Retrieval gets cheaper and more precise, but indexing creates more chunks and re
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L54-L89`
+- [WEEK2.md#L54-L89](WEEK2.md#L54-L89)
 
 ### Decision 7 — LLM-Powered Search Query Optimization
 
@@ -191,7 +191,7 @@ Search quality improves with minimal extra latency and cost, but the pipeline ad
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L90-L120`
+- [WEEK2.md#L90-L120](WEEK2.md#L90-L120)
 
 ### Decision 8 — Search Quality Filtering (Domain Whitelisting)
 
@@ -217,7 +217,7 @@ Research becomes more reliable, but some potentially useful non-whitelisted sour
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L121-L149`
+- [WEEK2.md#L121-L149](WEEK2.md#L121-L149)
 
 ### Decision 9 — Brand Guidelines Architecture Refactor
 
@@ -243,7 +243,7 @@ Brand enforcement becomes cleaner and more predictable, but prompt architecture 
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L150-L201`
+- [WEEK2.md#L150-L201](WEEK2.md#L150-L201)
 
 ### Decision 10 — Corpus Expansion Strategy (Synthetic Post Generation)
 
@@ -269,7 +269,7 @@ Retrieval reliability improves and the corpus becomes reusable for publishing, b
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L202-L243`
+- [WEEK2.md#L202-L243](WEEK2.md#L202-L243)
 
 ### Decision 11 — Manual Engagement Tracking (Defer Automation)
 
@@ -295,7 +295,7 @@ The system avoids fragile integration work now, but analytics collection remains
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L244-L281`
+- [WEEK2.md#L244-L281](WEEK2.md#L244-L281)
 
 ### Decision 12 — Observability Strategy (LangSmith Dev, Application Insights Production)
 
@@ -321,8 +321,8 @@ Development and production observability stayed fit-for-purpose, but the split a
 
 **Evidence**
 
-- `marketing-team/reports/WEEK2.md#L282-L316`
-- `marketing-team/reports/WEEK9-12.md#L61-L92`
+- [WEEK2.md#L282-L316](WEEK2.md#L282-L316)
+- [WEEK9-12.md#L61-L92](WEEK9-12.md#L61-L92)
 
 ### Decision 13 — Model Selection Strategy - Evidence-Driven Testing
 
@@ -348,8 +348,8 @@ Output quality and publishability improved, but later provider-agnostic model co
 
 **Evidence**
 
-- `marketing-team/reports/WEEK3.md#L28-L69`
-- `marketing-team/reports/WEEK9-12.md#L93-L107`
+- [WEEK3.md#L28-L69](WEEK3.md#L28-L69)
+- [WEEK9-12.md#L93-L107](WEEK9-12.md#L93-L107)
 
 ### Decision 14 — Orchestration Pattern Architecture - Three Approaches
 
@@ -375,7 +375,7 @@ The project gains an evidence base for workflow shape, but incurs extra experime
 
 **Evidence**
 
-- `marketing-team/reports/WEEK3.md#L70-L109`
+- [WEEK3.md#L70-L109](WEEK3.md#L70-L109)
 
 ### Decision 15 — Dynamic Rubric Generation from Brand Config
 
@@ -401,7 +401,7 @@ The evaluation layer stays synchronized automatically, but rubric behavior becom
 
 **Evidence**
 
-- `marketing-team/reports/WEEK3.md#L110-L127`
+- [WEEK3.md#L110-L127](WEEK3.md#L110-L127)
 
 ### Decision 16 — Evaluation System Calibration - Temperature Uniformity
 
@@ -427,7 +427,7 @@ Reported quality differences become more trustworthy, but some evaluator tuning 
 
 **Evidence**
 
-- `marketing-team/reports/WEEK3.md#L128-L152`
+- [WEEK3.md#L128-L152](WEEK3.md#L128-L152)
 
 ### Decision 17 — Evaluation System Calibration - Violation Detection Rules
 
@@ -453,7 +453,7 @@ Evaluation becomes stricter and more reliable, but the rubric is more opinionate
 
 **Evidence**
 
-- `marketing-team/reports/WEEK3.md#L153-L183`
+- [WEEK3.md#L153-L183](WEEK3.md#L153-L183)
 
 ### Decision 18 — Architecture Correction - Deterministic to Agentic
 
@@ -479,7 +479,7 @@ The workflow becomes genuinely agentic and auditable, but orchestration logic gr
 
 **Evidence**
 
-- `marketing-team/reports/WEEK4.md#L30-L60`
+- [WEEK4.md#L30-L60](WEEK4.md#L30-L60)
 
 ### Decision 19 — Config-Driven Architecture - ROI-Justified Refactoring
 
@@ -505,7 +505,7 @@ The system becomes easier to experiment with, but startup validation and configu
 
 **Evidence**
 
-- `marketing-team/reports/WEEK4.md#L61-L98`
+- [WEEK4.md#L61-L98](WEEK4.md#L61-L98)
 
 ### Decision 20 — Framework-Agnostic Core Architecture
 
@@ -531,8 +531,8 @@ Reuse improved immediately, but later hexagonal architecture formalized this bou
 
 **Evidence**
 
-- `marketing-team/reports/WEEK4.md#L99-L140`
-- `marketing-team/reports/WEEK8.md#L36-L65`
+- [WEEK4.md#L99-L140](WEEK4.md#L99-L140)
+- [WEEK8.md#L36-L65](WEEK8.md#L36-L65)
 
 ### Decision 21 — Framework-Agnostic Core Services
 
@@ -558,8 +558,8 @@ Core behavior stays reusable across frameworks, but adapter touchpoints must evo
 
 **Evidence**
 
-- `marketing-team/reports/WEEK5.md#L29-L51`
-- `marketing-team/reports/WEEK8.md#L36-L65`
+- [WEEK5.md#L29-L51](WEEK5.md#L29-L51)
+- [WEEK8.md#L36-L65](WEEK8.md#L36-L65)
 
 ### Decision 22 — Orchestration Boundary - Agentic vs Deterministic Split
 
@@ -585,7 +585,7 @@ Governance improves and cost stays predictable, but the architecture must mainta
 
 **Evidence**
 
-- `marketing-team/reports/WEEK5.md#L52-L74`
+- [WEEK5.md#L52-L74](WEEK5.md#L52-L74)
 
 ### Decision 23 — State Fields as API for Control/Audit
 
@@ -611,8 +611,8 @@ Observability became structured and comparable, but later typed state modeling r
 
 **Evidence**
 
-- `marketing-team/reports/WEEK5.md#L75-L96`
-- `marketing-team/reports/WEEK6.md#L70-L93`
+- [WEEK5.md#L75-L96](WEEK5.md#L75-L96)
+- [WEEK6.md#L70-L93](WEEK6.md#L70-L93)
 
 ### Decision 24 — CrewAI Evaluation and Early Rejection
 
@@ -638,7 +638,7 @@ The project saves integration time and preserves its core client design, but for
 
 **Evidence**
 
-- `marketing-team/reports/WEEK5.md#L97-L140`
+- [WEEK5.md#L97-L140](WEEK5.md#L97-L140)
 
 ### Decision 25 — Production Deployment Requirements for Regulated Industries (Azure) — Microsoft Agent Framework Validated and Adopted
 
@@ -664,8 +664,8 @@ Production fit improved quickly, but later decisions expanded this into full pro
 
 **Evidence**
 
-- `marketing-team/reports/WEEK5.md#L141-L166`
-- `marketing-team/reports/WEEK8.md#L186-L217`
+- [WEEK5.md#L141-L166](WEEK5.md#L141-L166)
+- [WEEK8.md#L186-L217](WEEK8.md#L186-L217)
 - `marketing-team/README.md#L60-L66`
 
 ### Decision 26 — Planner/Research/Writer Orchestration Boundary
@@ -692,7 +692,7 @@ Workflow stages become clearer and easier to observe, but the planner now runs t
 
 **Evidence**
 
-- `marketing-team/reports/WEEK6.md#L46-L69`
+- [WEEK6.md#L46-L69](WEEK6.md#L46-L69)
 
 ### Decision 27 — Custom Typed State Model for Microsoft Agent Framework Workflows
 
@@ -718,7 +718,7 @@ Workflow code becomes safer and clearer, but state evolution now requires schema
 
 **Evidence**
 
-- `marketing-team/reports/WEEK6.md#L70-L93`
+- [WEEK6.md#L70-L93](WEEK6.md#L70-L93)
 
 ### Decision 28 — Executor/Agent Separation
 
@@ -744,7 +744,7 @@ Wiring and maintenance become simpler, but the architecture becomes more opinion
 
 **Evidence**
 
-- `marketing-team/reports/WEEK6.md#L94-L115`
+- [WEEK6.md#L94-L115](WEEK6.md#L94-L115)
 
 ### Decision 29 — Conversation History on Thread State
 
@@ -770,7 +770,7 @@ End-to-end traces become easier to inspect, but history management must be disci
 
 **Evidence**
 
-- `marketing-team/reports/WEEK6.md#L116-L137`
+- [WEEK6.md#L116-L137](WEEK6.md#L116-L137)
 
 ### Decision 30 — Brand-Agnostic Executors with Per-Call Brand Slices
 
@@ -796,7 +796,7 @@ Multi-brand scaling improves, but every call site must pass the right brand slic
 
 **Evidence**
 
-- `marketing-team/reports/WEEK6.md#L138-L158`
+- [WEEK6.md#L138-L158](WEEK6.md#L138-L158)
 
 ### Decision 31 — Full Prompt & System Message Capture
 
@@ -822,7 +822,7 @@ Explainability improves substantially, but prompt logs increase storage volume a
 
 **Evidence**
 
-- `marketing-team/reports/WEEK6.md#L159-L180`
+- [WEEK6.md#L159-L180](WEEK6.md#L159-L180)
 
 ### Decision 32 — Separate Terraform Project for Container App Deployment
 
@@ -848,7 +848,7 @@ CI/CD becomes more reliable, but the infrastructure stack now spans multiple Ter
 
 **Evidence**
 
-- `marketing-team/reports/WEEK7.md#L34-L61`
+- [WEEK7.md#L34-L61](WEEK7.md#L34-L61)
 
 ### Decision 33 — GitHub Actions Build & Deploy Workflow
 
@@ -874,7 +874,7 @@ Delivery becomes automated and auditable, but pipeline secrets and workflow main
 
 **Evidence**
 
-- `marketing-team/reports/WEEK7.md#L62-L91`
+- [WEEK7.md#L62-L91](WEEK7.md#L62-L91)
 
 ### Decision 34 — Unified Application Codebase for Local and Azure Deployment
 
@@ -900,7 +900,7 @@ The same artifact runs in both environments, but configuration correctness becom
 
 **Evidence**
 
-- `marketing-team/reports/WEEK7.md#L92-L120`
+- [WEEK7.md#L92-L120](WEEK7.md#L92-L120)
 
 ### Decision 35 — PostgreSQL Managed Identity Authentication
 
@@ -926,7 +926,7 @@ Security and operations improve, but the deployment becomes more tightly aligned
 
 **Evidence**
 
-- `marketing-team/reports/WEEK7.md#L121-L151`
+- [WEEK7.md#L121-L151](WEEK7.md#L121-L151)
 
 ### Decision 36 — Hexagonal Architecture - Framework-Agnostic Core with Ports & Adapters
 
@@ -952,7 +952,7 @@ The core becomes future-proof and testable, but adapter layers and protocol evol
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L36-L65`
+- [WEEK8.md#L36-L65](WEEK8.md#L36-L65)
 - `marketing-team/README.md#L21-L22`
 - `marketing-team/README.md#L145-L146`
 
@@ -980,7 +980,7 @@ All LLM calls share the same telemetry path, but the adapter becomes a critical 
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L66-L95`
+- [WEEK8.md#L66-L95](WEEK8.md#L66-L95)
 
 ### Decision 38 — Hexagonal Tools Architecture - Framework-Agnostic Core with Framework Adapters
 
@@ -1006,7 +1006,7 @@ Adding a new orchestrator becomes cheaper, but tool contracts now span both core
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L96-L126`
+- [WEEK8.md#L96-L126](WEEK8.md#L96-L126)
 
 ### Decision 39 — Simplified Research Architecture - Direct Tool Execution Over LLM-Based Research Agent
 
@@ -1032,7 +1032,7 @@ Cost and latency fall, but the planner must remain strong enough to make accurat
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L127-L156`
+- [WEEK8.md#L127-L156](WEEK8.md#L127-L156)
 
 ### Decision 40 — Brand-Agnostic Configuration for Search and Fact-Checking
 
@@ -1058,7 +1058,7 @@ Multi-tenant customization improves, but configuration sprawl must be governed.
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L157-L185`
+- [WEEK8.md#L157-L185](WEEK8.md#L157-L185)
 
 ### Decision 41 — Full Microsoft Agent Framework Adoption (Option A)
 
@@ -1084,7 +1084,7 @@ The system gains deeper ecosystem capabilities, but the architecture commits mor
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L186-L217`
+- [WEEK8.md#L186-L217](WEEK8.md#L186-L217)
 - `marketing-team/README.md#L60-L66`
 - `marketing-team/README.md#L178-L182`
 
@@ -1112,7 +1112,7 @@ Config deployment becomes passwordless and dynamic, but local and cloud loaders 
 
 **Evidence**
 
-- `marketing-team/reports/WEEK8.md#L218-L246`
+- [WEEK8.md#L218-L246](WEEK8.md#L218-L246)
 
 ### Decision 43 — Cloudflare as Security Perimeter for Access Control
 
@@ -1138,7 +1138,7 @@ Application code can stay focused on business logic, but the deployment now depe
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L27-L60`
+- [WEEK9-12.md#L27-L60](WEEK9-12.md#L27-L60)
 - `marketing-team/README.md#L35-L36`
 
 ### Decision 44 — OpenTelemetry Observability Architecture with Application Insights Integration
@@ -1165,7 +1165,7 @@ Debugging and audit improve substantially, but teams must manage span design, sa
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L61-L92`
+- [WEEK9-12.md#L61-L92](WEEK9-12.md#L61-L92)
 - `marketing-team/README.md#L45-L46`
 - `marketing-team/README.md#L181-L182`
 
@@ -1193,7 +1193,7 @@ Switching providers becomes a config change, but configuration schemas become mo
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L93-L107`
+- [WEEK9-12.md#L93-L107](WEEK9-12.md#L93-L107)
 - `marketing-team/README.md#L60-L66`
 
 ### Decision 46 — HITL Storage and Approval Architecture (PostgreSQL, Folder-per-Status, Two Gates)
@@ -1220,7 +1220,7 @@ HITL flows become governable and resumable, but storage reconciliation and statu
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L108-L135`
+- [WEEK9-12.md#L108-L135](WEEK9-12.md#L108-L135)
 - `marketing-team/README.md#L35-L36`
 - `marketing-team/README.md#L145-L146`
 
@@ -1248,7 +1248,7 @@ Testing and swappability improve, but more abstraction layers must be maintained
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L136-L160`
+- [WEEK9-12.md#L136-L160](WEEK9-12.md#L136-L160)
 
 ### Decision 48 — Deterministic, Serialized Workflow Execution for HITL Content
 
@@ -1274,7 +1274,7 @@ Operators get stable execution and recovery behavior, but throughput is intentio
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L161-L186`
+- [WEEK9-12.md#L161-L186](WEEK9-12.md#L161-L186)
 
 ### Decision 49 — Persisted Workflow Traces and UI-Agnostic Workflow Views for HITL Content
 
@@ -1300,7 +1300,7 @@ Each content item gains replayable audit history, but trace storage and schema e
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L187-L217`
+- [WEEK9-12.md#L187-L217](WEEK9-12.md#L187-L217)
 - `marketing-team/README.md#L45-L46`
 
 ### Decision 50 — PII Sanitization Architecture for HITL and Agentic Workflow
@@ -1327,7 +1327,7 @@ PII leakage risk drops and auditability improves, but the system must preserve b
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L218-L243`
+- [WEEK9-12.md#L218-L243](WEEK9-12.md#L218-L243)
 - `marketing-team/README.md#L35-L36`
 
 ### Decision 51 — HITL Identity Logging with Entra User GUID (No PII)
@@ -1354,5 +1354,5 @@ Approvals become attributable and reconstructable, but the solution depends on u
 
 **Evidence**
 
-- `marketing-team/reports/WEEK9-12.md#L244-L266`
+- [WEEK9-12.md#L244-L266](WEEK9-12.md#L244-L266)
 - `marketing-team/README.md#L35-L36`
