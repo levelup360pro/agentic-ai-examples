@@ -405,7 +405,7 @@ In the active Microsoft Agent Framework workflow, tools are **not** invoked thro
 3. The active path lacks public HITL approval or publishing steps.
 4. Brand isolation is metadata-based, not physically separated per collection/table.
 5. `generate_content()` does not pass a `pattern` input, so `StartExecutor` defaults thread pattern to `single_pass`.
-6. Known bug: `ContentEvaluationAgent.run()` currently uses evaluator config where full brand config would be expected for rubric generation. TODO: pass the full brand config in a future code fix.
+6. Known bug: rubric-generation config is passed incorrectly in the evaluation path (see Section 11.5). TODO: pass the full brand config in a future code fix.
 7. Known bug: `generate_content()` contains duplicate `except Exception` blocks; the second block is unreachable. TODO: remove the dead handler in a future code fix.
 8. Embedding provider configuration differs between app initialization and workflow construction.
 

@@ -121,7 +121,7 @@ The architecture gets a production-ready store with future hybrid search headroo
 
 **Decision**
 
-Apply a maximum distance threshold so weak vector matches are dropped instead of forced into prompts.
+Apply a maximum distance threshold so weak vector matches are dropped instead of forced into prompts; the current public tuned value is 0.50.
 
 _Implementation note: the current public brand configs use `max_distance: 0.50`; the earlier 0.60 threshold recorded here reflects the initial decision before later tuning._
 
