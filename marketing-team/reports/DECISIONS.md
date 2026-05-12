@@ -666,7 +666,7 @@ Production fit improved quickly, but later decisions expanded this into full pro
 
 - [WEEK5.md#L141-L166](WEEK5.md#L141-L166)
 - [WEEK8.md#L186-L217](WEEK8.md#L186-L217)
-- `marketing-team/README.md#L60-L66`
+- [README.md#L60-L66](../README.md#L60-L66)
 
 ### Decision 26 — Planner/Research/Writer Orchestration Boundary
 
@@ -953,8 +953,8 @@ The core becomes future-proof and testable, but adapter layers and protocol evol
 **Evidence**
 
 - [WEEK8.md#L36-L65](WEEK8.md#L36-L65)
-- `marketing-team/README.md#L21-L22`
-- `marketing-team/README.md#L145-L146`
+- [README.md#L21-L22](../README.md#L21-L22)
+- [README.md#L145-L146](../README.md#L145-L146)
 
 ### Decision 37 — Dual-Protocol LLM Adapter - LLMClientProtocol + ChatClientProtocol
 
@@ -1085,8 +1085,8 @@ The system gains deeper ecosystem capabilities, but the architecture commits mor
 **Evidence**
 
 - [WEEK8.md#L186-L217](WEEK8.md#L186-L217)
-- `marketing-team/README.md#L60-L66`
-- `marketing-team/README.md#L178-L182`
+- [README.md#L60-L66](../README.md#L60-L66)
+- [README.md#L178-L182](../README.md#L178-L182)
 
 ### Decision 42 — BlobConfigLoader for Brand Configuration Storage
 
@@ -1139,7 +1139,7 @@ Application code can stay focused on business logic, but the deployment now depe
 **Evidence**
 
 - [WEEK9-12.md#L27-L60](WEEK9-12.md#L27-L60)
-- `marketing-team/README.md#L35-L36`
+- [README.md#L35-L36](../README.md#L35-L36)
 
 ### Decision 44 — OpenTelemetry Observability Architecture with Application Insights Integration
 
@@ -1166,8 +1166,8 @@ Debugging and audit improve substantially, but teams must manage span design, sa
 **Evidence**
 
 - [WEEK9-12.md#L61-L92](WEEK9-12.md#L61-L92)
-- `marketing-team/README.md#L45-L46`
-- `marketing-team/README.md#L181-L182`
+- [README.md#L45-L46](../README.md#L45-L46)
+- [README.md#L181-L182](../README.md#L181-L182)
 
 ### Decision 45 — Dual-Model Architecture for Provider-Agnostic LLM Configuration
 
@@ -1194,7 +1194,7 @@ Switching providers becomes a config change, but configuration schemas become mo
 **Evidence**
 
 - [WEEK9-12.md#L93-L107](WEEK9-12.md#L93-L107)
-- `marketing-team/README.md#L60-L66`
+- [README.md#L60-L66](../README.md#L60-L66)
 
 ### Decision 46 — HITL Storage and Approval Architecture (PostgreSQL, Folder-per-Status, Two Gates)
 
@@ -1221,8 +1221,8 @@ HITL flows become governable and resumable, but storage reconciliation and statu
 **Evidence**
 
 - [WEEK9-12.md#L108-L135](WEEK9-12.md#L108-L135)
-- `marketing-team/README.md#L35-L36`
-- `marketing-team/README.md#L145-L146`
+- [README.md#L35-L36](../README.md#L35-L36)
+- [README.md#L145-L146](../README.md#L145-L146)
 
 ### Decision 47 — Hexagonal Persistence and Service Ports for HITL Content
 
@@ -1301,7 +1301,7 @@ Each content item gains replayable audit history, but trace storage and schema e
 **Evidence**
 
 - [WEEK9-12.md#L187-L217](WEEK9-12.md#L187-L217)
-- `marketing-team/README.md#L45-L46`
+- [README.md#L45-L46](../README.md#L45-L46)
 
 ### Decision 50 — PII Sanitization Architecture for HITL and Agentic Workflow
 
@@ -1328,7 +1328,7 @@ PII leakage risk drops and auditability improves, but the system must preserve b
 **Evidence**
 
 - [WEEK9-12.md#L218-L243](WEEK9-12.md#L218-L243)
-- `marketing-team/README.md#L35-L36`
+- [README.md#L35-L36](../README.md#L35-L36)
 
 ### Decision 51 — HITL Identity Logging with Entra User GUID (No PII)
 
@@ -1355,4 +1355,4 @@ Approvals become attributable and reconstructable, but the solution depends on u
 **Evidence**
 
 - [WEEK9-12.md#L244-L266](WEEK9-12.md#L244-L266)
-- `marketing-team/README.md#L35-L36`
+- [README.md#L35-L36](../README.md#L35-L36)
