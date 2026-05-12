@@ -86,7 +86,7 @@ Brand definitions are stored as YAML files under `configs/`.
 - `vectorization`
 
 ### 5.5 Important implementation note
-The filename `cosmetics.yaml` contains `name: "aurora"`.
+The brand configuration file `configs/cosmetics.yaml` contains `name: "aurora"`.
 
 Current behavior:
 - the **filename stem** is the lookup key for loading configs from disk
